@@ -1,7 +1,8 @@
-namespace BizHawkExternalToolTemplate;
+namespace BizHawkPSXMMX.Forms;
 
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
+using BizHawkPSXMMX.Math;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -33,11 +34,13 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     protected override void UpdateAfter()
     {
-        APIs.Gui.DrawString(
-            10,
-            10,
-            "MMX",
-            surfaceID: DisplaySurfaceID.Client
-        );
+        var p0 = new Vector2Int(10, 10);
+        var p1 = new Vector2Int(20, 20);
+        var p2 = new Vector2Int(40, 40);
+        var p3 = new Vector2Int(60, 60);
+
+        APIs.Gui.DrawText(p0, "MMX", Color.Yellow);
+        APIs.Gui.DrawLine(p1, p2);
+        APIs.Gui.DrawAxis(p3);
     }
 }
