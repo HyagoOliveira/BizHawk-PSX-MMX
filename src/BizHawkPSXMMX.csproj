@@ -25,6 +25,8 @@
     <Reference Include="BizHawk.Common" HintPath="$(BizHawk_DLL)BizHawk.Common.dll" />
     <Reference Include="BizHawk.Emulation.Common" HintPath="$(BizHawk_DLL)BizHawk.Emulation.Common.dll" />
     <Reference Include="BizHawk.WinForms.Controls" HintPath="$(BizHawk_DLL)BizHawk.WinForms.Controls.dll" />
+    
+    <EmbeddedResource Include="Icon.ico" />
   </ItemGroup>
 
   <!-- Kill running EmuHawk instance before building to release file locks -->

@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 [ExternalTool("PSX MMX Analyzer", Description = "Analyzer Tool for PSOne MMX games")]
-[ExternalToolEmbeddedIcon("Icon.png")]
+[ExternalToolEmbeddedIcon("BizHawkPSXMMX.Icon.ico")]
 public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 {
     public ApiContainer? MaybeAPIContainer { get; set; }
