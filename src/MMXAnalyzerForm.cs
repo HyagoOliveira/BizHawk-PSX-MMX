@@ -5,16 +5,16 @@ using BizHawk.Client.EmuHawk;
 using System.Drawing;
 using System.Windows.Forms;
 
-[ExternalTool("PSX MMX", Description = "Analiser Tool for MMX games")]
+[ExternalTool("PSX MMX Analyzer", Description = "Analyzer Tool for PSOne MMX games")]
 [ExternalToolEmbeddedIcon("Icon.png")]
-public sealed class PSXMMXAnalyzerForm : ToolFormBase, IExternalToolForm
+public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 {
     public ApiContainer? MaybeAPIContainer { get; set; }
     private ApiContainer APIs => MaybeAPIContainer!;
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
 
-    public PSXMMXAnalyzerForm()
+    public MMXAnalyzerForm()
     {
         ClientSize = new Size(300, 100);
         FormBorderStyle = FormBorderStyle.FixedDialog;
