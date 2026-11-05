@@ -17,7 +17,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     public MMXAnalyzerForm()
     {
-        ClientSize = new Size(300, 100);
+        ClientSize = new Size(600, 100);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterParent;
@@ -34,13 +34,16 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     protected override void UpdateAfter()
     {
-        var p0 = new Vector2Int(10, 10);
+        /*var p0 = new Vector2Int(10, 10);
         var p1 = new Vector2Int(20, 20);
         var p2 = new Vector2Int(40, 40);
         var p3 = new Vector2Int(60, 60);
 
         APIs.Gui.DrawText(p0, "MMX", Color.Yellow);
         APIs.Gui.DrawLine(p1, p2);
-        APIs.Gui.DrawAxis(p3);
+        APIs.Gui.DrawAxis(p3);*/
+
+        var rect = new RectInt(60, 60, 50, 50);
+        APIs.Gui.DrawBox(rect, backgroundColor: Color.Blue);
     }
 }

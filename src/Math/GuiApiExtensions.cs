@@ -10,6 +10,8 @@ using System.Runtime.CompilerServices;
 /// </summary>
 public static class GuiApiExtensions
 {
+    private static readonly DisplaySurfaceID DefaultSurfaceID = DisplaySurfaceID.Client;
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void DrawText(
         this IGuiApi gui,
@@ -34,7 +36,7 @@ public static class GuiApiExtensions
             fontStyle,
             horizontalAlign,
             verticalAlign,
-            surfaceID: DisplaySurfaceID.Client
+            DefaultSurfaceID
         );
     }
 
@@ -51,7 +53,7 @@ public static class GuiApiExtensions
             end.X,
             end.Y,
             color,
-            surfaceID: DisplaySurfaceID.Client
+            DefaultSurfaceID
         );
     }
 
@@ -67,7 +69,26 @@ public static class GuiApiExtensions
             position.Y,
             size,
             color,
-            surfaceID: DisplaySurfaceID.Client
+            DefaultSurfaceID
+        );
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void DrawBox(
+        this IGuiApi gui,
+        RectInt rect,
+        Color? lineColor = null,
+        Color? backgroundColor = null)
+    {
+        // BizHawk IGuiApi.DrawBox requires (x1, y1, x2, y2)
+        gui.DrawBox(
+            rect.XMin,
+            rect.YMin,
+            rect.XMax,
+            rect.YMax,
+            line: lineColor,
+            backgroundColor,
+            DefaultSurfaceID
         );
     }
 }
