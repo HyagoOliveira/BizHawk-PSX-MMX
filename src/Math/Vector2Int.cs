@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace BizHawkPSXMMX.Math;
+
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Representation of 2D integer vectors and points.
@@ -79,7 +81,7 @@ public readonly record struct Vector2Int(int X, int Y) : IEquatable<Vector2Int>
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int ManhattanDistance(Vector2Int a, Vector2Int b) =>
-        Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+        System.Math.Abs(a.X - b.X) + System.Math.Abs(a.Y - b.Y);
 
     /// <summary>
     /// Calculates the Euclidean distance between two vectors.
@@ -92,14 +94,14 @@ public readonly record struct Vector2Int(int X, int Y) : IEquatable<Vector2Int>
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2Int Min(Vector2Int a, Vector2Int b) =>
-        new(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y));
+        new(System.Math.Min(a.X, b.X), System.Math.Min(a.Y, b.Y));
 
     /// <summary>
     /// Returns a vector made from the largest components of two vectors.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2Int Max(Vector2Int a, Vector2Int b) =>
-        new(Math.Max(a.X, b.X), Math.Max(a.Y, b.Y));
+        new(System.Math.Max(a.X, b.X), System.Math.Max(a.Y, b.Y));
 
     /// <summary>
     /// Deconstructs the vector into separate X and Y components.
