@@ -13,8 +13,7 @@
     <BizHawk_DLL>$(BizHawk_Home)dll\</BizHawk_DLL>
 
     <!-- Optional path to your test ROM. Leave it empty to open BizHawk without a Test ROM -->
-    <TestRom_Path></TestRom_Path>
-    <!-- <TestRom_Path>C:\Users\{USER_NAME}\Documents\Games\ROMS\PSOne\{GAME_FOLDER}\{GAME}.cue</TestRom_Path> -->
+    <TestRom_Path>C:\Users\Hyago Oliveira\Documents\Games\ROMS\PSOne\MegaMan X4\Mega Man X4.cue</TestRom_Path>
   </PropertyGroup>
 
   <ItemGroup>
