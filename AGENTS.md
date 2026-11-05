@@ -28,10 +28,10 @@ Root/
 │   │   └── BizHawk.WinForms.Controls.dll
 │   ├── ExternalTools/
 │   └── EmuHawk.exe
-└── <ToolName>/
+└── BizHawk-PSX-MMX/
     ├── src/
-    │   ├── <ToolName>.csproj
-    │   └── <ToolName>Form.cs
+    │   ├── BizHawkPSXMMX.csproj
+    │   └── PSXMMXForm.cs
     └── ...
 ```
 
