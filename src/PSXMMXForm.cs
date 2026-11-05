@@ -5,8 +5,8 @@ using BizHawk.Client.EmuHawk;
 using System.Drawing;
 using System.Windows.Forms;
 
-[ExternalTool("Custom Tool Template", Description = "Clean template for BizHawk 2.11.1 external tools")]
-public sealed class CustomToolForm : ToolFormBase, IExternalToolForm
+[ExternalTool("PSX MMX", Description = "Analiser Tool for MMX games")]
+public sealed class PSXMMXForm : ToolFormBase, IExternalToolForm
 {
     public ApiContainer? MaybeAPIContainer { get; set; }
     private ApiContainer APIs => MaybeAPIContainer!;
