@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+
+    <!-- Target BizHawk environment settings -->
+    <BizHawk_Version>2.11.1</BizHawk_Version>
+    <BizHawk_Home>$(ProjectDir)..\..\$(BizHawk_Version)\</BizHawk_Home>
+    <BizHawk_DLL>$(BizHawk_Home)dll\</BizHawk_DLL>
+
+    <!-- Optional path to your test ROM. Leave it empty to open BizHawk without a Test ROM -->
+    <TestRom_Path></TestRom_Path>
+    <!-- <TestRom_Path>C:\Users\{USER_NAME}\Documents\Games\ROMS\PSOne\{GAME_FOLDER}\{GAME}.cue</TestRom_Path> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="BizHawk.Client.Common" HintPath="$(BizHawk_DLL)BizHawk.Client.Common.dll" />
+    <Reference Include="BizHawk.Client.EmuHawk" HintPath="$(BizHawk_Home)EmuHawk.exe" />
+    <Reference Include="BizHawk.Common" HintPath="$(BizHawk_DLL)BizHawk.Common.dll" />
+    <Reference Include="BizHawk.Emulation.Common" HintPath="$(BizHawk_DLL)BizHawk.Emulation.Common.dll" />
+    <Reference Include="BizHawk.WinForms.Controls" HintPath="$(BizHawk_DLL)BizHawk.WinForms.Controls.dll" />
+  </ItemGroup>
+
+  <!-- Kill running EmuHawk instance before building to release file locks -->
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="taskkill /F /IM EmuHawk.exe 2&gt;&amp;1 || exit 0" />
+  </Target>
+
+  <!-- Automatically copy the compiled tool and launch EmuHawk conditionally -->
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Copy
+      SourceFiles="$(OutputPath)$(MSBuildProjectName).dll"
+      DestinationFolder="$(BizHawk_Home)ExternalTools"
+      Retries="3"
+      RetryDelayMilliseconds="300"
+      ContinueOnError="true" />
+
+    <!-- Launch BizHawk with ROM if TestRom_Path is defined and exists -->
+    <Exec
+      Condition=" '$(TestRom_Path)' != '' and Exists('$(TestRom_Path)') "
+      Command="start &quot;&quot; &quot;$(BizHawk_Home)EmuHawk.exe&quot; --open-ext-tool-dll=$(MSBuildProjectName) &quot;$(TestRom_Path)&quot;" />
+
+    <!-- Fallback: Launch BizHawk without a ROM if TestRom_Path is empty or invalid -->
+    <Exec
+      Condition=" '$(TestRom_Path)' == '' or !Exists('$(TestRom_Path)') "
+      Command="start &quot;&quot; &quot;$(BizHawk_Home)EmuHawk.exe&quot; --open-ext-tool-dll=$(MSBuildProjectName)" />
+  </Target>
+
+</Project>
