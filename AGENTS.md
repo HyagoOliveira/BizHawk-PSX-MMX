@@ -57,3 +57,13 @@ Because BizHawk lacks an isolated API documentation website, all contracts, beha
 - **Official Tool Implementations & Examples**: 
   `ExternalToolProjects/`  
   Provides canonical reference implementations maintained directly by the BizHawk core team. May be outdated with the newest versions. Always prefer the repo own code implementation to find better inputs.
+
+## 5. PSX Mega Man Memory Maps
+
+- The analyzer targets the USA releases of Mega Man X4, X5, and X6. Keep each game's addresses separate; do not reuse an address across games just because the field layout appears similar.
+- Store address data in `src/Memory/GameMemoryAddress.cs` and select it through `GameMemoryAddressFactory.Create(gameName)`. Add or correct mappings there rather than embedding game-specific addresses in the form.
+- The factory currently identifies games by BizHawk game name: `Mega Man X4 (USA)`, `Mega Man X5 (USA)`, and `Mega Man X6 (USA)`. Unsupported or unavailable game names return `null`; callers must handle that case without reading memory.
+- These addresses are offsets in BizHawk's PSX `MainRAM` memory domain, not host-process addresses. Read using the appropriate memory domain explicitly.
+- The X4 USA player HP address is `0x141924`. External Tool reads in BizHawk 2.11.1 confirmed that this byte tracks the player's energy (for example, `0x20` before damage and `0x1D` after one observed hit). The project's convention is to display the raw value as an unsigned 8-bit integer (`ReadU8`).
+- X5 and X6 addresses, along with player position/speed, camera, object groups, and flags, remain unvalidated until checked against live gameplay in BizHawk 2.11.1.
+- When validating a field, record the game/release, memory domain, address, read width/signedness, raw values before and after a controlled in-game action, and what was visible in the game. Do not describe a candidate address or inferred representation as confirmed until this comparison supports it.
