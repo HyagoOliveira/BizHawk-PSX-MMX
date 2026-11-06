@@ -1,8 +1,8 @@
-namespace BizHawkPSXMMX.Forms;
+namespace BizHawk.PSXMMX.Forms;
 
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
-using BizHawkPSXMMX.Math;
+using BizHawk.PSXMMX.Math;
 using System.Drawing;
 using System.Windows.Forms;
 

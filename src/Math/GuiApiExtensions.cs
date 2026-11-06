@@ -1,4 +1,4 @@
-﻿namespace BizHawkPSXMMX.Math;
+﻿namespace BizHawk.PSXMMX.Math;
 
 using BizHawk.Client.Common;
 using System.Drawing;
