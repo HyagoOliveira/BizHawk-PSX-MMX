@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <RootNamespace>BizHawk.PSXMMX</RootNamespace>
     <TargetFramework>net48</TargetFramework>
     <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
