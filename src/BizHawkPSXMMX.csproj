@@ -30,6 +30,8 @@
     <Error
       Condition="!Exists('$(BizHawk_Home)EmuHawk.exe')"
       Text="BizHawk was not found at '$(BizHawk_Home)'. Set the BizHawk_Home MSBuild property to the installation directory." />
+    <Exec
+      Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\build\Close-BizHawk.ps1&quot; -ExecutablePath &quot;$(BizHawk_Home)EmuHawk.exe&quot;" />
     <MakeDir Directories="$(BizHawk_Home)ExternalTools" />
     <Copy
       SourceFiles="$(TargetPath)"
