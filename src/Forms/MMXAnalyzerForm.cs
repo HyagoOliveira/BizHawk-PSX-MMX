@@ -1,7 +1,7 @@
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
+using BizHawk.PSXMMX.Memory;
 using BizHawk.PSXMMX.Math;
-using BizHawk.PSXMMX.Input;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,7 +12,7 @@ namespace BizHawk.PSXMMX.Forms;
 public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 {
     public ApiContainer APIs { get; set; } = null!;
-    public KeyboardInput Keyboard { get; private set; } = null!;
+    public GameMemoryAddress? MemoryAddress { get; private set; }
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
 
@@ -31,17 +31,34 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     public override void Restart()
     {
         base.Restart();
-        Keyboard = new KeyboardInput(APIs.Input);
+        var gameName = APIs.Emulation.GetGameInfo()?.Name ?? string.Empty;
+        MemoryAddress = GameMemoryAddressFactory.Create(gameName);
     }
 
     protected override void UpdateAfter()
     {
-        Keyboard.Update();
-
-        var pos = new Vector2Int(10, 10);
-        var rect = new RectInt(60, 60, 50, 50);
-
-        APIs.Gui.DrawBox(rect, backgroundColor: Color.Blue);
-        if (Keyboard.GetKey("T")) APIs.Gui.DrawText(pos, "T is pressing", Color.Yellow);
+        if (MemoryAddress is { } address) UpdateGame(address);
+        else ShowUnsupportedGameMessage();
     }
+
+    private void UpdateGame(GameMemoryAddress address)
+    {
+        var memory = APIs.Memory;
+        var domain = memory.MainMemoryName;
+        var message = $"Player HP: {memory.ReadU8(address.Player.Hp, domain)} | {domain}@0x{address.Player.Hp:X}";
+
+        APIs.Gui.DrawText(
+            new Vector2Int(10, 10),
+            message,
+            Color.Yellow,
+            Color.FromArgb(180, Color.Black)
+        );
+    }
+
+    private void ShowUnsupportedGameMessage() => APIs.Gui.DrawText(
+        new Vector2Int(10, 10),
+        "Failed to initialize!\nSupported games: Mega Man X4, X5 and X6 (USA)",
+        Color.Red,
+        Color.FromArgb(180, Color.Black)
+    );
 }
