@@ -1,0 +1,52 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}\\src\\BizHawkPSXMMX.csproj"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "BizHawk: Deploy",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "msbuild",
+        "${workspaceFolder}\\src\\BizHawkPSXMMX.csproj",
+        "-restore",
+        "-target:DeployToBizHawk"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "BizHawk: Launch",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "msbuild",
+        "${workspaceFolder}\\src\\BizHawkPSXMMX.csproj",
+        "-restore",
+        "-target:LaunchBizHawk",
+        "-property:RomPath=${input:romPath}"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "romPath",
+      "type": "promptString",
+      "description": "Optional full path to the ROM to open; leave blank to start without one",
+      "default": ""
+    }
+  ]
+}

@@ -9,11 +9,8 @@
 
     <!-- Target BizHawk environment settings -->
     <BizHawk_Version>2.11.1</BizHawk_Version>
-    <BizHawk_Home>$(ProjectDir)..\..\$(BizHawk_Version)\</BizHawk_Home>
+    <BizHawk_Home Condition="'$(BizHawk_Home)' == ''">$(MSBuildProjectDirectory)\..\..\$(BizHawk_Version)\</BizHawk_Home>
     <BizHawk_DLL>$(BizHawk_Home)dll\</BizHawk_DLL>
-
-    <!-- Optional path to your test ROM. Leave it empty to open BizHawk without a Test ROM -->
-    <TestRom_Path>C:\Users\Hyago Oliveira\Documents\Games\ROMS\PSOne\MegaMan X4\Mega Man X4.cue</TestRom_Path>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,29 +26,28 @@
     <EmbeddedResource Include="Icon.ico" />
   </ItemGroup>
 
-  <!-- Kill running EmuHawk instance before building to release file locks -->
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="taskkill /F /IM EmuHawk.exe 2&gt;&amp;1 || exit 0" />
-  </Target>
-
-  <!-- Automatically copy the compiled tool and launch EmuHawk conditionally -->
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Target Name="DeployToBizHawk" DependsOnTargets="Build">
+    <Error
+      Condition="!Exists('$(BizHawk_Home)EmuHawk.exe')"
+      Text="BizHawk was not found at '$(BizHawk_Home)'. Set the BizHawk_Home MSBuild property to the installation directory." />
+    <MakeDir Directories="$(BizHawk_Home)ExternalTools" />
     <Copy
-      SourceFiles="$(OutputPath)$(MSBuildProjectName).dll"
+      SourceFiles="$(TargetPath)"
       DestinationFolder="$(BizHawk_Home)ExternalTools"
       Retries="3"
-      RetryDelayMilliseconds="300"
-      ContinueOnError="true" />
+      RetryDelayMilliseconds="300" />
+  </Target>
 
-    <!-- Launch BizHawk with ROM if TestRom_Path is defined and exists -->
+  <Target Name="LaunchBizHawk" DependsOnTargets="DeployToBizHawk">
+    <Error
+      Condition="'$(RomPath)' != '' and !Exists('$(RomPath)')"
+      Text="The ROM specified by RomPath was not found: '$(RomPath)'." />
     <Exec
-      Condition=" '$(TestRom_Path)' != '' and Exists('$(TestRom_Path)') "
-      Command="start &quot;&quot; &quot;$(BizHawk_Home)EmuHawk.exe&quot; --open-ext-tool-dll=$(MSBuildProjectName) &quot;$(TestRom_Path)&quot;" />
-
-    <!-- Fallback: Launch BizHawk without a ROM if TestRom_Path is empty or invalid -->
+      Condition="'$(RomPath)' != ''"
+      Command="start &quot;&quot; &quot;$(BizHawk_Home)EmuHawk.exe&quot; --open-ext-tool-dll=$(AssemblyName) &quot;$(RomPath)&quot;" />
     <Exec
-      Condition=" '$(TestRom_Path)' == '' or !Exists('$(TestRom_Path)') "
-      Command="start &quot;&quot; &quot;$(BizHawk_Home)EmuHawk.exe&quot; --open-ext-tool-dll=$(MSBuildProjectName)" />
+      Condition="'$(RomPath)' == ''"
+      Command="start &quot;&quot; &quot;$(BizHawk_Home)EmuHawk.exe&quot; --open-ext-tool-dll=$(AssemblyName)" />
   </Target>
 
 </Project>

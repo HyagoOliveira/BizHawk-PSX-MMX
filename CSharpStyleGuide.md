@@ -173,5 +173,6 @@ APIs.Gui.DrawString(
 
 1. **Targeting**: `.csproj` must specify `<TargetFramework>net48</TargetFramework>` with `<LangVersion>12.0</LangVersion>`.
 2. **References**: Reference `Microsoft.NETFramework.ReferenceAssemblies` (v1.0.3) to enable modern SDK builds.
-3. **Build Target Protection (`PreBuild`)**: Must terminate any running `EmuHawk.exe` using `taskkill /F /IM EmuHawk.exe 2>&1 || exit 0` to release OS assembly locks.
-4. **Deploy Target (`PostBuild`)**: Copy `.dll` output to `$(BizHawk_Home)ExternalTools` and start the emulator asynchronously with `--open-ext-tool-dll`.
+3. **Build behavior**: A normal build must not terminate running `EmuHawk.exe`, deploy files, or launch the emulator.
+4. **Explicit deployment**: Expose deployment and launch as separate MSBuild targets or IDE tasks. Validate the BizHawk installation and any supplied ROM path, and report errors instead of silently ignoring deployment failures.
+5. **Relative installation path**: Default `BizHawk_Home` to the versioned BizHawk installation beside the repository; allow overriding it through an MSBuild property.
