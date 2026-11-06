@@ -1,6 +1,6 @@
-﻿namespace BizHawk.PSXMMX.Math;
+﻿using System.Runtime.CompilerServices;
 
-using System.Runtime.CompilerServices;
+namespace BizHawk.PSXMMX.Math;
 
 /// <summary>
 /// Representation of 2D integer vectors and points.

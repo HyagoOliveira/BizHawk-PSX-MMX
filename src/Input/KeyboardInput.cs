@@ -1,6 +1,6 @@
-namespace BizHawk.PSXMMX.Input;
-
 using BizHawk.Client.Common;
+
+namespace BizHawk.PSXMMX.Input;
 
 public sealed class KeyboardInput(IInputApi input)
 {

@@ -1,11 +1,11 @@
-namespace BizHawk.PSXMMX.Forms;
-
-using BizHawk.Client.EmuHawk;
 using BizHawk.Client.Common;
-using System.Drawing;
-using BizHawk.PSXMMX.Input;
+using BizHawk.Client.EmuHawk;
 using BizHawk.PSXMMX.Math;
+using BizHawk.PSXMMX.Input;
+using System.Drawing;
 using System.Windows.Forms;
+
+namespace BizHawk.PSXMMX.Forms;
 
 [ExternalTool("PSX MMX Analyzer", Description = "Analyzer Tool for PSOne MMX games")]
 [ExternalToolEmbeddedIcon("BizHawkPSXMMX.Icon.ico")]

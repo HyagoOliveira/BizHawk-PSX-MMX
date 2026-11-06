@@ -1,8 +1,8 @@
-﻿namespace BizHawk.PSXMMX.Math;
-
-using BizHawk.Client.Common;
+﻿using BizHawk.Client.Common;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+
+namespace BizHawk.PSXMMX.Math;
 
 /// <summary>
 /// Provides extension methods for <see cref="IGuiApi"/> enabling coordinate interop with <see cref="Vector2Int"/>.

@@ -1,7 +1,6 @@
-namespace BizHawk.PSXMMX.Math;
-
-using System;
 using System.Runtime.CompilerServices;
+
+namespace BizHawk.PSXMMX.Math;
 
 /// <summary>
 /// A 2D rectangle defined by integer coordinates and dimensions.
