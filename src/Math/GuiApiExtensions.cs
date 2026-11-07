@@ -74,6 +74,22 @@ public static class GuiApiExtensions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void DrawAxis(
+        this IGuiApi gui,
+        Vector2 position,
+        int size = 6,
+        Color? color = null)
+    {
+        gui.DrawAxis(
+            (int)position.X,
+            (int)position.Y,
+            size,
+            color,
+            DefaultSurfaceID
+        );
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void DrawBox(
         this IGuiApi gui,
         RectInt rect,

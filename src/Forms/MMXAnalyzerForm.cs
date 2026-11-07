@@ -45,7 +45,13 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     {
         var memory = APIs.Memory;
         var domain = memory.MainMemoryName;
-        var message = $"Player HP: {memory.ReadU8(address.Player.Hp, domain)} | {domain}@0x{address.Player.Hp:X}";
+        var playerPosition = new Vector2(
+            memory.ReadQ16_16(address.Player.PositionX, domain),
+            memory.ReadQ16_16(address.Player.PositionY, domain)
+        );
+        var message =
+            $"Player HP: {memory.ReadU8(address.Player.Hp, domain)} | {domain}@0x{address.Player.Hp:X}\n" +
+            $"Player Position: {playerPosition}";
 
         APIs.Gui.DrawText(
             new Vector2Int(10, 10),
@@ -53,6 +59,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
             Color.Yellow,
             Color.FromArgb(180, Color.Black)
         );
+        APIs.Gui.DrawAxis(playerPosition, color: Color.Lime);
     }
 
     private void ShowUnsupportedGameMessage() => APIs.Gui.DrawText(
