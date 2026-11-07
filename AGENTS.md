@@ -44,7 +44,7 @@ Root/
 Because BizHawk lacks an isolated API documentation website, all contracts, behaviors, and available services must be referenced directly from the following sources:
 
 ### 1. Official GitHub Repository (`TASEmulators/BizHawk`)
-- Analize the code inside this repository: https://github.com/TASEmulators/BizHawk/tree/2.11.1
+- Analise the code inside this repository: https://github.com/TASEmulators/BizHawk/tree/2.11.1
 - **API Contracts & Interfaces**: 
   `src/BizHawk.Client.Common/Api/Interfaces/`  
   Contains all public interfaces available via `ApiContainer` (e.g., `IMemoryApi.cs`, `IGuiApi.cs`, `IEmulationApi.cs`, `ISaveStateApi.cs`). Every method signature and XML summary (`/// <summary>`) detailing frame behaviors is located here.
@@ -62,8 +62,13 @@ Because BizHawk lacks an isolated API documentation website, all contracts, beha
 
 - The analyzer targets the USA releases of Mega Man X4, X5, and X6. Keep each game's addresses separate; do not reuse an address across games just because the field layout appears similar.
 - Store address data in `src/Memory/GameMemoryAddress.cs` and select it through `GameMemoryAddressFactory.Create(gameName)`. Add or correct mappings there rather than embedding game-specific addresses in the form.
-- The factory currently identifies games by BizHawk game name: `Mega Man X4 (USA)`, `Mega Man X5 (USA)`, and `Mega Man X6 (USA)`. Unsupported or unavailable game names return `null`; callers must handle that case without reading memory.
 - These addresses are offsets in BizHawk's PSX `MainRAM` memory domain, not host-process addresses. Read using the appropriate memory domain explicitly.
-- The X4 USA player HP address is `0x141924`. External Tool reads in BizHawk 2.11.1 confirmed that this byte tracks the player's energy (for example, `0x20` before damage and `0x1D` after one observed hit). The project's convention is to display the raw value as an unsigned 8-bit integer (`ReadU8`).
-- X5 and X6 addresses, along with player position/speed, camera, object groups, and flags, remain unvalidated until checked against live gameplay in BizHawk 2.11.1.
-- When validating a field, record the game/release, memory domain, address, read width/signedness, raw values before and after a controlled in-game action, and what was visible in the game. Do not describe a candidate address or inferred representation as confirmed until this comparison supports it.
+- For Mega Man X4 (USA), the player's HP is read from offset `0x141924` in BizHawk's PSX `MainRAM` domain.
+- Read HP as an unsigned 8-bit integer using `ReadU8`.
+
+## 6. Extracted PSX Room Data
+
+- Local extracted game data is stored under the Git-ignored `ROOMS_Extractions/` directory. It currently has separate `MMX4/`, `MMX5/`, and `MMX6/` folders.
+- Use these files as local references when investigating room layouts, assets, and game-specific data. Keep each game's extracted files separate.
+- The folders include disc files such as `ARC`, `STR`, `XA`, executables, and data files. They are not source code or validated memory maps; verify any conclusions against the running game.
+- Do not add extracted ROM/disc files to Git or modify them as part of routine analysis. Keep implementation changes in the project source.
