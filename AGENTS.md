@@ -63,8 +63,7 @@ Because BizHawk lacks an isolated API documentation website, all contracts, beha
 - The analyzer targets the USA releases of Mega Man X4, X5, and X6. Keep each game's addresses separate; do not reuse an address across games just because the field layout appears similar.
 - Store address data in `src/Memory/GameMemoryAddress.cs` and select it through `GameMemoryAddressFactory.Create(gameName)`. Add or correct mappings there rather than embedding game-specific addresses in the form.
 - These addresses are offsets in BizHawk's PSX `MainRAM` memory domain, not host-process addresses. Read using the appropriate memory domain explicitly.
-- For Mega Man X4 (USA), the player's HP is read from offset `0x141924` in BizHawk's PSX `MainRAM` domain.
-- Read HP as an unsigned 8-bit integer using `ReadU8`.
+- For Mega Man X4 (USA), the player's HP is read from offset `0x141924` in BizHawk's PSX `MainRAM` domain. Read HP as an unsigned 8-bit integer using `ReadU8`.
 
 ## 6. Extracted PSX Room Data
 
