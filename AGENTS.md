@@ -78,3 +78,9 @@ Because BizHawk lacks an isolated API documentation website, all contracts, beha
 - The resident PS-X executable `SLUS_005.61` loads at CPU address `0x80010000`, has text size `0x11F800`, and entry point `0x800DAE8C`. These are executable load/CPU addresses, not offsets for BizHawk's `MainRAM` memory API.
 - The repository's [bounded disc inventory](https://github.com/mstan/MegaManX4Recomp/blob/master/docs/DISC_INVENTORY.md) reports 130 typed ARC containers with 612 members and no separate game executable overlay identified in its examined loader paths. Treat this as inventory evidence, not proof about every possible runtime path or the meaning of individual room assets.
 - This project recompiles the PS1 executable to run natively on PC and adds optional mods. Addresses or pointers in that native process are not BizHawk PS1 `MainRAM` offsets; use the repository only as static reference for disc identity, executable metadata, and asset/archive investigation.
+
+## 8. Mega Man X4 Decompilation Reference
+
+- The [sozud/mmx4 repository](https://github.com/sozud/mmx4) is a reverse-engineered decompilation, not the original Capcom source project. Its C and assembly code are reconstructed from retail game executables, with the goal of producing byte-matching PlayStation builds.
+- The reconstruction is incomplete: some routines remain in assembly or have not yet been fully decompiled. Function names, comments, and interpretations in the repository are research labels and may not match the original developers' names or documentation.
+- Use it as a static reference for investigating X4 game logic, including enemy behavior. Do not treat its reconstructed source as an authoritative original design document or copy executable/process addresses as BizHawk `MainRAM` offsets; validate memory findings against the running game.
