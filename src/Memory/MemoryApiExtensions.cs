@@ -9,6 +9,6 @@ public static class MemoryApiExtensions
     /// and converts it to a floating-point value by dividing the stored integer by 2^16
     /// (65,536). In Q16.16, the lower 16 bits represent the fractional part.
     /// </summary>
-    public static float ReadQ16_16(this IMemoryApi memory, long address, string domain) =>
+    public static float ReadQ16(this IMemoryApi memory, long address, string domain) =>
         memory.ReadS32(address, domain) / 65536f;
 }

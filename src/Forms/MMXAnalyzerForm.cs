@@ -46,8 +46,8 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         var memory = APIs.Memory;
         var domain = memory.MainMemoryName;
         var playerPosition = new Vector2(
-            memory.ReadQ16_16(address.Player.PositionX, domain),
-            memory.ReadQ16_16(address.Player.PositionY, domain)
+            memory.ReadQ16(address.Player.PositionX, domain),
+            memory.ReadQ16(address.Player.PositionY, domain)
         );
         var message =
             $"Player HP: {memory.ReadU8(address.Player.Hp, domain)} | {domain}@0x{address.Player.Hp:X}\n" +
