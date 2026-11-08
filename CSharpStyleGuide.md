@@ -38,15 +38,15 @@ A comprehensive coding standard and style guide for developing using modern C# f
 ## 3. Formatting & Code Structure
 
 ### 3.1 File-Scoped Namespaces (C# 10+)
-Use file-scoped namespaces to reduce visual nesting across all source files.
+Use file-scoped namespaces to reduce visual nesting across all source files. Place the namespace declaration after all `using` directives.
 
 ```csharp
-namespace BizHawkExternalTool;
-
 using System.Drawing;
 using System.Windows.Forms;
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
+
+namespace BizHawkExternalTool;
 ```
 
 ### 3.2 Expression-Bodied Members
