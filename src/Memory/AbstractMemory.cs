@@ -46,6 +46,13 @@ public abstract class AbstractMemory<T>(string name, long address, IMemoryApi ap
         FrozenValue = default!;
     }
 
+    protected void WriteValueAndUpdate(T value)
+    {
+        WriteValue(value);
+        Value = value;
+        if (IsFrozen) FrozenValue = value;
+    }
+
     public override string ToString() => $"{Name}: {Value}";
 
     protected abstract T ReadValue();
