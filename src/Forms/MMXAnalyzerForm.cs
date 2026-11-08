@@ -4,6 +4,7 @@ using BizHawk.PSXMMX.Memory;
 using BizHawk.PSXMMX.Math;
 using System.Drawing;
 using System.Windows.Forms;
+using BizHawk.PSXMMX.Input;
 
 namespace BizHawk.PSXMMX.Forms;
 
@@ -12,9 +13,12 @@ namespace BizHawk.PSXMMX.Forms;
 public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 {
     public ApiContainer APIs { get; set; } = null!;
-    public GameMemoryAddress? MemoryAddress { get; private set; }
+    public KeyboardInput? Input { get; private set; } = null!;
+    public GameMemoryAddress? MemoryAddress { get; private set; } = null!;
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
+
+    public UIntMemory PlayerHP { get; private set; } = default!;
 
     public MMXAnalyzerForm()
     {
@@ -32,34 +36,26 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     {
         base.Restart();
         var gameName = APIs.Emulation.GetGameInfo()?.Name ?? string.Empty;
-        MemoryAddress = GameMemoryAddressFactory.Create(gameName);
+        MemoryAddress = GameMemoryAddress.Create(gameName);
+
+        Input = new KeyboardInput(APIs.Input);
+        PlayerHP = new UIntMemory("Player HP", MemoryAddress?.PlayerHP ?? 0, APIs.Memory);
     }
 
     protected override void UpdateAfter()
     {
-        if (MemoryAddress is { } address) UpdateGame(address);
-        else ShowUnsupportedGameMessage();
+        if (MemoryAddress == null) ShowUnsupportedGameMessage();
+        else UpdateGame();
     }
 
-    private void UpdateGame(GameMemoryAddress address)
+    private void UpdateGame()
     {
-        var memory = APIs.Memory;
-        var domain = memory.MainMemoryName;
-        var playerPosition = new Vector2(
-            memory.ReadQ16(address.Player.PositionX, domain),
-            memory.ReadQ16(address.Player.PositionY, domain)
-        );
-        var message =
-            $"Player HP: {memory.ReadU8(address.Player.Hp, domain)} | {domain}@0x{address.Player.Hp:X}\n" +
-            $"Player Position: {playerPosition}";
+        Input.Update();
 
-        APIs.Gui.DrawText(
-            new Vector2Int(10, 10),
-            message,
-            Color.Yellow,
-            Color.FromArgb(180, Color.Black)
-        );
-        APIs.Gui.DrawAxis(playerPosition, color: Color.Lime);
+        PlayerHP.Update();
+        PlayerHP.Draw(new Vector2Int(60, 10), APIs.Gui);
+
+        if (Input.GetKeyDown("T")) PlayerHP.ToggleFreeze();
     }
 
     private void ShowUnsupportedGameMessage() => APIs.Gui.DrawText(

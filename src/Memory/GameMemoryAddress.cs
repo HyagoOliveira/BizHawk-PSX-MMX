@@ -2,119 +2,25 @@ namespace BizHawk.PSXMMX.Memory;
 
 public sealed class GameMemoryAddress
 {
-    public string GameName { get; }
-    public Player Player { get; }
-    public Camera Camera { get; }
-    public PlayerDamage PlayerDamage { get; }
-    public Enemies Enemies { get; }
-    public EnemyItems EnemyItems { get; }
+    public long PlayerHP { get; }
 
-    internal GameMemoryAddress(
-        string gameName,
-        Player player,
-        Camera camera,
-        PlayerDamage playerDamage,
-        Enemies enemies,
-        EnemyItems enemyItems)
+    internal GameMemoryAddress(long playerHP)
     {
-        GameName = gameName;
-        Player = player;
-        Camera = camera;
-        PlayerDamage = playerDamage;
-        Enemies = enemies;
-        EnemyItems = enemyItems;
+        PlayerHP = playerHP;
     }
-}
 
-public sealed class Player
-{
-    public long Base { get; }
-    public long Action { get; }
-    public long SubAction { get; }
-    public long PositionX { get; }
-    public long PositionY { get; }
-    public long Facing { get; }
-    public long LastPositionX { get; }
-    public long LastPositionY { get; }
-    public long SpeedX { get; }
-    public long SpeedY { get; }
-    public long Hp { get; }
-
-    internal Player(
-        long baseAddress,
-        long action,
-        long subAction,
-        long positionX,
-        long positionY,
-        long facing,
-        long lastPositionX,
-        long lastPositionY,
-        long speedX,
-        long speedY,
-        long hp)
+    public static GameMemoryAddress? Create(string gameName)
     {
-        Base = baseAddress;
-        Action = action;
-        SubAction = subAction;
-        PositionX = positionX;
-        PositionY = positionY;
-        Facing = facing;
-        LastPositionX = lastPositionX;
-        LastPositionY = lastPositionY;
-        SpeedX = speedX;
-        SpeedY = speedY;
-        Hp = hp;
+        return gameName switch
+        {
+            "Mega Man X4 (USA)" => CreateX4(),
+            "Mega Man X5 (USA)" => CreateX5(),
+            "Mega Man X6 (USA)" => CreateX6(),
+            _ => null
+        };
     }
-}
 
-public sealed class Camera
-{
-    public long Base { get; }
-    public long PositionX { get; }
-    public long PositionY { get; }
-    public long Hud { get; }
-
-    internal Camera(long baseAddress, long positionX, long positionY, long hud)
-    {
-        Base = baseAddress;
-        PositionX = positionX;
-        PositionY = positionY;
-        Hud = hud;
-    }
-}
-
-public sealed class PlayerDamage
-{
-    public long Base { get; }
-    public long Disabled { get; }
-
-    internal PlayerDamage(long baseAddress, long disabled)
-    {
-        Base = baseAddress;
-        Disabled = disabled;
-    }
-}
-
-public sealed class Enemies
-{
-    public long Base { get; }
-    public long Disabled { get; }
-
-    internal Enemies(long baseAddress, long disabled)
-    {
-        Base = baseAddress;
-        Disabled = disabled;
-    }
-}
-
-public sealed class EnemyItems
-{
-    public long Base { get; }
-    public long Disabled { get; }
-
-    internal EnemyItems(long baseAddress, long disabled)
-    {
-        Base = baseAddress;
-        Disabled = disabled;
-    }
+    private static GameMemoryAddress CreateX4() => new(playerHP: 0x141924);
+    private static GameMemoryAddress CreateX5() => new(playerHP: 0x09A0FC);
+    private static GameMemoryAddress CreateX6() => new(playerHP: 0x0970FC);
 }
