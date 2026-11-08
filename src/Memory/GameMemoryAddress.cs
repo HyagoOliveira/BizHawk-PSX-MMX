@@ -9,13 +9,13 @@ public sealed class GameMemoryAddress
         PlayerHP = playerHP;
     }
 
-    public static GameMemoryAddress? Create(string gameName)
+    public static GameMemoryAddress? Create(string gameHash)
     {
-        return gameName switch
+        return gameHash switch
         {
-            "Mega Man X4 (USA)" => CreateX4(),
-            "Mega Man X5 (USA)" => CreateX5(),
-            "Mega Man X6 (USA)" => CreateX6(),
+            "314E06A8" => CreateX4(),
+            "1C64D6EA" => CreateX5(),
+            "F063F536" => CreateX6(),
             _ => null
         };
     }

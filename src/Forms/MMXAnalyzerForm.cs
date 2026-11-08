@@ -40,8 +40,8 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     public override void Restart()
     {
         base.Restart();
-        var gameName = APIs.Emulation.GetGameInfo()?.Name ?? string.Empty;
-        MemoryAddress = GameMemoryAddress.Create(gameName);
+        var gameHash = APIs.Emulation.GetGameInfo()?.Hash ?? string.Empty;
+        MemoryAddress = GameMemoryAddress.Create(gameHash);
 
         Input = new KeyboardInput(APIs.Input);
         PlayerHP = new UIntMemory("Player HP", MemoryAddress?.PlayerHP ?? 0, APIs.Memory);
