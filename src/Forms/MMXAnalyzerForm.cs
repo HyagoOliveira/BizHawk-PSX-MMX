@@ -41,16 +41,16 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     {
         base.Restart();
         var gameHash = APIs.Emulation.GetGameInfo()?.Hash ?? string.Empty;
-        MemoryAddress = GameMemoryAddress.Create(gameHash);
+        MemoryAddress = GameMemoryAddress.Get(gameHash);
 
         Input = new KeyboardInput(APIs.Input);
-        PlayerHP = new UIntMemory("Player HP", MemoryAddress?.PlayerHP ?? 0, APIs.Memory);
+        PlayerHP = new UIntMemory("Player HP", MemoryAddress.PlayerHP, APIs.Memory);
         playerFoldout.SetMemory(PlayerHP);
     }
 
     protected override void UpdateAfter()
     {
-        if (MemoryAddress == null) ShowUnsupportedGameMessage();
+        if (MemoryAddress?.IsInvalid == true) ShowUnsupportedGameMessage();
         else UpdateGame();
     }
 
