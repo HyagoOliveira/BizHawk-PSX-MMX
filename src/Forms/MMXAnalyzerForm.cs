@@ -22,6 +22,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     public UIntMemory? PlayerHP { get; private set; }
 
     private readonly PlayerFoldout playerFoldout = new();
+    private readonly SoundFoldout soundFoldout = new();
 
     public MMXAnalyzerForm()
     {
@@ -58,9 +59,12 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         Input.Update();
 
         PlayerHP.Update();
-        PlayerHP.Draw(new Vector2Int(60, 10), APIs.Gui);
 
         if (Input.GetKeyDown("T")) playerFoldout.ToggleFreeze();
+        if (Input.GetKeyDown("KeypadAdd")) PlayerHP++;
+        if (Input.GetKeyDown("KeypadSubtract")) PlayerHP--;
+
+        PlayerHP.Draw(new Vector2Int(60, 10), APIs.Gui);
 
         UpdateFoldouts();
     }
@@ -77,6 +81,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         };
 
         sections.Controls.Add(playerFoldout);
+        sections.Controls.Add(soundFoldout);
         Controls.Add(sections);
     }
     private void UpdateFoldouts()

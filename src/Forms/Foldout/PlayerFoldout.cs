@@ -21,7 +21,7 @@ public sealed class PlayerFoldout : FoldoutControl
         {
             AutoSize = true,
             Location = new Point(10, 36),
-            Text = "T: Freeze or unfreeze Player HP"
+            Text = "T: Freeze/unfreeze HP | +/-: Change HP"
         };
 
         ContentPanel.Controls.Add(freezePlayerHpButton);
