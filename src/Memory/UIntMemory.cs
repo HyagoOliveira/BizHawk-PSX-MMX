@@ -10,6 +10,7 @@ public sealed class UIntMemory(string name, long address, IMemoryApi api) : Abst
     public static UIntMemory operator +(UIntMemory memory, uint amount)
     {
         if (memory is null) throw new ArgumentNullException(nameof(memory));
+        if (memory.IsFrozen) return memory;
 
         var value = amount >= byte.MaxValue - memory.Value
             ? byte.MaxValue
@@ -21,6 +22,7 @@ public sealed class UIntMemory(string name, long address, IMemoryApi api) : Abst
     public static UIntMemory operator -(UIntMemory memory, uint amount)
     {
         if (memory is null) throw new ArgumentNullException(nameof(memory));
+        if (memory.IsFrozen) return memory;
 
         var value = amount >= memory.Value ? 0 : memory.Value - amount;
         memory.WriteValueAndUpdate(value);

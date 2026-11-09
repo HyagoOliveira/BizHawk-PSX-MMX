@@ -1,6 +1,7 @@
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
 using BizHawk.PSXMMX.Forms.Foldout;
+using BizHawk.PSXMMX.Gameplay;
 using BizHawk.PSXMMX.Input;
 using BizHawk.PSXMMX.Math;
 using BizHawk.PSXMMX.Memory;
@@ -14,14 +15,11 @@ namespace BizHawk.PSXMMX.Forms;
 public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 {
     public ApiContainer APIs { get; set; } = null!;
+    public Player? Player { get; private set; } = null!;
     public KeyboardInput Input { get; private set; } = null!;
     public GameMemoryAddress? MemoryAddress { get; private set; } = null!;
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
-
-    public SByteMemory? PlayerHP { get; private set; }
-
-    private readonly PlayerFoldout playerFoldout = new();
 
     public MMXAnalyzerForm()
     {
@@ -43,33 +41,24 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         MemoryAddress = GameMemoryAddress.Get(gameHash);
 
         Input = new KeyboardInput(APIs.Input);
-        PlayerHP = new SByteMemory("Player HP", MemoryAddress.PlayerHP, APIs.Memory);
-        playerFoldout.SetMemory(PlayerHP);
+        Player = new Player(APIs.Memory, MemoryAddress.Player);
     }
 
     protected override void UpdateAfter()
     {
-        if (MemoryAddress?.IsInvalid == true) ShowUnsupportedGameMessage();
+        if (MemoryAddress?.IsInvalid() == true) ShowUnsupportedGameMessage();
         else UpdateGame();
     }
 
     private void UpdateGame()
     {
         Input.Update();
-        PlayerHP?.Update();
-
-        if (Input.GetKeyDown("T")) playerFoldout.ToggleFreeze();
-        if (Input.GetKeyDown("KeypadAdd") && PlayerHP is not null) PlayerHP++;
-        if (Input.GetKeyDown("KeypadSubtract") && PlayerHP is not null) PlayerHP--;
-
-        PlayerHP?.Draw(new Vector2Int(60, 10), APIs.Gui);
-
-        UpdateFoldouts();
+        Player?.Update(Input, APIs.Gui);
     }
 
     private void InitializeFoldouts()
     {
-        var sections = new FlowLayoutPanel
+        /*var sections = new FlowLayoutPanel
         {
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.TopDown,
@@ -79,12 +68,9 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         };
 
         sections.Controls.Add(playerFoldout);
-        Controls.Add(sections);
+        Controls.Add(sections);*/
     }
-    private void UpdateFoldouts()
-    {
-        playerFoldout.UpdateFreezeButton();
-    }
+
     private void ShowUnsupportedGameMessage() => APIs.Gui.DrawText(
         new Vector2Int(10, 10),
         "Failed to initialize!\nSupported games: Mega Man X4, X5 and X6 (USA)",

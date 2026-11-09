@@ -10,6 +10,7 @@ public sealed class SByteMemory(string name, long address, IMemoryApi api) : Abs
     public static SByteMemory operator ++(SByteMemory memory)
     {
         if (memory is null) throw new ArgumentNullException(nameof(memory));
+        if (memory.IsFrozen) return memory;
 
         var value = memory.Value < sbyte.MaxValue ? (sbyte)(memory.Value + 1) : sbyte.MaxValue;
         memory.WriteValueAndUpdate(value);
@@ -19,6 +20,7 @@ public sealed class SByteMemory(string name, long address, IMemoryApi api) : Abs
     public static SByteMemory operator --(SByteMemory memory)
     {
         if (memory is null) throw new ArgumentNullException(nameof(memory));
+        if (memory.IsFrozen) return memory;
 
         var value = memory.Value > sbyte.MinValue ? (sbyte)(memory.Value - 1) : sbyte.MinValue;
         memory.WriteValueAndUpdate(value);
