@@ -7,7 +7,7 @@ namespace BizHawk.PSXMMX.Forms.Foldout;
 public sealed class PlayerFoldout : FoldoutControl
 {
     private readonly Button freezePlayerHpButton = new();
-    private UIntMemory? playerHP;
+    private SByteMemory? playerHP;
 
     public PlayerFoldout() : base("Player", isExpanded: true)
     {
@@ -31,7 +31,7 @@ public sealed class PlayerFoldout : FoldoutControl
         UpdateFreezeButton();
     }
 
-    public void SetMemory(UIntMemory? memory)
+    public void SetMemory(SByteMemory? memory)
     {
         playerHP = memory;
         freezePlayerHpButton.Enabled = memory is not null;

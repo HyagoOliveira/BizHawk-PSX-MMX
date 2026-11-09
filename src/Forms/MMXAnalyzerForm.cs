@@ -19,10 +19,9 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
 
-    public UIntMemory? PlayerHP { get; private set; }
+    public SByteMemory? PlayerHP { get; private set; }
 
     private readonly PlayerFoldout playerFoldout = new();
-    private readonly SoundFoldout soundFoldout = new();
 
     public MMXAnalyzerForm()
     {
@@ -44,7 +43,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         MemoryAddress = GameMemoryAddress.Get(gameHash);
 
         Input = new KeyboardInput(APIs.Input);
-        PlayerHP = new UIntMemory("Player HP", MemoryAddress.PlayerHP, APIs.Memory);
+        PlayerHP = new SByteMemory("Player HP", MemoryAddress.PlayerHP, APIs.Memory);
         playerFoldout.SetMemory(PlayerHP);
     }
 
@@ -57,14 +56,13 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     private void UpdateGame()
     {
         Input.Update();
-
-        PlayerHP.Update();
+        PlayerHP?.Update();
 
         if (Input.GetKeyDown("T")) playerFoldout.ToggleFreeze();
-        if (Input.GetKeyDown("KeypadAdd")) PlayerHP++;
-        if (Input.GetKeyDown("KeypadSubtract")) PlayerHP--;
+        if (Input.GetKeyDown("KeypadAdd") && PlayerHP is not null) PlayerHP++;
+        if (Input.GetKeyDown("KeypadSubtract") && PlayerHP is not null) PlayerHP--;
 
-        PlayerHP.Draw(new Vector2Int(60, 10), APIs.Gui);
+        PlayerHP?.Draw(new Vector2Int(60, 10), APIs.Gui);
 
         UpdateFoldouts();
     }
@@ -81,7 +79,6 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         };
 
         sections.Controls.Add(playerFoldout);
-        sections.Controls.Add(soundFoldout);
         Controls.Add(sections);
     }
     private void UpdateFoldouts()
