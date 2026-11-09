@@ -14,6 +14,8 @@ public abstract class AbstractMemory<T>(string name, long address, IMemoryApi ap
     public T Value { get; private set; } = default!;
     public T FrozenValue { get; private set; } = default!;
 
+    public const string MEMORY_DOMAIN = "MainRAM";
+
     public void Update()
     {
         if (IsFrozen) WriteValue(FrozenValue);

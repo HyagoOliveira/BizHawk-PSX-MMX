@@ -4,8 +4,8 @@ namespace BizHawk.PSXMMX.Memory;
 
 public sealed class UIntMemory(string name, long address, IMemoryApi api) : AbstractMemory<uint>(name, address, api)
 {
-    protected override uint ReadValue() => MemoryApi.ReadU8(Address);
-    protected override void WriteValue(uint value) => MemoryApi.WriteU8(Address, value);
+    protected override uint ReadValue() => MemoryApi.ReadU8(Address, MEMORY_DOMAIN);
+    protected override void WriteValue(uint value) => MemoryApi.WriteU8(Address, value, MEMORY_DOMAIN);
 
     public static UIntMemory operator +(UIntMemory memory, uint amount)
     {
