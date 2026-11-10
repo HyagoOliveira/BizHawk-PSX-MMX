@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace BizHawk.PSXMMX.Math;
@@ -18,7 +19,7 @@ public readonly record struct Vector2(float X, float Y) : IEquatable<Vector2>
     public float GetSqrMagnitude() => (X * X) + (Y * Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString() => $"({X}, {Y})";
+    public override string ToString() => string.Format(CultureInfo.InvariantCulture, "({0}, {1})", X, Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator +(Vector2 a, Vector2 b) => new(a.X + b.X, a.Y + b.Y);

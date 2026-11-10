@@ -9,8 +9,8 @@ namespace BizHawk.PSXMMX.Memory;
 /// </summary>
 public sealed class Fixed16Memory(string name, long address, IMemoryApi api) : AbstractMemory<float>(name, address, api)
 {
-    private const float FIXED_POINT_SCALE = 65_536f; // 0x10000 (2^16).
+    public const float POINT_SCALE = 65_536f; // 0x10000 (2^16)
 
-    protected override float ReadValue() => MemoryApi.ReadS32(Address, MEMORY_DOMAIN) / FIXED_POINT_SCALE;
-    protected override void WriteValue(float value) => MemoryApi.WriteS32(Address, checked((int)(value * FIXED_POINT_SCALE)), MEMORY_DOMAIN);
+    protected override float ReadValue() => MemoryApi.ReadS32(Address, MEMORY_DOMAIN) / POINT_SCALE;
+    protected override void WriteValue(float value) => MemoryApi.WriteS32(Address, checked((int)(value * POINT_SCALE)), MEMORY_DOMAIN);
 }

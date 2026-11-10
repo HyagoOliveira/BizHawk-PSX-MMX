@@ -1,5 +1,4 @@
 using BizHawk.Client.Common;
-using BizHawk.PSXMMX.Gameplay.Components;
 using BizHawk.PSXMMX.Input;
 using BizHawk.PSXMMX.Math;
 

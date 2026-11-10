@@ -10,8 +10,7 @@ public class GameObject
     public long BaseAddress { get; }
     public ApiContainer APIs { get; }
 
-    // Default Component similar to Unity's API.
-    public Transform Transform { get; private set; }
+    public Fixed16Vector2Memory Position { get; private set; }
 
     private readonly List<IMemory> variables = [];
     private readonly List<AbstractComponent> components = [];
@@ -21,10 +20,10 @@ public class GameObject
         APIs = apis;
         BaseAddress = baseAddress;
 
-        Transform = AddComponent(new Transform(
-            this,
-            BaseAddress + 0, //TODO find offset addresses
-            BaseAddress + 0
+        Position = AddVariable(new Fixed16Vector2Memory(
+            "Position",
+            BaseAddress + 0x08,
+            APIs.Memory
         ));
 
         // Each implementation should initialize its own variables and components in the constructor.
@@ -50,7 +49,7 @@ public class GameObject
         foreach (var component in components) component.Update();
     }
 
-    public void DrawVariables(Vector2Int position)
+    public virtual void DrawVariables(Vector2Int position)
     {
         foreach (var variable in variables)
         {
