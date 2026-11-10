@@ -41,7 +41,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         MemoryAddress = GameMemoryAddress.Get(gameHash);
 
         Input = new KeyboardInput(APIs.Input);
-        Player = new Player(APIs.Memory, MemoryAddress.Player);
+        Player = new Player(APIs, Input, MemoryAddress.Player);
     }
 
     protected override void UpdateAfter()
