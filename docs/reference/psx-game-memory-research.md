@@ -74,7 +74,7 @@ These are separate globals/pools. `g_Player` is a single player object, not an a
 | `on_screen` | `+0x03` | `s8` | `sbyte` |
 | `state` | `+0x04` | `s8` | `sbyte` |
 | `unk5`, `unk6`, `unk7` | `+0x05`-`+0x07` | `s8` each | `sbyte` |
-| `x_pos`, `y_pos` | `+0x08`, `+0x0C` | `f32` each | `float` |
+| `x_pos`, `y_pos` | `+0x08`, `+0x0C` | `f32` (signed 16.16 fixed-point) each | `int` (raw value) |
 | `backref` | `+0x10` | 32-bit PS1 pointer | `uint` when stored as a raw address |
 | `bg_offset` | `+0x14` | `s8` | `sbyte` |
 | `unk15` | `+0x15` | `u8` | `byte` |
@@ -86,7 +86,7 @@ These are separate globals/pools. `g_Player` is a single player object, not an a
 
 | Layout | Field | Object offset | MMX4 type | C# type |
 |---|---|---:|---|---|
-| `PlayerObj` | `x_vel`, `y_vel` | `+0x20`, `+0x24` | `f32` each | `float` |
+| `PlayerObj` | `x_vel`, `y_vel` | `+0x20`, `+0x24` | `f32` (signed 16.16 fixed-point) each | `int` (raw value) |
 | `MainObj` | `x_speed`, `y_speed` | `+0x20`, `+0x24` | `s32` each | `int` |
 | `MainObj` | `x_accel` | `+0x28` | `s32` | `int` |
 | `MainObj` | `gravity` | `+0x2C` | `s32` | `int` |
@@ -94,4 +94,6 @@ These are separate globals/pools. `g_Player` is a single player object, not an a
 
 Do not treat fields at the same offset as having the same type or meaning across different object layouts. For example, player velocity is `f32` while main-object speed is `s32`; offset `+0x5C` is named `hp` in `PlayerObj` and `MainObj`, but is not HP in every pool's object type.
 
-The reconstructed C `obj.h` and USA symbol map are the primary references for these layouts. Names such as `unk*` reflect incomplete reverse engineering; do not assign semantics without corroborating code use. The PC port may use different layouts because pointer sizes differ. Keep these PS1 offsets separate from addresses for other games and platforms.
+In the MMX4 decompilation, `f32` is a union containing a signed 32-bit `val`; it is not an IEEE-754 `float`. Position and player velocity values use signed 16.16 fixed-point representation: divide the raw signed integer by `65536.0` to obtain the real-valued quantity. Read these fields as a 32-bit integer in C# and retain that raw value when exact representation matters; convert to `double` or `float` only when needed for calculations or display. The `s32` main-object speed, acceleration, and gravity fields remain documented as raw signed integers; do not assume their scale from the `f32` fields.
+
+The reconstructed C `obj.h`, `common.h`, and USA symbol map are the primary references for these layouts. Names such as `unk*` reflect incomplete reverse engineering; do not assign semantics without corroborating code use. The PC port may use different layouts because pointer sizes differ. Keep these PS1 offsets separate from addresses for other games and platforms.
