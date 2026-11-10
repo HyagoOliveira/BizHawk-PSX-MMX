@@ -1,5 +1,7 @@
 using BizHawk.Client.Common;
 using BizHawk.PSXMMX.Gameplay.Components;
+using BizHawk.PSXMMX.Math;
+using BizHawk.PSXMMX.Memory;
 
 namespace BizHawk.PSXMMX.Gameplay;
 
@@ -10,6 +12,7 @@ public class GameObject
     public IMemoryApi MemoryApi { get; private set; }
 
     private readonly List<IComponent> components = [];
+    private readonly List<IMemory> variables = new();
 
     public GameObject(IMemoryApi memoryApi, long baseAddress)
     {
@@ -31,11 +34,26 @@ public class GameObject
         return component;
     }
 
-    public T? GetComponent<T>() where T : class, IComponent => components.OfType<T>().FirstOrDefault();
+    public T AddVariable<T>(T variable) where T : IMemory
+    {
+        if (variable is null) throw new ArgumentNullException(nameof(variable));
+        variables.Add(variable);
+        return variable;
+    }
 
     public virtual void Update()
     {
+        foreach (var variable in variables) variable.Update();
         foreach (var component in components) component.Update();
+    }
+
+    public void DrawVariables(IGuiApi gui, Vector2Int position)
+    {
+        foreach (var variable in variables)
+        {
+            variable.Draw(position, gui);
+            position = new Vector2Int(position.X, position.Y + 20);
+        }
     }
 
     protected virtual void AddInitialComponents() { }

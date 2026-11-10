@@ -12,15 +12,8 @@ public class GameCharacter : GameObject
 
     public GameCharacter(IMemoryApi memoryApi, long baseAddress) : base(memoryApi, baseAddress)
     {
-        Health = new SByteMemory("HP", baseAddress + 0x5C, memoryApi);
-        Facing = new ByteMemory("Facing", baseAddress + 0x15, memoryApi);
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        Health.Update();
-        Facing.Update();
+        Health = AddVariable(new SByteMemory("HP", baseAddress + 0x5C, memoryApi));
+        Facing = AddVariable(new ByteMemory("Facing", baseAddress + 0x15, memoryApi));
     }
 
     public void Update(KeyboardInput input, IGuiApi gui)
@@ -30,7 +23,6 @@ public class GameCharacter : GameObject
         else if (input.GetKey("KeypadSubtract")) Health--;
 
         Update();
-        Health.Draw(new Vector2Int(60, 10), gui);
-        Facing.Draw(new Vector2Int(60, 30), gui);
+        DrawVariables(gui, new Vector2Int(60, 10));
     }
 }

@@ -4,7 +4,7 @@ using BizHawk.PSXMMX.Math;
 
 namespace BizHawk.PSXMMX.Memory;
 
-public abstract class AbstractMemory<T>(string name, long address, IMemoryApi api)
+public abstract class AbstractMemory<T>(string name, long address, IMemoryApi api) : IMemory
 {
     public string Name { get; } = name;
     public long Address { get; } = address;
