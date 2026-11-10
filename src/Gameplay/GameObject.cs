@@ -14,7 +14,7 @@ public class GameObject
     public Transform Transform { get; private set; }
 
     private readonly List<IMemory> variables = [];
-    private readonly List<IComponent> components = [];
+    private readonly List<AbstractComponent> components = [];
 
     public GameObject(long baseAddress, ApiContainer apis)
     {
@@ -22,6 +22,7 @@ public class GameObject
         BaseAddress = baseAddress;
 
         Transform = AddComponent(new Transform(
+            this,
             BaseAddress + 0, //TODO find offset addresses
             BaseAddress + 0
         ));
@@ -29,10 +30,9 @@ public class GameObject
         // Each implementation should initialize its own variables and components in the constructor.
     }
 
-    public T AddComponent<T>(T component) where T : IComponent
+    public T AddComponent<T>(T component) where T : AbstractComponent
     {
         if (component is null) throw new ArgumentNullException(nameof(component));
-        component.GameObject = this;
         components.Add(component);
         return component;
     }

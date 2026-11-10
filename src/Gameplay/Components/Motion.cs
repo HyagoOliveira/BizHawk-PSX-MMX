@@ -3,15 +3,14 @@ using BizHawk.PSXMMX.Memory;
 
 namespace BizHawk.PSXMMX.Gameplay.Components;
 
-public sealed class Motion : IComponent
+public sealed class Motion : AbstractComponent
 {
-    public GameObject GameObject { get; set; }
     public Vector2 Velocity { get; private set; }
 
-    public Motion(long xSpeedAddress, long ySpeedAddress)
+    public Motion(GameObject gameObject, long xSpeedAddress, long ySpeedAddress) : base(gameObject)
     {
 
     }
 
-    public void Update() { }
+    public override void Update() { }
 }

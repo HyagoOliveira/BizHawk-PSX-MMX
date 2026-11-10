@@ -3,15 +3,14 @@ using BizHawk.PSXMMX.Memory;
 
 namespace BizHawk.PSXMMX.Gameplay.Components;
 
-public sealed class Transform : IComponent
+public sealed class Transform : AbstractComponent
 {
-    public GameObject GameObject { get; set; }
     public Vector2 Position { get; private set; }
 
-    public Transform(long xAddress, long yAddress)
+    public Transform(GameObject gameObject, long xAddress, long yAddress) : base(gameObject)
     {
 
     }
 
-    public void Update() { }
+    public override void Update() { }
 }
