@@ -7,23 +7,26 @@ namespace BizHawk.PSXMMX.Gameplay;
 
 public class GameObject
 {
-    public long BaseAddress { get; private set; }
+    public long BaseAddress { get; }
+    public ApiContainer APIs { get; }
+
+    // Default Component similar to Unity's API.
     public Transform Transform { get; private set; }
-    public IMemoryApi MemoryApi { get; private set; }
 
+    private readonly List<IMemory> variables = [];
     private readonly List<IComponent> components = [];
-    private readonly List<IMemory> variables = new();
 
-    public GameObject(IMemoryApi memoryApi, long baseAddress)
+    public GameObject(long baseAddress, ApiContainer apis)
     {
-        MemoryApi = memoryApi;
+        APIs = apis;
         BaseAddress = baseAddress;
 
         Transform = AddComponent(new Transform(
             BaseAddress + 0, //TODO find offset addresses
             BaseAddress + 0
         ));
-        AddInitialComponents();
+
+        // Each implementation should initialize its own variables and components in the constructor.
     }
 
     public T AddComponent<T>(T component) where T : IComponent
@@ -47,14 +50,12 @@ public class GameObject
         foreach (var component in components) component.Update();
     }
 
-    public void DrawVariables(IGuiApi gui, Vector2Int position)
+    public void DrawVariables(Vector2Int position)
     {
         foreach (var variable in variables)
         {
-            variable.Draw(position, gui);
+            variable.Draw(position, APIs.Gui);
             position = new Vector2Int(position.X, position.Y + 20);
         }
     }
-
-    protected virtual void AddInitialComponents() { }
 }

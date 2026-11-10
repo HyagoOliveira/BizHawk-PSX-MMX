@@ -16,7 +16,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 {
     public ApiContainer APIs { get; set; } = null!;
     public Player? Player { get; private set; } = null!;
-    public KeyboardInput Input { get; private set; } = null!;
+    public KeyboardInput? Input { get; private set; } = null!;
     public GameMemoryAddress? MemoryAddress { get; private set; } = null!;
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
@@ -41,7 +41,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         MemoryAddress = GameMemoryAddress.Get(gameHash);
 
         Input = new KeyboardInput(APIs.Input);
-        Player = new Player(APIs, Input, MemoryAddress.Player);
+        Player = new Player(MemoryAddress.Player, APIs, Input);
     }
 
     protected override void UpdateAfter()
@@ -52,8 +52,8 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     private void UpdateGame()
     {
-        Input.Update();
-        Player?.Update(Input, APIs.Gui);
+        Input?.Update();
+        Player?.Update();
     }
 
     private void InitializeFoldouts()
