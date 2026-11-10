@@ -90,7 +90,7 @@ The following `PlayerObj` fields are useful for correlating a weapon-pool snapsh
 | `on_screen` | `+0x03` | `s8` | `sbyte` |
 | `state` | `+0x04` | `s8` | `sbyte` |
 | `unk5`, `unk6`, `unk7` | `+0x05`-`+0x07` | `s8` each | `sbyte` |
-| `x_pos`, `y_pos` | `+0x08`, `+0x0C` | `f32` (signed 16.16 fixed-point) each | `int` (raw value) |
+| `x_pos`, `y_pos` | `+0x08`, `+0x0C` | `f32` (signed 16.16 fixed-point) each | `Fixed16Vector2Memory` (`Vector2` values) |
 | `backref` | `+0x10` | 32-bit PS1 pointer | `uint` when stored as a raw address |
 | `bg_offset` | `+0x14` | `s8` | `sbyte` |
 | `unk15` | `+0x15` | `u8` | `byte` |
@@ -110,6 +110,6 @@ The following `PlayerObj` fields are useful for correlating a weapon-pool snapsh
 
 Do not treat fields at the same offset as having the same type or meaning across different object layouts. For example, player velocity is `f32` while main-object speed is `s32`; offset `+0x5C` is named `hp` in `PlayerObj` and `MainObj`, but is not HP in every pool's object type.
 
-In the MMX4 decompilation, `f32` is a union containing a signed 32-bit `val`; it is not an IEEE-754 `float`. Position and player velocity values use signed 16.16 fixed-point representation: divide the raw signed integer by `65536.0` to obtain the real-valued quantity. Read these fields as a 32-bit integer in C# and retain that raw value when exact representation matters; convert to `double` or `float` only when needed for calculations or display. The `s32` main-object speed, acceleration, and gravity fields remain documented as raw signed integers; do not assume their scale from the `f32` fields.
+In the MMX4 decompilation, `f32` is a union containing a signed 32-bit `val`; it is not an IEEE-754 `float`. Position and player velocity values use signed 16.16 fixed-point representation: divide the raw signed integer by `65,536` (`0x10000`) to obtain the real-valued quantity. The current `Fixed16Vector2Memory` implementation reads the two position components as signed 32-bit integers at `+0x08` and `+0x0C`, converts them to `float`, and exposes them as a `Vector2`. The underlying raw values can be read directly as `int` when exact representation is needed. Player velocity is also 16.16, but should use its own mapping at `+0x20` and `+0x24`; do not assume the position vector's memory spacing or reader applies to it. The `s32` main-object speed, acceleration, and gravity fields remain documented as raw signed integers; do not assume their scale from the `f32` fields.
 
 The reconstructed C `obj.h`, `common.h`, and USA symbol map are the primary references for these layouts. Names such as `unk*` reflect incomplete reverse engineering; do not assign semantics without corroborating code use. The PC port may use different layouts because pointer sizes differ. Keep these PS1 offsets separate from addresses for other games and platforms.

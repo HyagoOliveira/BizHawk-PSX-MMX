@@ -8,9 +8,9 @@ namespace BizHawk.PSXMMX.Memory;
 /// with a 32-bit integer: 16 bits represent the integer part and 16 bits represent the
 /// fractional part.
 /// </summary>
-public sealed class Fixed16Vector2Memory(string name, long address, IMemoryApi api) : AbstractMemory<Vector2>(name, address, api)
+public sealed class Fixed16Vector2Memory(string name, long address, long offset, IMemoryApi api) : AbstractMemory<Vector2>(name, address, api)
 {
-    private const long Y_OFFSET = 0x0C; // Offset for the Y component in memory.
+    public long Offset { get; } = offset;
 
     protected override Vector2 ReadValue() => new Vector2(
         MemoryApi.ReadS32(GetXAddress(), MEMORY_DOMAIN),
@@ -26,5 +26,5 @@ public sealed class Fixed16Vector2Memory(string name, long address, IMemoryApi a
     private int ToInt(float value) => checked((int)(value * Fixed16Memory.POINT_SCALE));
 
     private long GetXAddress() => Address;
-    private long GetYAddress() => Address + Y_OFFSET;
+    private long GetYAddress() => Address + Offset;
 }
