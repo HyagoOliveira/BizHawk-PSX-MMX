@@ -64,6 +64,22 @@ The following addresses and layouts are confirmed against the MMX4 USA reconstru
 
 These are separate globals/pools. `g_Player` is a single player object, not an array. `main_objects` is the general main-object pool; do not assume every entry represents an enemy.
 
+### Player projectiles
+
+Player-fired shots use `weapon_objects`, not `shot_objects`. The reconstructed `player_spawn_weapon` allocates a free `WeaponObj`, initializes its `active` and `id` fields, and stores the shot type in `id`; `player_fire_weapon` calls it with the player's current shot type. `shot_objects` is a separate pool used for other projectiles, including enemy bullets.
+
+The following `PlayerObj` fields are useful for correlating a weapon-pool snapshot with the player's firing state:
+
+| Field | `PlayerObj` offset | MMX4 type | C# type |
+|---|---:|---|---|
+| `attacking` | `+0x8E` | `s8` | `sbyte` |
+| `shot_fired` | `+0x8F` | `s8` | `sbyte` |
+| `shot_types[0..1]` | `+0x94`-`+0x95` | `s8` each | `sbyte` |
+| `shot_type` | `+0x96` | `s8` | `sbyte` |
+| `last_shot_type` | `+0x97` | `s8` | `sbyte` |
+| `shot_count` | `+0x98` | `s8` | `sbyte` |
+| `special_shot_count` | `+0x99` | `s8` | `sbyte` |
+
 ### Shared object fields
 
 | Field | Object offset | MMX4 type | C# type |
