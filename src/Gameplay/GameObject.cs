@@ -1,3 +1,4 @@
+using System.Drawing;
 using BizHawk.Client.Common;
 using BizHawk.PSXMMX.Gameplay.Components;
 using BizHawk.PSXMMX.Math;
@@ -48,14 +49,29 @@ public class GameObject
     {
         foreach (var variable in variables) variable.Update();
         foreach (var component in components) component.Update();
+        Draw();
+    }
+
+    public virtual void Draw()
+    {
+        //TODO draw Position
+        var position = Position.Value.ToVector2Int();
+        position.Y = 40;
+        APIs.DrawAxis(position);
     }
 
     public virtual void DrawVariables(Vector2Int position)
     {
         foreach (var variable in variables)
         {
-            variable.Draw(position, APIs.Gui);
-            position = new Vector2Int(position.X, position.Y + 20);
+            variable.Draw(position, APIs);
+            position.Y += 20;
         }
+    }
+
+    protected void DrawInsideEmulator(Vector2Int position, Color color)
+    {
+        // var clientPosition = APIs.EmuClient.TransformPoint(new Point(position.X, position.Y));
+        // APIs.Gui.DrawAxis(clientPosition, color, surfaceID: DisplaySurfaceID.Client);
     }
 }

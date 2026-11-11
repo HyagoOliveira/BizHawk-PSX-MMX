@@ -24,6 +24,6 @@ public sealed class Player : GameCharacter
         if (Input.GetKey("KeypadAdd")) Health++;
         else if (Input.GetKey("KeypadSubtract")) Health--;
 
-        DrawVariables(new Vector2Int(60, 10));
+        DrawVariables(Vector2Int.One * 10);
     }
 }
