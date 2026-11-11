@@ -122,8 +122,8 @@ public static class ApiContainerExtensions
         Color? backgroundColor = null
     )
     {
-        var clientMin = ToClientPosition(apis.EmuClient, new Vector2Int(rect.XMin, rect.YMin));
-        var clientMax = ToClientPosition(apis.EmuClient, new Vector2Int(rect.XMax, rect.YMax));
+        var clientMin = ToClientPosition(apis.EmuClient, new Vector2Int(rect.GetXMin(), rect.GetYMin()));
+        var clientMax = ToClientPosition(apis.EmuClient, new Vector2Int(rect.GetXMax(), rect.GetYMax()));
         // BizHawk IGuiApi.DrawBox requires (x1, y1, x2, y2)
         apis.Gui.DrawBox(
             clientMin.X,
