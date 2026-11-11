@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Runtime.CompilerServices;
 
 namespace BizHawk.PSXMMX.Math;
 
@@ -15,36 +14,18 @@ public record struct Vector2(float X, float Y) : IEquatable<Vector2>
     public static readonly Vector2 Left = new(-1, 0);
     public static readonly Vector2 Right = new(1, 0);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly float GetSqrMagnitude() => (X * X) + (Y * Y);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly Vector2Int ToVector2Int() => new((int)X, (int)Y);
     public override readonly string ToString() => string.Format(CultureInfo.InvariantCulture, "({0}, {1})", X, Y);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator +(Vector2 a, Vector2 b) => new(a.X + b.X, a.Y + b.Y);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator -(Vector2 a, Vector2 b) => new(a.X - b.X, a.Y - b.Y);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator -(Vector2 a) => new(-a.X, -a.Y);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator *(Vector2 a, float scalar) => new(a.X * scalar, a.Y * scalar);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator *(float scalar, Vector2 a) => new(a.X * scalar, a.Y * scalar);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator *(Vector2 a, int scalar) => a * (float)scalar;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator *(int scalar, Vector2 a) => a * (float)scalar;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator *(Vector2 a, Vector2 b) => new(a.X * b.X, a.Y * b.Y);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator /(Vector2 a, float divisor) => new(a.X / divisor, a.Y / divisor);
 }
