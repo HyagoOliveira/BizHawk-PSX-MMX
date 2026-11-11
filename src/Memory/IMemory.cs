@@ -10,6 +10,6 @@ public interface IMemory
     bool IsFrozen { get; }
 
     void Update();
-    void Draw(Vector2Int position, IGuiApi gui);
+    void Draw(Vector2Int position, ApiContainer apis);
     void ToggleFreeze();
 }

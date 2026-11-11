@@ -22,10 +22,10 @@ public abstract class AbstractMemory<T>(string name, long address, IMemoryApi ap
         Value = ReadValue();
     }
 
-    public void Draw(Vector2Int position, IGuiApi gui)
+    public void Draw(Vector2Int position, ApiContainer apis)
     {
         var color = IsFrozen ? Color.Cyan : Color.White;
-        gui.DrawText(position, ToString(), color);
+        apis.DrawText(position, ToString(), color);
     }
 
     public void ToggleFreeze()
