@@ -16,6 +16,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 {
     public ApiContainer APIs { get; set; } = null!;
     public Player? Player { get; private set; } = null!;
+    public Camera? Camera { get; private set; } = null!;
     public KeyboardInput? Input { get; private set; } = null!;
     public GameMemoryAddress? MemoryAddress { get; private set; } = null!;
 
@@ -41,6 +42,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         MemoryAddress = GameMemoryAddress.Get(gameHash);
 
         Input = new KeyboardInput(APIs.Input);
+        Camera = new Camera(MemoryAddress.Camera, APIs);
         Player = new Player(MemoryAddress.Player, APIs, Input);
     }
 
@@ -53,6 +55,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     private void UpdateGame()
     {
         Input?.Update();
+        Camera?.Update();
         Player?.Update();
     }
 

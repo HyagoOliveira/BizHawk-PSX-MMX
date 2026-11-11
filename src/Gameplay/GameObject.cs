@@ -55,9 +55,9 @@ public class GameObject
     public virtual void Draw()
     {
         //TODO draw Position
-        var position = Position.Value.ToVector2Int();
+        /*var position = Position.Value.ToVector2Int();
         position.Y = 40;
-        APIs.DrawAxis(position);
+        APIs.DrawAxis(position);*/
     }
 
     public virtual void DrawVariables(Vector2Int position)
