@@ -24,10 +24,9 @@ public class GameObject
         Position = AddVariable(new Fixed16Vector2Memory(
             "Position",
             BaseAddress + 0x08,
-            offset: 0x0C,
+            offset: 0x04,
             APIs.Memory
         ));
-
         // Each implementation should initialize its own variables and components in the constructor.
     }
 
@@ -65,7 +64,7 @@ public class GameObject
         foreach (var variable in variables)
         {
             variable.Draw(position, APIs);
-            position.Y += 20;
+            position.Y += 12;
         }
     }
 
