@@ -17,12 +17,15 @@ public sealed class Player : GameCharacter
         Input = input;
 
         // Initialize player-specific variables and components
-        PreviousPosition = AddVariable(new Fixed16Vector2Memory(
-            "Previous Position",
-            BaseAddress + 0x18,
-            offset: 0x04,
-            APIs.Memory
-        ));
+        PreviousPosition = AddVariable(
+            new Fixed16Vector2Memory(
+                "Previous Position",
+                BaseAddress + 0x18,
+                offset: 0x04,
+                APIs.Memory
+            ),
+            displayOrder: 1
+        );
     }
 
     public override void Update()

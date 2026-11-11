@@ -11,6 +11,7 @@ public class GameObject
     public long BaseAddress { get; }
     public ApiContainer APIs { get; }
 
+    public string Name { get; protected set; }
     public Fixed16Vector2Memory Position { get; private set; }
 
     private readonly List<IMemory> variables = [];
@@ -19,6 +20,7 @@ public class GameObject
     public GameObject(long baseAddress, ApiContainer apis)
     {
         APIs = apis;
+        Name = GetType().Name;
         BaseAddress = baseAddress;
 
         Position = AddVariable(new Fixed16Vector2Memory(
@@ -37,10 +39,18 @@ public class GameObject
         return component;
     }
 
-    public T AddVariable<T>(T variable) where T : IMemory
+    public T AddVariable<T>(T variable, int? displayOrder = null) where T : IMemory
     {
         if (variable is null) throw new ArgumentNullException(nameof(variable));
-        variables.Add(variable);
+
+        if (displayOrder is int index && (index < 0 || index > variables.Count))
+        {
+            throw new ArgumentOutOfRangeException(nameof(displayOrder));
+        }
+
+        if (displayOrder is int displayIndex) variables.Insert(displayIndex, variable);
+        else variables.Add(variable);
+
         return variable;
     }
 
@@ -61,10 +71,13 @@ public class GameObject
 
     public virtual void DrawVariables(Vector2Int position)
     {
+        APIs.DrawText(position, Name);
+        position.X += 4;
+
         foreach (var variable in variables)
         {
+            position.Y += 10;
             variable.Draw(position, APIs);
-            position.Y += 12;
         }
     }
 

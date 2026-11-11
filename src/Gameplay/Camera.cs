@@ -12,6 +12,7 @@ public sealed class Camera : GameObject
     public Camera(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
         Main = this;
+
         PreviousPosition = AddVariable(new Fixed16Vector2Memory(
             "Previous Position",
             BaseAddress + 0x14,
@@ -23,6 +24,6 @@ public sealed class Camera : GameObject
     public override void Draw()
     {
         base.Draw();
-        DrawVariables(new Vector2Int(150, 100));
+        DrawVariables(new Vector2Int(320, 240) / 2);
     }
 }
