@@ -6,7 +6,7 @@ namespace BizHawk.PSXMMX.Math;
 /// <summary>
 /// Representation of 2D floating-point vectors and points.
 /// </summary>
-public readonly record struct Vector2(float X, float Y) : IEquatable<Vector2>
+public record struct Vector2(float X, float Y) : IEquatable<Vector2>
 {
     public static readonly Vector2 Zero = new(0, 0);
     public static readonly Vector2 One = new(1, 1);
@@ -16,10 +16,10 @@ public readonly record struct Vector2(float X, float Y) : IEquatable<Vector2>
     public static readonly Vector2 Right = new(1, 0);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public float GetSqrMagnitude() => (X * X) + (Y * Y);
+    public readonly float GetSqrMagnitude() => (X * X) + (Y * Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString() => string.Format(CultureInfo.InvariantCulture, "({0}, {1})", X, Y);
+    public override readonly string ToString() => string.Format(CultureInfo.InvariantCulture, "({0}, {1})", X, Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator +(Vector2 a, Vector2 b) => new(a.X + b.X, a.Y + b.Y);
@@ -35,6 +35,12 @@ public readonly record struct Vector2(float X, float Y) : IEquatable<Vector2>
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator *(float scalar, Vector2 a) => new(a.X * scalar, a.Y * scalar);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2 operator *(Vector2 a, int scalar) => a * (float)scalar;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2 operator *(int scalar, Vector2 a) => a * (float)scalar;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 operator *(Vector2 a, Vector2 b) => new(a.X * b.X, a.Y * b.Y);

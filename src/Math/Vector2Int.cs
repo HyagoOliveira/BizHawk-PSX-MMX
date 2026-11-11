@@ -1,11 +1,12 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Drawing;
+using System.Runtime.CompilerServices;
 
 namespace BizHawk.PSXMMX.Math;
 
 /// <summary>
 /// Representation of 2D integer vectors and points.
 /// </summary>
-public readonly record struct Vector2Int(int X, int Y) : IEquatable<Vector2Int>
+public record struct Vector2Int(int X, int Y) : IEquatable<Vector2Int>
 {
     public static readonly Vector2Int Zero = new(0, 0);
     public static readonly Vector2Int One = new(1, 1);
@@ -15,10 +16,12 @@ public readonly record struct Vector2Int(int X, int Y) : IEquatable<Vector2Int>
     public static readonly Vector2Int Right = new(1, 0);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int GetSqrMagnitude() => (X * X) + (Y * Y);
+    public readonly int GetSqrMagnitude() => (X * X) + (Y * Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString() => $"({X}, {Y})";
+    public override readonly string ToString() => $"({X}, {Y})";
+
+    public Point ToPoint() => new(X, Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2Int operator +(Vector2Int a, Vector2Int b) => new(a.X + b.X, a.Y + b.Y);
