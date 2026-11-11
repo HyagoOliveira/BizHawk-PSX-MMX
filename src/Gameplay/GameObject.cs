@@ -63,10 +63,8 @@ public class GameObject
 
     public virtual void Draw()
     {
-        //TODO draw Position
-        /*var position = Position.Value.ToVector2Int();
-        position.Y = 40;
-        APIs.DrawAxis(position);*/
+        var position = Camera.Main.WorldToScreenPoint(Position.Value);
+        APIs.DrawAxis(position);
     }
 
     public virtual void DrawVariables(Vector2Int position)
@@ -79,11 +77,5 @@ public class GameObject
             position.Y += 10;
             variable.Draw(position, APIs);
         }
-    }
-
-    protected void DrawInsideEmulator(Vector2Int position, Color color)
-    {
-        // var clientPosition = APIs.EmuClient.TransformPoint(new Point(position.X, position.Y));
-        // APIs.Gui.DrawAxis(clientPosition, color, surfaceID: DisplaySurfaceID.Client);
     }
 }

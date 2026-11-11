@@ -6,8 +6,12 @@ namespace BizHawk.PSXMMX.Gameplay;
 
 public sealed class Camera : GameObject
 {
-    public static Camera Main { get; private set; } = null!;
+    private const int LEFT_BORDER_OFFSET = 86;
+
     public Fixed16Vector2Memory PreviousPosition { get; }
+
+    public static Camera Main { get; private set; } = null!;
+    public static readonly Vector2Int SCREEN_SIZE = new(320, 240);
 
     public Camera(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
@@ -21,9 +25,11 @@ public sealed class Camera : GameObject
         ));
     }
 
-    public override void Draw()
+    /*public override void Draw()
     {
         base.Draw();
-        DrawVariables(new Vector2Int(320, 240) / 2);
-    }
+        DrawVariables(SCREEN_SIZE / 2);
+    }*/
+
+    public Vector2Int WorldToScreenPoint(Vector2 position) => (position - Position.Value).ToVector2Int();
 }
