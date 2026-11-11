@@ -71,7 +71,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         Controls.Add(sections);*/
     }
 
-    private void ShowUnsupportedGameMessage() => APIs.Gui.DrawText(
+    private void ShowUnsupportedGameMessage() => APIs.DrawText(
         new Vector2Int(10, 10),
         "Failed to initialize!\nSupported games: Mega Man X4, X5 and X6 (USA)",
         Color.Red,

@@ -35,6 +35,22 @@ public sealed class KeyboardInput(IInputApi input)
         return !currentKeys.Contains(key) && previousKeys.Contains(key);
     }
 
+    public float GetKeypadHorizontalAxis(float speed = 1f)
+    {
+        var value = 0f;
+        if (GetKey("Keypad4")) value -= speed;
+        else if (GetKey("Keypad6")) value += speed;
+        return value;
+    }
+
+    public float GetKeypadVerticalAxis(float speed = 1f)
+    {
+        var value = 0f;
+        if (GetKey("Keypad8")) value -= speed;
+        else if (GetKey("Keypad2")) value += speed;
+        return value;
+    }
+
     private static void ValidateKey(string key)
     {
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("A keyboard key name is required.", nameof(key));

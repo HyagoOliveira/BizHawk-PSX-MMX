@@ -17,7 +17,7 @@ namespace BizHawk.PSXMMX.Math;
 /// </remarks>
 public static class ApiContainerExtensions
 {
-    // Render using Client mode to get a better resolution.
+    // Rendering using Client Mode to get a better resolution.
     private const DisplaySurfaceID DEFAULT_RENDER_MODE = DisplaySurfaceID.Client;
     private static readonly Size FRAME_BUFFER_INITIAL_OFFSET = new(18, 0);
 
