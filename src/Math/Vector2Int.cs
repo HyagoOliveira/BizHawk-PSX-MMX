@@ -16,6 +16,7 @@ public record struct Vector2Int(int X, int Y) : IEquatable<Vector2Int>
 
     public readonly int GetSqrMagnitude() => (X * X) + (Y * Y);
     public readonly Point ToPoint() => new(X, Y);
+    public readonly Vector2 ToVector2() => new(X, Y);
     public override readonly string ToString() => $"({X}, {Y})";
 
     public static Vector2Int operator +(Vector2Int a, Vector2Int b) => new(a.X + b.X, a.Y + b.Y);

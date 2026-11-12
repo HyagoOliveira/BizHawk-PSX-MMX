@@ -64,6 +64,10 @@ The following addresses and layouts are confirmed against the MMX4 USA reconstru
 
 These are separate globals/pools. `g_Player` is a single player object, not an array. `main_objects` is the general main-object pool; do not assume every entry represents an enemy.
 
+### Player collision boxes
+
+The analyzer reads player hurt-box and terrain-box pointers at offsets `+0x54` and `+0x68`, respectively, for MMX4, MMX5, and MMX6 USA. The shared offsets were validated by the user; each game still uses its own player base address. On each update, the analyzer reads the four-byte records and displays the resulting world-space boxes in red and green. Null pointers indicate inactive boxes. The current geometry interprets hurt-box dimensions as directional extensions and terrain-box dimensions as half-extents. This interpretation is based on the MMX4 fork's PC/Saturn reconstruction and has not been independently validated for PS1 or the other games.
+
 ### Player projectiles
 
 Player-fired shots use `weapon_objects`, not `shot_objects`. The reconstructed `player_spawn_weapon` allocates a free `WeaponObj`, initializes its `active` and `id` fields, and stores the shot type in `id`; `player_fire_weapon` calls it with the player's current shot type. `shot_objects` is a separate pool used for other projectiles, including enemy bullets.

@@ -1,13 +1,8 @@
 namespace BizHawk.PSXMMX.Gameplay.Components;
 
-public abstract class AbstractComponent
+public abstract class AbstractComponent(GameObject gameObject)
 {
-    public GameObject GameObject { get; }
-
-    public AbstractComponent(GameObject gameObject)
-    {
-        GameObject = gameObject;
-    }
+    public GameObject GameObject { get; } = gameObject;
 
     public abstract void Update();
 }

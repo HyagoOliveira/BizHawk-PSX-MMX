@@ -31,4 +31,5 @@ public sealed class Camera : GameObject
     }
 
     public Vector2Int WorldToScreenPoint(Vector2 position) => (position - Position.Value).ToVector2Int();
+    public Vector2Int WorldToScreenPoint(Vector2Int position) => WorldToScreenPoint(position.ToVector2());
 }
