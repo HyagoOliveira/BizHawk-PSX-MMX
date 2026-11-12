@@ -64,6 +64,23 @@ The following addresses and layouts are confirmed against the MMX4 USA reconstru
 
 These are separate globals/pools. `g_Player` is a single player object, not an array. `main_objects` is the general main-object pool; do not assume every entry represents an enemy.
 
+### MMX4 stage object types
+
+In the MMX4 fork, `StageObjectRecord.object_type` selects the object pool through `g_MakeObjectFuncs` in [`src/main/195B4.c`](https://github.com/HyagoOliveira/mmx4/blob/main/src/main/195B4.c):
+
+| `object_type` | Pool |
+|---:|---|
+| `0` | Main objects (`main_objects`), including enemies and other main objects |
+| `1` | Weapon objects (`weapon_objects`) |
+| `2` | Visual objects (`visual_objects`) |
+| `3` | Effect objects (`effect_objects`) |
+| `4` | Item objects (`item_objects`) |
+| `5` | Miscellaneous objects (`misc_objects`) |
+| `6` | Quad objects (`g_QuadObjects`) |
+| `7` | Layer objects (`layer_objects`) |
+
+`object_type` chooses the pool; the record's `id` selects behavior within that pool. For main objects, `id` indexes `main_object_update_funcs`; do not assume IDs have the same meaning across different pools. A record with `object_type == 0xFF` terminates the stage-object list and is not an allocatable object type. The main-object pool is not limited to enemies.
+
 ### Player collision boxes
 
 The analyzer reads player hurt-box and terrain-box pointers at offsets `+0x54` and `+0x68`, respectively, for MMX4, MMX5, and MMX6 USA. The shared offsets were validated by the user; each game still uses its own player base address. On each update, the analyzer reads the four-byte records and displays the resulting world-space boxes in red and green. Null pointers indicate inactive boxes. The current geometry interprets hurt-box dimensions as directional extensions and terrain-box dimensions as half-extents. This interpretation is based on the MMX4 fork's PC/Saturn reconstruction and has not been independently validated for PS1 or the other games.
