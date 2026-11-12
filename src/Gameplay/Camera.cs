@@ -25,11 +25,10 @@ public sealed class Camera : GameObject
         ));
     }
 
-    /*public override void Draw()
+    public override void Draw()
     {
-        base.Draw();
-        DrawVariables(SCREEN_SIZE / 2);
-    }*/
+        //DrawVariables(SCREEN_SIZE / 2);
+    }
 
     public Vector2Int WorldToScreenPoint(Vector2 position) => (position - Position.Value).ToVector2Int();
 }

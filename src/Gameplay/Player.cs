@@ -31,11 +31,14 @@ public sealed class Player : GameCharacter
     public override void Update()
     {
         base.Update();
+        UpdateHealthByInput();
+        DrawVariables(Vector2Int.One * 10);
+    }
 
+    private void UpdateHealthByInput()
+    {
         if (Input.GetKeyDown("T")) Health.ToggleFreeze();
         if (Input.GetKey("KeypadAdd")) Health++;
         else if (Input.GetKey("KeypadSubtract")) Health--;
-
-        DrawVariables(Vector2Int.One * 10);
     }
 }
