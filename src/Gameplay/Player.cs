@@ -1,5 +1,4 @@
 using BizHawk.Client.Common;
-using BizHawk.PSXMMX.Gameplay.Components.Collisions;
 using BizHawk.PSXMMX.Input;
 using BizHawk.PSXMMX.Math;
 using BizHawk.PSXMMX.Memory;
@@ -13,11 +12,8 @@ public sealed class Player : GameCharacter
     // Variables
     public Fixed16Vector2Memory PreviousPosition { get; }
 
-    // Components
-    public HurtBox HurtBox { get; }
-    public TerrainBox TerrainBox { get; }
-
-    private const long BLOCK_SIZE = 0xE4;
+    private const int VARS_COUNT = 4;
+    private static readonly Vector2Int VARS_POSITION = new(2, Camera.SCREEN_SIZE.Y - VARS_COUNT * 12);
 
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
@@ -25,30 +21,25 @@ public sealed class Player : GameCharacter
 
         PreviousPosition = AddVariable(
             new Fixed16Vector2Memory(
-                "Previous Position",
+                "Prev Pos",
                 BaseAddress + 0x18,
                 offset: 0x04,
                 APIs.Memory
             ),
             displayOrder: 1
         );
-
-        HurtBox = AddComponent(new HurtBox(BaseAddress + 0x54, this));
-        TerrainBox = AddComponent(new TerrainBox(BaseAddress + 0x68, this));
     }
 
     public override void Update()
     {
         base.Update();
-        UpdateHealthByInput();
-        DrawVariables(Vector2Int.One * 10);
+        UpdateHealthByInput(); //TODO remove later
     }
 
     public override void Draw()
     {
         base.Draw();
-        HurtBox.Draw();
-        TerrainBox.Draw();
+        DrawVariables(VARS_POSITION);
     }
 
     private void UpdateHealthByInput()

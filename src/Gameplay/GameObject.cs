@@ -24,7 +24,7 @@ public class GameObject
         BaseAddress = baseAddress;
 
         Position = AddVariable(new Fixed16Vector2Memory(
-            "Position",
+            "Pos",
             BaseAddress + 0x08,
             offset: 0x04,
             APIs.Memory
