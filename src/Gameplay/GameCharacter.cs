@@ -13,7 +13,9 @@ public class GameCharacter : GameObject
     public Vector2S32Memory Speed { get; }      // x_speed, y_speed
     public FloatS32Memory HorizontalAcceleration { get; }   // x_accel
     public FloatS32Memory Gravity { get; }                  // gravity
-    public SByteS8Memory Health { get; protected set; }
+    public SByteS8Memory Health { get; protected set; }     // hp
+    public UIntS8Memory Damage { get; }                 // contact_damage 
+    public UIntS8Memory InvincibilityTimer { get; }     // invincibility_timer 
 
     // Components
     public BoundBox DamagerBox { get; }         // attack_box
@@ -58,6 +60,20 @@ public class GameCharacter : GameObject
                 APIs.Memory
             ),
             displayOrder: 0
+        );
+        Damage = AddVariable(
+            new UIntS8Memory(
+                "Damage",
+                BaseAddress + 0x60,
+                APIs.Memory
+            )
+        );
+        InvincibilityTimer = AddVariable(
+            new UIntS8Memory(
+                "Inv Timer",
+                BaseAddress + 0x61,
+                APIs.Memory
+            )
         );
 
         DamagerBox = AddComponent(new BoundBox(BaseAddress + 0x50, this, Color.Red));
