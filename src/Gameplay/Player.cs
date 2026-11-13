@@ -13,7 +13,10 @@ public sealed class Player : GameCharacter
     public Vector2S32Memory PreviousPosition { get; }
 
     private const int VARS_COUNT = 4;
-    private static readonly Vector2Int VARS_POSITION = new(2, Camera.SCREEN_SIZE.Y - VARS_COUNT * 12);
+    private static readonly Vector2Int VARS_POSITION = new(
+        2,
+        Camera.SCREEN_SIZE.Y - (VARS_COUNT + 1) * ApiContainerExtensions.DEFAULT_FONT_SIZE
+    );
 
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
@@ -22,8 +25,8 @@ public sealed class Player : GameCharacter
         PreviousPosition = AddVariable(
             new Vector2S32Memory(
                 "Prev Pos",
-                BaseAddress + 0x18,
-                offset: 0x04,
+                xAddress: BaseAddress + 0x18,
+                yAddress: BaseAddress + 0x1C,
                 APIs.Memory
             ),
             displayOrder: 1

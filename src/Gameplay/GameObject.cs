@@ -13,10 +13,12 @@ public class GameObject
     public string Name { get; protected set; }
 
     // Variables
-    public BoolS8Memory IsActive { get; private set; }
-    public UIntS8Memory Id { get; private set; }
+    public BoolS8Memory IsActive { get; }   // active (whether slot is active)
+    public UIntS8Memory Id { get; }         // id (pool identifier)
+    public BoolS8Memory IsVisible { get; }  // on_screen (whether is visible)
+    public UIntS8Memory MainState { get; }  // state (initialization, behavior or despawn)
 
-    public Vector2S32Memory Position { get; private set; }
+    public Vector2S32Memory Position { get; }
 
     private readonly List<IMemory> variables = [];
     private readonly List<AbstractComponent> components = [];
@@ -27,7 +29,7 @@ public class GameObject
         Name = GetType().Name;
         BaseAddress = baseAddress;
 
-        // Initialize default variables
+        #region VARIABLES INITIALIZATION
         IsActive = AddVariable(
             new BoolS8Memory(
                 "Active",
@@ -44,14 +46,29 @@ public class GameObject
                 hideDisplay: true
             )
         );
-        Position = AddVariable(
-            new Vector2S32Memory(
-                "Pos",
-                BaseAddress + 0x08,
-                offset: 0x04,
+        IsVisible = AddVariable(
+            new BoolS8Memory(
+                "OnScreen",
+                BaseAddress + 0x03,
                 APIs.Memory
             )
         );
+        MainState = AddVariable(
+            new UIntS8Memory(
+                "State",
+                BaseAddress + 0x04,
+                APIs.Memory
+            )
+        );
+        Position = AddVariable(
+            new Vector2S32Memory(
+                "Pos",
+                xAddress: BaseAddress + 0x08,
+                yAddress: BaseAddress + 0x0C,
+                APIs.Memory
+            )
+        );
+        #endregion
 
         // Each implementation should initialize its own variables and components in the constructor.
     }

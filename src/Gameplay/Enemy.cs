@@ -22,6 +22,7 @@ public sealed class Enemy : GameCharacter
 
     private void UpdateName()
     {
+        if (!IsVisible.Value) return;
         var hasName = ID_NAMES.TryGetValue(Id.Value, out var name);
         Name = (hasName ? name : "UNKNOWN ENEMY") + $" (Id: {Id.Value})";
     }

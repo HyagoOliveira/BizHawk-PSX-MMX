@@ -18,9 +18,9 @@ public sealed class Camera : GameObject
         Main = this;
 
         PreviousPosition = AddVariable(new Vector2S32Memory(
-            "Previous Position",
-            BaseAddress + 0x14,
-            offset: 0x04,
+            "Prev Pos",
+            xAddress: BaseAddress + 0x14,
+            yAddress: BaseAddress + 0x18,
             APIs.Memory
         ));
     }

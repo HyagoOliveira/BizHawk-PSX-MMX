@@ -17,9 +17,10 @@ namespace BizHawk.PSXMMX.Math;
 /// </remarks>
 public static class ApiContainerExtensions
 {
+    public const int DEFAULT_FONT_SIZE = 12;
     // Rendering using Client Mode to get a better resolution.
-    private const DisplaySurfaceID DEFAULT_RENDER_MODE = DisplaySurfaceID.Client;
-    private static readonly Size FRAME_BUFFER_INITIAL_OFFSET = new(18, 0);
+    public const DisplaySurfaceID DEFAULT_RENDER_MODE = DisplaySurfaceID.Client;
+    public static readonly Size FRAME_BUFFER_INITIAL_OFFSET = new(18, 0);
 
     /// <summary>Draws text at a game-display position.</summary>
     /// <param name="apis">The BizHawk API container.</param>
@@ -39,7 +40,7 @@ public static class ApiContainerExtensions
         string message,
         Color? color = null,
         Color? backColor = null,
-        int fontSize = 12,
+        int fontSize = DEFAULT_FONT_SIZE,
         string? fontFace = null,
         string? fontStyle = null,
         string? horizontalAlign = null,
