@@ -11,17 +11,9 @@ public sealed class Player : GameCharacter
 
     // Variables
 
-    private const int VARS_COUNT = 4;
-    private static readonly Vector2Int VARS_POSITION = new(
-        2,
-        Camera.SCREEN_SIZE.Y - (VARS_COUNT + 1) * ApiContainerExtensions.DEFAULT_FONT_SIZE
-    );
-
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
         Input = input;
-
-
     }
 
     public override void Update()
@@ -30,7 +22,10 @@ public sealed class Player : GameCharacter
         UpdateHealthByInput(); //TODO remove later
     }
 
-    protected override Vector2Int GetVarsPosition() => VARS_POSITION;
+    protected override Vector2Int GetVarsPosition() => new(
+        2,
+        Camera.SCREEN_SIZE.Y - (TotalVariables + 1) * ApiContainerExtensions.DEFAULT_FONT_SIZE
+    );
 
     private void UpdateHealthByInput()
     {

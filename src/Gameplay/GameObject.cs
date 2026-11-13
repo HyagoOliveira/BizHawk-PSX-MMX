@@ -21,6 +21,9 @@ public class GameObject
     public Vector2S32Memory Position { get; }
     public Vector2S32Memory PreviousPosition { get; }
 
+    public int TotalVariables => variables.Count;
+    public int TotalComponents => components.Count;
+
     private readonly List<IMemory> variables = [];
     private readonly List<AbstractComponent> components = [];
 
