@@ -8,7 +8,7 @@ public sealed class Camera : GameObject
 {
     private const int LEFT_BORDER_OFFSET = 86;
 
-    public Fixed16Vector2Memory PreviousPosition { get; }
+    public Vector2S32Memory PreviousPosition { get; }
 
     public static Camera Main { get; private set; } = null!;
     public static readonly Vector2Int SCREEN_SIZE = new(320, 240);
@@ -17,7 +17,7 @@ public sealed class Camera : GameObject
     {
         Main = this;
 
-        PreviousPosition = AddVariable(new Fixed16Vector2Memory(
+        PreviousPosition = AddVariable(new Vector2S32Memory(
             "Previous Position",
             BaseAddress + 0x14,
             offset: 0x04,

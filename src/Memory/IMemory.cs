@@ -5,11 +5,8 @@ namespace BizHawk.PSXMMX.Memory;
 
 public interface IMemory
 {
-    string Name { get; }
-    long Address { get; }
-    bool IsFrozen { get; }
+    bool HideDraw { get; set; }
 
     void Update();
     void Draw(Vector2Int position, ApiContainer apis);
-    void ToggleFreeze();
 }

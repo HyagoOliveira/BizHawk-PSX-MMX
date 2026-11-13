@@ -2,6 +2,8 @@ namespace BizHawk.PSXMMX.Memory;
 
 public sealed class GameMemoryAddress
 {
+    public const string DOMAIN = "MainRAM";
+
     private static readonly Dictionary<string, GameMemoryAddress> addressesByHash = new(StringComparer.OrdinalIgnoreCase)
     {
         ["314E06A8"] = new(SupportedGames.MegaManX4, player: 0x1418C8, camera: 0x1419B0),

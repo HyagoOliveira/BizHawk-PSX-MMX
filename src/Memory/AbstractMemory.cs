@@ -4,17 +4,26 @@ using BizHawk.PSXMMX.Math;
 
 namespace BizHawk.PSXMMX.Memory;
 
-public abstract class AbstractMemory<T>(string name, long address, IMemoryApi api) : IMemory
+public abstract class AbstractMemory<T> : IMemory
 {
-    public string Name { get; } = name;
-    public long Address { get; } = address;
-    public IMemoryApi MemoryApi { get; } = api;
+    public string Name { get; }
+    public long Address { get; }
+    public IMemoryApi MemoryApi { get; }
 
-    public bool IsFrozen { get; private set; } = false;
+    public bool HideDraw { get; set; }
+    public bool IsFrozen { get; private set; }
+
     public T Value { get; private set; } = default!;
     public T FrozenValue { get; private set; } = default!;
 
-    public const string MEMORY_DOMAIN = "MainRAM";
+    public const string DOMAIN = GameMemoryAddress.DOMAIN;
+
+    public AbstractMemory(string name, long address, IMemoryApi api)
+    {
+        Name = name;
+        MemoryApi = api;
+        Address = address;
+    }
 
     public void Update()
     {
@@ -48,14 +57,14 @@ public abstract class AbstractMemory<T>(string name, long address, IMemoryApi ap
         FrozenValue = default!;
     }
 
-    protected void WriteValueAndUpdate(T value)
+    public override string ToString() => $"{Name}: {Value}";
+
+    protected void ForceToWriteValue(T value)
     {
         WriteValue(value);
         Value = value;
         if (IsFrozen) FrozenValue = value;
     }
-
-    public override string ToString() => $"{Name}: {Value}";
 
     protected abstract T ReadValue();
     protected abstract void WriteValue(T value);

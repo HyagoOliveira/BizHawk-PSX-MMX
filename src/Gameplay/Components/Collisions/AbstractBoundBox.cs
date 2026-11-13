@@ -10,7 +10,7 @@ public abstract class AbstractBoundBox(long baseAddress, GameObject gameObject) 
     public RectInt? RawBounds { get; private set; } = null!;
     public RectInt? WorldBounds { get; private set; } = null!;
 
-    private const string MEMORY_DOMAIN = AbstractMemory<int>.MEMORY_DOMAIN;
+    private const string MEMORY_DOMAIN = AbstractMemory<int>.DOMAIN;
 
     protected abstract Color GetBoxLineColor();
     protected abstract RectInt CalculateWorldBounds(RectInt rawBounds, int x, int y, uint facing);

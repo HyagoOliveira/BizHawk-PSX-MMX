@@ -7,8 +7,8 @@ namespace BizHawk.PSXMMX.Gameplay;
 public class GameCharacter : GameObject
 {
     // Variables
-    public ByteMemory Facing { get; protected set; }
-    public SByteMemory Health { get; protected set; }
+    public ByteU8Memory Facing { get; protected set; }
+    public SByteS8Memory Health { get; protected set; }
 
     // Components
     public HurtBox HurtBox { get; }
@@ -16,8 +16,8 @@ public class GameCharacter : GameObject
 
     public GameCharacter(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
-        Facing = AddVariable(new ByteMemory("Dir", BaseAddress + 0x15, APIs.Memory));
-        Health = AddVariable(new SByteMemory("HP", BaseAddress + 0x5C, APIs.Memory), displayOrder: 0);
+        Facing = AddVariable(new ByteU8Memory("Dir", BaseAddress + 0x15, APIs.Memory));
+        Health = AddVariable(new SByteS8Memory("HP", BaseAddress + 0x5C, APIs.Memory), displayOrder: 0);
 
         HurtBox = AddComponent(new HurtBox(BaseAddress + 0x54, this));
         TerrainBox = AddComponent(new TerrainBox(BaseAddress + 0x68, this));

@@ -1,4 +1,3 @@
-using System.Drawing;
 using BizHawk.Client.Common;
 using BizHawk.PSXMMX.Gameplay.Components;
 using BizHawk.PSXMMX.Math;
@@ -12,7 +11,7 @@ public class GameObject
     public ApiContainer APIs { get; }
 
     public string Name { get; protected set; }
-    public Fixed16Vector2Memory Position { get; private set; }
+    public Vector2S32Memory Position { get; private set; }
 
     private readonly List<IMemory> variables = [];
     private readonly List<AbstractComponent> components = [];
@@ -23,34 +22,27 @@ public class GameObject
         Name = GetType().Name;
         BaseAddress = baseAddress;
 
-        Position = AddVariable(new Fixed16Vector2Memory(
-            "Pos",
-            BaseAddress + 0x08,
-            offset: 0x04,
-            APIs.Memory
-        ));
+        Position = AddVariable(
+            new Vector2S32Memory(
+                "Pos",
+                BaseAddress + 0x08,
+                offset: 0x04,
+                APIs.Memory
+            )
+        );
         // Each implementation should initialize its own variables and components in the constructor.
     }
 
     public T AddComponent<T>(T component) where T : AbstractComponent
     {
-        if (component is null) throw new ArgumentNullException(nameof(component));
         components.Add(component);
         return component;
     }
 
     public T AddVariable<T>(T variable, int? displayOrder = null) where T : IMemory
     {
-        if (variable is null) throw new ArgumentNullException(nameof(variable));
-
-        if (displayOrder is int index && (index < 0 || index > variables.Count))
-        {
-            throw new ArgumentOutOfRangeException(nameof(displayOrder));
-        }
-
-        if (displayOrder is int displayIndex) variables.Insert(displayIndex, variable);
+        if (displayOrder is int index) variables.Insert(index, variable);
         else variables.Add(variable);
-
         return variable;
     }
 
@@ -67,13 +59,15 @@ public class GameObject
         APIs.DrawAxis(position);
     }
 
-    public virtual void DrawVariables(Vector2Int position)
+    public void DrawVariables(Vector2Int position)
     {
         APIs.DrawText(position, Name);
         position.X += 4;
 
         foreach (var variable in variables)
         {
+            if (variable.HideDraw) continue;
+
             position.Y += 10;
             variable.Draw(position, APIs);
         }
