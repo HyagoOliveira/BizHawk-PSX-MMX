@@ -14,11 +14,11 @@ public class GameObject
     public bool IsDrawEnabled { get; set; } = true;
 
     // Variables
-    public BoolS8Memory IsActive { get; }   // active (whether slot is active)
-    public UIntS8Memory Id { get; }         // id (pool identifier)
-    public BoolS8Memory IsVisible { get; }  // on_screen (whether is visible)
-    public UIntS8Memory MainState { get; }  // state (initialization, behavior or despawn)
-    public Vector2S32Memory Position { get; }
+    public BoolS8Memory IsActive { get; }       // active (whether slot is active)
+    public UIntS8Memory Id { get; }             // id (pool identifier)
+    public BoolS8Memory IsVisible { get; }      // on_screen (whether is visible)
+    public UIntS8Memory MainState { get; }      // state (initialization, behavior or despawn)
+    public Vector2S32Memory Position { get; }   // x_pos, y_pos
     public Vector2S32Memory PreviousPosition { get; }
 
     public int TotalVariables => variables.Count;
@@ -108,6 +108,8 @@ public class GameObject
 
     public virtual void Draw()
     {
+        foreach (var component in components) component.Draw();
+
         var position = Camera.Main.WorldToScreenPoint(Position.Value);
         APIs.DrawAxis(position);
     }

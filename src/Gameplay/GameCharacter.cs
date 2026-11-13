@@ -1,3 +1,4 @@
+using System.Drawing;
 using BizHawk.Client.Common;
 using BizHawk.PSXMMX.Gameplay.Components.Collisions;
 using BizHawk.PSXMMX.Math;
@@ -8,28 +9,65 @@ namespace BizHawk.PSXMMX.Gameplay;
 public class GameCharacter : GameObject
 {
     // Variables
-    public BoolU8Memory IsFacingRight { get; protected set; }
+    public BoolU8Memory IsFacingRight { get; }  // direction
+    public Vector2S32Memory Speed { get; }      // x_speed, y_speed
+    public FloatS32Memory HorizontalAcceleration { get; }   // x_accel
+    public FloatS32Memory Gravity { get; }                  // gravity
     public SByteS8Memory Health { get; protected set; }
 
     // Components
-    public HurtBox HurtBox { get; }
-    public TerrainBox TerrainBox { get; }
+    public BoundBox DamagerBox { get; }         // attack_box
+    public BoundBox DamageableBox { get; }      // hurt_box
+    public TerrainBox CollisionBox { get; }     // terrain_box
 
     public GameCharacter(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
-        IsFacingRight = AddVariable(new BoolU8Memory("Is Right", BaseAddress + 0x15, APIs.Memory));
-        Health = AddVariable(new SByteS8Memory("HP", BaseAddress + 0x5C, APIs.Memory), displayOrder: 0);
+        IsFacingRight = AddVariable(
+            new BoolU8Memory(
+                "Is Right",
+                BaseAddress + 0x15,
+                APIs.Memory
+            )
+        );
+        Speed = AddVariable(
+            new Vector2S32Memory(
+                "Speed",
+                xAddress: BaseAddress + 0x20,
+                yAddress: BaseAddress + 0x24,
+                APIs.Memory
+            )
+        );
+        HorizontalAcceleration = AddVariable(
+            new FloatS32Memory(
+                "Hor Acc",
+                BaseAddress + 0x28,
+                APIs.Memory
+            )
+        );
+        Gravity = AddVariable(
+            new FloatS32Memory(
+                "Gravity",
+                BaseAddress + 0x2C,
+                APIs.Memory
+            )
+        );
+        Health = AddVariable(
+            new SByteS8Memory(
+                "HP",
+                BaseAddress + 0x5C,
+                APIs.Memory
+            ),
+            displayOrder: 0
+        );
 
-        HurtBox = AddComponent(new HurtBox(BaseAddress + 0x54, this));
-        TerrainBox = AddComponent(new TerrainBox(BaseAddress + 0x68, this));
+        DamagerBox = AddComponent(new BoundBox(BaseAddress + 0x50, this, Color.Red));
+        DamageableBox = AddComponent(new BoundBox(BaseAddress + 0x54, this, Color.LimeGreen));
+        CollisionBox = AddComponent(new TerrainBox(BaseAddress + 0x68, this));
     }
 
     public override void Draw()
     {
         base.Draw();
-        HurtBox.Draw();
-        TerrainBox.Draw();
-
         DrawVariables(GetVarsPosition());
     }
 

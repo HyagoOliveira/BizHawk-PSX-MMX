@@ -3,10 +3,9 @@ using BizHawk.PSXMMX.Math;
 
 namespace BizHawk.PSXMMX.Gameplay.Components.Collisions;
 
-public sealed class HurtBox(long baseAddress, GameObject gameObject) : AbstractBoundBox(baseAddress, gameObject)
+public sealed class BoundBox(long baseAddress, GameObject gameObject, Color lineColor) :
+    AbstractBoundBox(baseAddress, gameObject, lineColor)
 {
-    protected override Color GetBoxLineColor() => Color.LimeGreen;
-
     protected override RectInt CalculateWorldBounds(RectInt rawBounds, int x, int y, uint facing)
     {
         var facingRight = (facing & 0x40) != 0;

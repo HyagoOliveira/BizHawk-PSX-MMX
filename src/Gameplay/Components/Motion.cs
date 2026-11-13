@@ -13,4 +13,5 @@ public sealed class Motion : AbstractComponent
     }
 
     public override void Update() { }
+    public override void Draw() { }
 }

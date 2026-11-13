@@ -3,10 +3,9 @@ using BizHawk.PSXMMX.Math;
 
 namespace BizHawk.PSXMMX.Gameplay.Components.Collisions;
 
-public sealed class TerrainBox(long baseAddress, GameObject gameObject) : AbstractBoundBox(baseAddress, gameObject)
+public sealed class TerrainBox(long baseAddress, GameObject gameObject) :
+    AbstractBoundBox(baseAddress, gameObject, Color.WhiteSmoke)
 {
-    protected override Color GetBoxLineColor() => Color.WhiteSmoke;
-
     protected override RectInt CalculateWorldBounds(RectInt rawBounds, int x, int y, uint facing)
     {
         var centerX = x + (facing == 0 ? rawBounds.X : -rawBounds.X);

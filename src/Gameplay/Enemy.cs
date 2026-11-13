@@ -16,8 +16,8 @@ public sealed class Enemy : GameCharacter
         UpdateName();
     }
 
-    protected override Vector2Int GetVarsPosition() => HurtBox.WorldBounds.HasValue ?
-        Camera.Main.WorldToScreenPoint(HurtBox.WorldBounds.Value.GetTopRight()) :
+    protected override Vector2Int GetVarsPosition() => DamageableBox.WorldBounds.HasValue ?
+        Camera.Main.WorldToScreenPoint(DamageableBox.WorldBounds.Value.GetTopRight()) :
         Vector2Int.Zero;
 
     private void UpdateName()
