@@ -10,7 +10,6 @@ public sealed class Player : GameCharacter
     public KeyboardInput Input { get; }
 
     // Variables
-    public Vector2S32Memory PreviousPosition { get; }
 
     private const int VARS_COUNT = 4;
     private static readonly Vector2Int VARS_POSITION = new(
@@ -22,15 +21,7 @@ public sealed class Player : GameCharacter
     {
         Input = input;
 
-        PreviousPosition = AddVariable(
-            new Vector2S32Memory(
-                "Prev Pos",
-                xAddress: BaseAddress + 0x18,
-                yAddress: BaseAddress + 0x1C,
-                APIs.Memory
-            ),
-            displayOrder: 1
-        );
+
     }
 
     public override void Update()

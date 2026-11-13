@@ -11,14 +11,15 @@ public class GameObject
     public ApiContainer APIs { get; }
 
     public string Name { get; protected set; }
+    public bool IsDrawEnabled { get; set; } = true;
 
     // Variables
     public BoolS8Memory IsActive { get; }   // active (whether slot is active)
     public UIntS8Memory Id { get; }         // id (pool identifier)
     public BoolS8Memory IsVisible { get; }  // on_screen (whether is visible)
     public UIntS8Memory MainState { get; }  // state (initialization, behavior or despawn)
-
     public Vector2S32Memory Position { get; }
+    public Vector2S32Memory PreviousPosition { get; }
 
     private readonly List<IMemory> variables = [];
     private readonly List<AbstractComponent> components = [];
@@ -68,6 +69,14 @@ public class GameObject
                 APIs.Memory
             )
         );
+        PreviousPosition = AddVariable(
+            new Vector2S32Memory(
+                "Prev Pos",
+                xAddress: BaseAddress + 0x18,
+                yAddress: BaseAddress + 0x1C,
+                APIs.Memory
+            )
+        );
         #endregion
 
         // Each implementation should initialize its own variables and components in the constructor.
@@ -90,7 +99,8 @@ public class GameObject
     {
         foreach (var variable in variables) variable.Update();
         foreach (var component in components) component.Update();
-        Draw();
+
+        if (IsDrawEnabled) Draw();
     }
 
     public virtual void Draw()

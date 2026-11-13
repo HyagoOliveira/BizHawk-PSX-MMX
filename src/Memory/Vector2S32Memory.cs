@@ -11,8 +11,8 @@ namespace BizHawk.PSXMMX.Memory;
 /// </remarks>
 public sealed class Vector2S32Memory : AbstractMemory<Vector2>
 {
-    public long XAddress { get; }
-    public long YAddress { get; }
+    public long XAddress { get; set; }
+    public long YAddress { get; set; }
 
     public Vector2S32Memory(string name, long xAddress, long yAddress, IMemoryApi api) :
         base(name, xAddress, api)
