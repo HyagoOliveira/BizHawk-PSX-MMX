@@ -36,11 +36,7 @@ public sealed class Player : GameCharacter
         UpdateHealthByInput(); //TODO remove later
     }
 
-    public override void Draw()
-    {
-        base.Draw();
-        DrawVariables(VARS_POSITION);
-    }
+    protected override Vector2Int GetVarsPosition() => VARS_POSITION;
 
     private void UpdateHealthByInput()
     {

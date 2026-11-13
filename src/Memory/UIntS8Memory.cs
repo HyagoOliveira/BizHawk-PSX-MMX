@@ -2,10 +2,11 @@ using BizHawk.Client.Common;
 
 namespace BizHawk.PSXMMX.Memory;
 
-public sealed class UIntS8Memory(string name, long address, IMemoryApi api) : AbstractMemory<uint>(name, address, api)
+public sealed class UIntS8Memory(string name, long address, IMemoryApi api, bool hideDisplay = false) :
+    AbstractMemory<uint>(name, address, api, hideDisplay)
 {
-    protected override uint ReadValue() => MemoryApi.ReadU8(Address, DOMAIN);
-    protected override void WriteValue(uint value) => MemoryApi.WriteU8(Address, value, DOMAIN);
+    public override uint ReadValue() => MemoryApi.ReadU8(Address, DOMAIN);
+    public override void WriteValue(uint value) => MemoryApi.WriteU8(Address, value, DOMAIN);
 
     public static UIntS8Memory operator +(UIntS8Memory memory, uint amount)
     {

@@ -39,5 +39,6 @@ public readonly record struct RectInt : IEquatable<RectInt>
 
     public Vector2Int GetMin() => new(GetXMin(), GetYMin());
     public Vector2Int GetMax() => new(GetXMax(), GetYMax());
+    public Vector2Int GetTopRight() => new(GetXMax(), GetYMin());
     public Vector2Int GetCenter() => new(X + (Width / 2), Y + (Height / 2));
 }

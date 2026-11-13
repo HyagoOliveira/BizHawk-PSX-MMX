@@ -5,7 +5,7 @@ namespace BizHawk.PSXMMX.Memory;
 
 public interface IMemory
 {
-    bool HideDraw { get; set; }
+    bool HideDisplay { get; set; }
 
     void Update();
     void Draw(Vector2Int position, ApiContainer apis);

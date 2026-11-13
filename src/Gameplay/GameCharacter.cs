@@ -1,5 +1,6 @@
 using BizHawk.Client.Common;
 using BizHawk.PSXMMX.Gameplay.Components.Collisions;
+using BizHawk.PSXMMX.Math;
 using BizHawk.PSXMMX.Memory;
 
 namespace BizHawk.PSXMMX.Gameplay;
@@ -28,5 +29,9 @@ public class GameCharacter : GameObject
         base.Draw();
         HurtBox.Draw();
         TerrainBox.Draw();
+
+        DrawVariables(GetVarsPosition());
     }
+
+    protected virtual Vector2Int GetVarsPosition() => Vector2Int.Zero;
 }

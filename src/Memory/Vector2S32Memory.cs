@@ -13,12 +13,12 @@ public sealed class Vector2S32Memory(string name, long address, long offset, IMe
 {
     public long Offset { get; } = offset;
 
-    protected override Vector2 ReadValue() => new Vector2(
+    public override Vector2 ReadValue() => new Vector2(
         MemoryApi.ReadS32(GetXAddress(), DOMAIN),
         MemoryApi.ReadS32(GetYAddress(), DOMAIN)
     ) / FloatS32Memory.POINT_SCALE;
 
-    protected override void WriteValue(Vector2 value)
+    public override void WriteValue(Vector2 value)
     {
         MemoryApi.WriteS32(GetXAddress(), ToInt(value.X), DOMAIN);
         MemoryApi.WriteS32(GetYAddress(), ToInt(value.Y), DOMAIN);

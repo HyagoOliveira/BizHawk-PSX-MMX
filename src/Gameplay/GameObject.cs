@@ -11,6 +11,11 @@ public class GameObject
     public ApiContainer APIs { get; }
 
     public string Name { get; protected set; }
+
+    // Variables
+    public BoolS8Memory IsActive { get; private set; }
+    public UIntS8Memory Id { get; private set; }
+
     public Vector2S32Memory Position { get; private set; }
 
     private readonly List<IMemory> variables = [];
@@ -22,6 +27,23 @@ public class GameObject
         Name = GetType().Name;
         BaseAddress = baseAddress;
 
+        // Initialize default variables
+        IsActive = AddVariable(
+            new BoolS8Memory(
+                "Active",
+                BaseAddress + 0x00,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        Id = AddVariable(
+            new UIntS8Memory(
+                "Id",
+                BaseAddress + 0x01,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
         Position = AddVariable(
             new Vector2S32Memory(
                 "Pos",
@@ -30,6 +52,7 @@ public class GameObject
                 APIs.Memory
             )
         );
+
         // Each implementation should initialize its own variables and components in the constructor.
     }
 
@@ -62,11 +85,9 @@ public class GameObject
     public void DrawVariables(Vector2Int position)
     {
         APIs.DrawText(position, Name);
-        position.X += 4;
-
         foreach (var variable in variables)
         {
-            if (variable.HideDraw) continue;
+            if (variable.HideDisplay) continue;
 
             position.Y += 10;
             variable.Draw(position, APIs);

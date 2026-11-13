@@ -10,7 +10,7 @@ public abstract class AbstractMemory<T> : IMemory
     public long Address { get; }
     public IMemoryApi MemoryApi { get; }
 
-    public bool HideDraw { get; set; }
+    public bool HideDisplay { get; set; }
     public bool IsFrozen { get; private set; }
 
     public T Value { get; private set; } = default!;
@@ -18,11 +18,12 @@ public abstract class AbstractMemory<T> : IMemory
 
     public const string DOMAIN = GameMemoryAddress.DOMAIN;
 
-    public AbstractMemory(string name, long address, IMemoryApi api)
+    public AbstractMemory(string name, long address, IMemoryApi api, bool hideDisplay = false)
     {
         Name = name;
         MemoryApi = api;
         Address = address;
+        HideDisplay = hideDisplay;
     }
 
     public void Update()
@@ -66,6 +67,6 @@ public abstract class AbstractMemory<T> : IMemory
         if (IsFrozen) FrozenValue = value;
     }
 
-    protected abstract T ReadValue();
-    protected abstract void WriteValue(T value);
+    public abstract T ReadValue();
+    public abstract void WriteValue(T value);
 }

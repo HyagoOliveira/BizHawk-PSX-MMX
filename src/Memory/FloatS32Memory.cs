@@ -12,6 +12,6 @@ public sealed class FloatS32Memory(string name, long address, IMemoryApi api) : 
 {
     public const float POINT_SCALE = 65_536f; // 0x10000 (2^16)
 
-    protected override float ReadValue() => MemoryApi.ReadS32(Address, DOMAIN) / POINT_SCALE;
-    protected override void WriteValue(float value) => MemoryApi.WriteS32(Address, checked((int)(value * POINT_SCALE)), DOMAIN);
+    public override float ReadValue() => MemoryApi.ReadS32(Address, DOMAIN) / POINT_SCALE;
+    public override void WriteValue(float value) => MemoryApi.WriteS32(Address, checked((int)(value * POINT_SCALE)), DOMAIN);
 }
