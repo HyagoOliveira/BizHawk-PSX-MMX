@@ -1,11 +1,10 @@
 using BizHawk.Client.Common;
 using BizHawk.PSXMMX.Input;
 using BizHawk.PSXMMX.Math;
-using BizHawk.PSXMMX.Memory;
 
 namespace BizHawk.PSXMMX.Gameplay;
 
-public sealed class Player : GameCharacter
+public sealed class Player : MainObject
 {
     public KeyboardInput Input { get; }
 
@@ -14,7 +13,7 @@ public sealed class Player : GameCharacter
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
         Input = input;
-        IsDrawEnabled = true;
+        ShowProperties = true;
     }
 
     public override void Update()
@@ -23,7 +22,9 @@ public sealed class Player : GameCharacter
         UpdateHealthByInput(); //TODO remove later
     }
 
-    protected override Vector2Int GetVarsPosition() => new(
+    protected override void UpdateName() => Name = "Player";
+
+    protected override Vector2Int GetPropertiesPosition() => new(
         2,
         Camera.SCREEN_SIZE.Y - 90
     );

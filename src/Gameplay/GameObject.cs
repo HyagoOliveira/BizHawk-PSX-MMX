@@ -11,7 +11,7 @@ public class GameObject
     public ApiContainer APIs { get; }
 
     public string Name { get; protected set; }
-    public bool IsDrawEnabled { get; set; } = true;
+    public bool ShowProperties { get; set; }
 
     // Variables
     public BoolS8Memory IsActive { get; }       // active (whether slot is active)
@@ -100,12 +100,13 @@ public class GameObject
     }
 
     public bool IsActivated() => IsActive.Value;
-    public bool ShouldDrawn() => IsVisible.Value && IsDrawEnabled;
+    public bool IsDrawEnabled() => IsVisible.Value;
 
     public void UpdateAndDraw()
     {
         Update();
-        if (ShouldDrawn()) Draw();
+        if (IsDrawEnabled()) Draw();
+        if (ShowProperties) DrawProperties();
     }
 
     public virtual void Update()
@@ -117,14 +118,14 @@ public class GameObject
     public virtual void Draw()
     {
         foreach (var component in components) component.Draw();
-
-        var position = Camera.Main.WorldToScreenPoint(Position.Value);
-        APIs.DrawAxis(position);
+        APIs.DrawAxis(Camera.Main.WorldToScreenPoint(Position.Value));
     }
 
-    public void DrawVariables(Vector2Int position)
+    public void DrawProperties()
     {
+        var position = GetPropertiesPosition();
         APIs.DrawText(position, Name);
+
         foreach (var variable in variables)
         {
             if (variable.HideDisplay) continue;
@@ -133,4 +134,6 @@ public class GameObject
             variable.Draw(position, APIs);
         }
     }
+
+    protected virtual Vector2Int GetPropertiesPosition() => Vector2Int.Zero;
 }

@@ -6,7 +6,7 @@ using BizHawk.PSXMMX.Memory;
 
 namespace BizHawk.PSXMMX.Gameplay;
 
-public class GameCharacter : GameObject
+public class MainObject : GameObject
 {
     // Variables
     public BoolU8Memory IsFacingRight { get; }  // direction
@@ -23,7 +23,7 @@ public class GameCharacter : GameObject
     public TerrainBox CollisionBox { get; }     // terrain_box
     public AnimationMemory Animation { get; }   // unk17, animation_step
 
-    public GameCharacter(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
+    public MainObject(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
         IsFacingRight = AddVariable(
             new BoolU8Memory(
@@ -92,11 +92,19 @@ public class GameCharacter : GameObject
         CollisionBox = AddComponent(new TerrainBox(BaseAddress + 0x68, this));
     }
 
-    public override void Draw()
+    public override void Update()
     {
-        base.Draw();
-        DrawVariables(GetVarsPosition());
+        base.Update();
+        UpdateName();
     }
 
-    protected virtual Vector2Int GetVarsPosition() => Vector2Int.Zero;
+    protected virtual void UpdateName()
+    {
+        var mainName = GameMemoryAddress.GetMainObjectName(Id.Value);
+        Name = $"{mainName} (Id: {Id.Value})";
+    }
+
+    protected override Vector2Int GetPropertiesPosition() => DamageableBox.WorldBounds.HasValue ?
+        Camera.Main.WorldToScreenPoint(DamageableBox.WorldBounds.Value.GetTopRight()) :
+        Vector2Int.Zero;
 }

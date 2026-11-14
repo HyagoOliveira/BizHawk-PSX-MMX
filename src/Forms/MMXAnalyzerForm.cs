@@ -18,7 +18,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     public Player? Player { get; private set; } = null!;
     public Camera? Camera { get; private set; } = null!;
     public KeyboardInput? Input { get; private set; } = null!;
-    public PoolManager<Enemy>? EnemyPool { get; private set; } = null!;
+    public GamePoolManager<MainObject>? MainObjectsPool { get; private set; } = null!;
     public GameMemoryAddress? MemoryAddress { get; private set; } = null!;
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
@@ -45,7 +45,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         Input = new KeyboardInput(APIs.Input);
         Camera = new Camera(MemoryAddress.Camera, APIs);
         Player = new Player(MemoryAddress.Player, APIs, Input);
-        EnemyPool = new PoolManager<Enemy>(
+        MainObjectsPool = new GamePoolManager<MainObject>(
             MemoryAddress.MainObjectsPool,
             blockSize: 0x9C,
             totalSlots: 48,
@@ -64,7 +64,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         Input?.Update();
         Camera?.UpdateAndDraw();
         Player?.UpdateAndDraw();
-        EnemyPool?.Update();
+        MainObjectsPool?.Update();
     }
 
     private void InitializeFoldouts()
