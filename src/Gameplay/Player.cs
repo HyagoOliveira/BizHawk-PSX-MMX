@@ -16,7 +16,6 @@ public sealed class Player : MainObject
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
         Input = input;
-        ShowProperties = true;
 
         Character = AddVariable(
             new UIntS8Memory(
@@ -26,6 +25,8 @@ public sealed class Player : MainObject
                 hideDisplay: true
             )
         );
+
+        ShowProperties();
     }
 
     public override void Update()

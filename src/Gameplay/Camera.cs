@@ -15,8 +15,6 @@ public sealed class Camera : GameObject
         // Camera Previous Position addresses are different
         PreviousPosition.XAddress = BaseAddress + 0x14;
         PreviousPosition.YAddress = BaseAddress + 0x18;
-
-        ShowProperties = false;
     }
 
     public Vector2Int WorldToScreenPoint(Vector2 position) => (position - Position.Value).ToVector2Int();

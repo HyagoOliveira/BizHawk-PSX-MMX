@@ -23,6 +23,8 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
 
+    private readonly List<FoldoutControl> foldouts = [];
+
     public MMXAnalyzerForm()
     {
         ClientSize = new Size(600, 160);
@@ -31,7 +33,6 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         StartPosition = FormStartPosition.CenterParent;
 
         SuspendLayout();
-        InitializeFoldouts();
         ResumeLayout(performLayout: false);
         PerformLayout();
     }
@@ -51,6 +52,9 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
             totalSlots: 48,
             APIs
         );
+
+        foldouts.Add(new PlayerFoldout(Player, isExpanded: true));
+        InitializeFoldouts();
     }
 
     protected override void UpdateAfter()
@@ -69,7 +73,9 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     private void InitializeFoldouts()
     {
-        /*var sections = new FlowLayoutPanel
+        Activated -= (_, _) => UpdateFoldouts();
+
+        var sections = new FlowLayoutPanel
         {
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.TopDown,
@@ -78,8 +84,23 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
             Padding = new Padding(6)
         };
 
-        sections.Controls.Add(playerFoldout);
-        Controls.Add(sections);*/
+        foreach (var foldout in foldouts)
+        {
+            sections.Controls.Add(foldout);
+        }
+        Controls.Add(sections);
+
+        Activated += (_, _) => UpdateFoldouts();
+    }
+
+    private void UpdateFoldouts()
+    {
+        if (MemoryAddress?.IsInvalid() == true) return;
+
+        foreach (var foldout in foldouts)
+        {
+            foldout.UpdateContent();
+        }
     }
 
     private void ShowUnsupportedGameMessage() => APIs.DrawText(

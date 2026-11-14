@@ -56,4 +56,6 @@ public class FoldoutControl : UserControl
         Controls.Add(contentPanel);
         Controls.Add(headerButton);
     }
+
+    public virtual void UpdateContent() { }
 }

@@ -11,7 +11,7 @@ public class GameObject
     public ApiContainer APIs { get; }
 
     public string Name { get; protected set; }
-    public bool ShowProperties { get; set; }
+    public bool IsPropertiesEnabled { get; private set; }
 
     // Variables
     public BoolS8Memory IsActive { get; }       // active (whether slot is active)
@@ -102,11 +102,14 @@ public class GameObject
     public bool IsActivated() => IsActive.Value;
     public bool IsDrawEnabled() => IsVisible.Value;
 
+    public void ShowProperties() => IsPropertiesEnabled = true;
+    public void HideProperties() => IsPropertiesEnabled = false;
+
     public void UpdateAndDraw()
     {
         Update();
         if (IsDrawEnabled()) Draw();
-        if (ShowProperties) DrawProperties();
+        if (IsPropertiesEnabled) DrawProperties();
     }
 
     public virtual void Update()
