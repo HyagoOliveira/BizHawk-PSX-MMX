@@ -99,12 +99,19 @@ public class GameObject
         return variable;
     }
 
+    public bool IsActivated() => IsActive.Value;
+    public bool ShouldDrawn() => IsVisible.Value && IsDrawEnabled;
+
+    public void UpdateAndDraw()
+    {
+        Update();
+        if (ShouldDrawn()) Draw();
+    }
+
     public virtual void Update()
     {
         foreach (var variable in variables) variable.Update();
         foreach (var component in components) component.Update();
-
-        if (IsDrawEnabled) Draw();
     }
 
     public virtual void Draw()

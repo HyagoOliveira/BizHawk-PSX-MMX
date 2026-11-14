@@ -14,6 +14,7 @@ public sealed class Player : GameCharacter
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
         Input = input;
+        IsDrawEnabled = true;
     }
 
     public override void Update()

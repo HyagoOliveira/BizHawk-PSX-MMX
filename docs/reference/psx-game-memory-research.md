@@ -81,6 +81,8 @@ In the MMX4 fork, `StageObjectRecord.object_type` selects the object pool throug
 
 `object_type` chooses the pool; the record's `id` selects behavior within that pool. For main objects, `id` indexes `main_object_update_funcs`; do not assume IDs have the same meaning across different pools. A record with `object_type == 0xFF` terminates the stage-object list and is not an allocatable object type. The main-object pool is not limited to enemies.
 
+The analyzer's `GameMemoryAddress.Get` selects the game used by `GetMainObjectName`. The name table currently covers MMX4 only; unknown IDs and games without a table display `UNKNOWN MAIN OBJECT`.
+
 ### Player collision boxes
 
 The analyzer reads player hurt-box and terrain-box pointers at offsets `+0x54` and `+0x68`, respectively, for MMX4, MMX5, and MMX6 USA. The shared offsets were validated by the user; each game still uses its own player base address. On each update, the analyzer reads the four-byte records and displays the resulting world-space boxes in red and green. Null pointers indicate inactive boxes. The current geometry interprets hurt-box dimensions as directional extensions and terrain-box dimensions as half-extents. This interpretation is based on the MMX4 fork's PC/Saturn reconstruction and has not been independently validated for PS1 or the other games.
