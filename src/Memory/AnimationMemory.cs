@@ -58,11 +58,11 @@ public sealed class AnimationMemory : AbstractMemory<AnimationMemory.Step>
     public override void WriteValue(Step value) { }
 
     public override string ToString() =>
-        $"{Name}: {Value.Index} | " +
-        $"Frame {Value.CurrentFrame}/{Value.TotalFrames} | " +
-        $"Sprite {Value.SpriteIndex} | " +
-        $"Ev {Value.Event} | " +
-        $"Then: {Value.GetNextAction()}";
+        $"{Name}: {Value.Index:D3} | " +
+        $"Frame {Value.CurrentFrame:D2}/{Value.TotalFrames:D2} | " +
+        $"Sprite {Value.SpriteIndex:D3} | " +
+        $"Ev {Value.Event}";
+    //$"| Then: {Value.GetNextAction()}";
 
     // The cursor points to the original step, whose duration is not decremented.
     private sbyte ReadTotalDuration()
