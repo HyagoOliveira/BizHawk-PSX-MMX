@@ -7,6 +7,11 @@ namespace BizHawk.PSXMMX.Memory;
 /// </summary>
 public sealed class AnimationMemory : AbstractMemory<AnimationMemory.Step>
 {
+    /// <param name="Event">
+    /// Animation event interpreted by the object's behavior; its meaning depends on the object and state.
+    /// For MMX4's Trident Mech charge attack, event 2 enables alternating attack boxes and plays a sound;
+    /// event 1 restores the body attack box and ends the attack. The routine checks the event on each update.
+    /// </param>
     public readonly record struct Step(
         byte Index,
         sbyte Duration,
@@ -20,7 +25,7 @@ public sealed class AnimationMemory : AbstractMemory<AnimationMemory.Step>
         public int CurrentFrame => TotalFrames - Duration + 1;
 
         // What the game does when this step's duration ends.
-        public string NextAction => RelativeStep switch
+        public string GetNextAction() => RelativeStep switch
         {
             > 0 => $"next step (+{RelativeStep})",
             < 0 => $"loop back {-RelativeStep} step(s)",
@@ -57,7 +62,7 @@ public sealed class AnimationMemory : AbstractMemory<AnimationMemory.Step>
         $"Frame {Value.CurrentFrame}/{Value.TotalFrames} | " +
         $"Sprite {Value.SpriteIndex} | " +
         $"Ev {Value.Event} | " +
-        $"Then: {Value.NextAction}";
+        $"Then: {Value.GetNextAction()}";
 
     // The cursor points to the original step, whose duration is not decremented.
     private sbyte ReadTotalDuration()

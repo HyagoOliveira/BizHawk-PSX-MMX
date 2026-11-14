@@ -134,3 +134,37 @@ Do not treat fields at the same offset as having the same type or meaning across
 In the MMX4 decompilation, `f32` is a union containing a signed 32-bit `val`; it is not an IEEE-754 `float`. Position and player velocity values use signed 16.16 fixed-point representation: divide the raw signed integer by `65,536` (`0x10000`) to obtain the real-valued quantity. The current `Fixed16Vector2Memory` implementation reads the two position components as signed 32-bit integers at `+0x08` and `+0x0C`, converts them to `float`, and exposes them as a `Vector2`. The underlying raw values can be read directly as `int` when exact representation is needed. Player velocity is also 16.16, but should use its own mapping at `+0x20` and `+0x24`; do not assume the position vector's memory spacing or reader applies to it. The `s32` main-object speed, acceleration, and gravity fields remain documented as raw signed integers; do not assume their scale from the `f32` fields.
 
 The reconstructed C `obj.h`, `common.h`, and USA symbol map are the primary references for these layouts. Names such as `unk*` reflect incomplete reverse engineering; do not assign semantics without corroborating code use. The PC port may use different layouts because pointer sizes differ. Keep these PS1 offsets separate from addresses for other games and platforms.
+
+### Object animation
+
+`AnimatedObj` fields (PS1 layout from `ANIMATED_OBJ_FIELDS` in the fork's `obj.h`) are read by `AnimationMemory`:
+
+| Field | Object offset | MMX4 type | Meaning |
+|---|---:|---|---|
+| `unk17` | `+0x17` | `u8` | Current animation index, written by `set_animation` |
+| `animation_table` | `+0x30` | 32-bit PS1 pointer | Per-object table of animation start pointers |
+| `animation_cursor` | `+0x34` | 32-bit PS1 pointer | Current step inside the playing animation |
+| `animation_step` | `+0x44` | `AnimationStep` (4 bytes) | Copy of the step at the cursor |
+| `previous_animation_index` | `+0x48` | `u8` | Set to `0xFF` by `set_animation` |
+
+`AnimationStep` bytes: `duration` (`+0x44`, `s8`), `event` (`+0x45`, `s8`), `relative_step` (`+0x46`, `s8`) and `frame_index` (`+0x47`, `u8`). The `+0x34` and `+0x44`-`+0x48` offsets were checked against MMX4 USA save states for the Trident Mech enemy; `+0x17` comes from the fork and was not checked in saves. How the game uses `frame_index` for rendering was not verified; the analyzer labels it `Sprite`.
+
+Timing, from `set_animation` and `animate_object`:
+
+- `set_animation` points the cursor at `animation_table[index]` and copies that step into `animation_step`.
+- `animate_object` decrements the copied `duration` once per call. When it reaches 0, the cursor moves by `relative_step` steps (4 bytes each) and the new step is copied.
+- The copy's `duration` counts down, so the step's original duration is read from the memory the cursor points to. The analyzer shows `Frame current/total`, where current is `total - duration + 1`.
+- `relative_step` `> 0` advances, `< 0` loops back, and `0` reloads the same step (inferred from the code, not tested in game).
+
+#### `event`
+
+`event` is a signal from the animation data to the object's behavior code. Most steps have `0`. The meaning of a non-zero value is defined by each object's own routine, so it can differ between enemies and between animations of the same enemy.
+
+Trident Mech (`main_16_trident_mech.c`, `trident_mech_charge_attack`, animation `0xD`) reads `animation_step.fields.event` every frame while the step is active:
+
+| `event` | Effect |
+|---|---|
+| `2` | Sets `ext.main_16.unk88 = 1` and plays a sound. From then on `unk7C ^= unk88` alternates `attack_box` every frame: body box `(-11, -17, 19, 47)` with `contact_damage = 3`, then spear box `(-89, -1, 69, 13)` with `contact_damage = 6`. |
+| `1` | Restores the body box and `contact_damage = 3`, faces the player, calls `set_animation(self, 0)`, and ends the attack. |
+
+The condition is evaluated on every frame while the step is active, not only on its first frame. The order of events across animation `0xD` comes from the code and was not checked step by step in save states.
