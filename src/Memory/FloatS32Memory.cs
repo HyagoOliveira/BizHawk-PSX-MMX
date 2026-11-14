@@ -8,7 +8,8 @@ namespace BizHawk.PSXMMX.Memory;
 /// <remarks>
 /// The first 16 bits represent the integer part; the last 16 bits represent the fractional part.
 /// </remarks>
-public sealed class FloatS32Memory(string name, long address, IMemoryApi api) : AbstractMemory<float>(name, address, api)
+public sealed class FloatS32Memory(string name, long address, IMemoryApi api, bool hideDisplay = false) :
+AbstractMemory<float>(name, address, api, hideDisplay)
 {
     public const float POINT_SCALE = 65_536f; // 0x10000 (2^16)
 

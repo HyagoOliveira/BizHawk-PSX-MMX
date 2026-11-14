@@ -54,19 +54,21 @@ public class GameObject
             new BoolS8Memory(
                 "OnScreen",
                 BaseAddress + 0x03,
-                APIs.Memory
+                APIs.Memory,
+                hideDisplay: true
             )
         );
         MainState = AddVariable(
             new UIntS8Memory(
                 "State",
                 BaseAddress + 0x04,
-                APIs.Memory
+                APIs.Memory,
+                hideDisplay: true
             )
         );
         Position = AddVariable(
             new Vector2S32Memory(
-                "Pos",
+                "Position",
                 xAddress: BaseAddress + 0x08,
                 yAddress: BaseAddress + 0x0C,
                 APIs.Memory
@@ -91,10 +93,9 @@ public class GameObject
         return component;
     }
 
-    public T AddVariable<T>(T variable, int? displayOrder = null) where T : IMemory
+    public T AddVariable<T>(T variable) where T : IMemory
     {
-        if (displayOrder is int index) variables.Insert(index, variable);
-        else variables.Add(variable);
+        variables.Add(variable);
         return variable;
     }
 

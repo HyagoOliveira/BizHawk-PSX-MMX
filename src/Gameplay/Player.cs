@@ -24,7 +24,7 @@ public sealed class Player : GameCharacter
 
     protected override Vector2Int GetVarsPosition() => new(
         2,
-        Camera.SCREEN_SIZE.Y - (TotalVariables + 1) * ApiContainerExtensions.DEFAULT_FONT_SIZE
+        Camera.SCREEN_SIZE.Y - 90
     );
 
     private void UpdateHealthByInput()
