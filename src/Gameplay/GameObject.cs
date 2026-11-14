@@ -104,6 +104,7 @@ public class GameObject
 
     public void ShowProperties() => IsPropertiesEnabled = true;
     public void HideProperties() => IsPropertiesEnabled = false;
+    public void ToggleShowProperties() => IsPropertiesEnabled = !IsPropertiesEnabled;
 
     public void UpdateAndDraw()
     {

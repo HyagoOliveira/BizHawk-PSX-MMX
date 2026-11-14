@@ -1,4 +1,3 @@
-using System.Drawing;
 using BizHawk.Client.Common;
 using BizHawk.PSXMMX.Math;
 
@@ -34,7 +33,7 @@ public abstract class AbstractMemory<T> : IMemory
 
     public void Draw(Vector2Int position, ApiContainer apis)
     {
-        var color = IsFrozen ? Color.Cyan : Color.White;
+        var color = IsFrozen ? MemoryDisplayColors.FROZEN_COLOR : MemoryDisplayColors.UNFROZEN_COLOR;
         apis.DrawText(position, ToString(), color);
     }
 

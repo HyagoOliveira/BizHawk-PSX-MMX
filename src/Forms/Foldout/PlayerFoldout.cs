@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Windows.Forms;
 using BizHawk.PSXMMX.Gameplay;
 using BizHawk.PSXMMX.Memory;
@@ -9,11 +8,13 @@ public sealed class PlayerFoldout : FoldoutControl
 {
     public Player Player { get; }
 
+    private readonly MemoryFreezeToggle healthToggle;
+    private readonly GameObjectPropertiesToggle propertiesToggle;
     private readonly NumericUpDown healthInput = new()
     {
         Minimum = SByteS8Memory.MIN_VALUE,
         Maximum = SByteS8Memory.MAX_VALUE,
-        Location = new Point(72, 6),
+        Margin = new Padding(3, 5, 3, 3),
         Width = 100,
         TextAlign = HorizontalAlignment.Right
     };
@@ -27,21 +28,36 @@ public sealed class PlayerFoldout : FoldoutControl
         var healthLabel = new Label
         {
             AutoSize = true,
-            Location = new Point(8, 10),
+            Margin = new Padding(3, 8, 3, 3),
             Text = "Health"
         };
+        healthToggle = new MemoryFreezeToggle(Player.Health);
+        propertiesToggle = new GameObjectPropertiesToggle(Player);
 
-        healthInput.Enabled = player is not null;
         healthInput.ValueChanged += (_, _) => WriteHealth();
 
-        ContentPanel.Controls.Add(healthLabel);
-        ContentPanel.Controls.Add(healthInput);
+        var controls = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            Padding = new Padding(3),
+            WrapContents = false
+        };
+
+        controls.Controls.Add(healthLabel);
+        controls.Controls.Add(healthInput);
+        controls.Controls.Add(healthToggle);
+        controls.Controls.Add(propertiesToggle);
+
+        ContentPanel.Controls.Add(controls);
     }
 
     public override void UpdateContent()
     {
         base.UpdateContent();
+
         healthInput.Value = Player.Health.ReadValue();
+        healthToggle.UpdateAppearance();
+        propertiesToggle.UpdateAppearance();
     }
 
     private void WriteHealth()
