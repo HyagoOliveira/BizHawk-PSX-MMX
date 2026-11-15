@@ -15,9 +15,18 @@ public sealed class Player : MainObject
     public SByteS8Memory ActionSubstate { get; }      // unk6
     public BoolS8Memory IsSpikeImmune { get; }          // spike_immune
     public SByteS8Memory AirAction { get; }           // air_action
-    public SByteS8Memory ZeroTechniqueEnergy { get; } // weapon_energy[0]
+    public SByteS8Memory ChargeState0 { get; }         // charge_state[0]
+    public SByteS8Memory ChargeState1 { get; }         // charge_state[1]
+    public ByteU8Memory ChargeTimer { get; }           // charge_timer
+    public ByteU8Memory SpecialChargeTimer { get; }    // special_charge_timer
+    public SByteS8Memory StockCharge { get; }          // stock_charge
+    public ByteU8Memory ArmorParts { get; }            // armor_parts
+    public SByteS8Memory[] WeaponEnergy { get; }       // weapon_energy[0x10]
+    public ByteU8Memory ArmType { get; }               // arm_type
     public ByteU8Memory BossFlags { get; }            // boss_flags
     public SByteS8Memory ZeroCombo { get; }               // combo
+    public BoolS8Memory IsNovaStrikeActive { get; }    // nova_strike_active
+    public SByteS8Memory NovaStrikeTimer { get; }      // nova_strike_timer
     public BoolU8Memory IsAttacking { get; }      // attacking
     public SByteS8Memory ShotFired { get; }      // shot_fired
     public SByteS8Memory AttackEnded { get; }    // attack_ended
@@ -77,10 +86,70 @@ public sealed class Player : MainObject
                 hideDisplay: true
             )
         );
-        ZeroTechniqueEnergy = AddVariable(
+        ChargeState0 = AddVariable(
             new SByteS8Memory(
-                "Zero Energy",
-                baseAddress + 0xA8,
+                "Charge State 0",
+                baseAddress + 0x9B,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        ChargeState1 = AddVariable(
+            new SByteS8Memory(
+                "Charge State 1",
+                baseAddress + 0x9C,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        ChargeTimer = AddVariable(
+            new ByteU8Memory(
+                "Charge Timer",
+                baseAddress + 0x9D,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        SpecialChargeTimer = AddVariable(
+            new ByteU8Memory(
+                "Special Charge Timer",
+                baseAddress + 0x9E,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        StockCharge = AddVariable(
+            new SByteS8Memory(
+                "Stock Charge",
+                baseAddress + 0xA6,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        ArmorParts = AddVariable(
+            new ByteU8Memory(
+                "Armor Parts",
+                baseAddress + 0xA7,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        WeaponEnergy = new SByteS8Memory[0x10];
+        for (var index = 0; index < WeaponEnergy.Length; index++)
+        {
+            WeaponEnergy[index] = AddVariable(
+                new SByteS8Memory(
+                    $"Weapon Energy [{index}]",
+                    baseAddress + 0xA8 + index,
+                    APIs.Memory,
+                    hideDisplay: true
+                )
+            );
+        }
+        ArmType = AddVariable(
+            new ByteU8Memory(
+                "Arm Type",
+                baseAddress + 0xB8,
                 APIs.Memory,
                 hideDisplay: true
             )
@@ -101,11 +170,28 @@ public sealed class Player : MainObject
                 hideDisplay: true
             )
         );
+        IsNovaStrikeActive = AddVariable(
+            new BoolS8Memory(
+                "Nova Strike Active",
+                baseAddress + 0xE2,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        NovaStrikeTimer = AddVariable(
+            new SByteS8Memory(
+                "Nova Strike Timer",
+                baseAddress + 0xE3,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
         IsAttacking = AddVariable(
             new BoolU8Memory(
                 "Is Attacking",
                 baseAddress + 0x8E,
-                APIs.Memory //, hideDisplay: true
+                APIs.Memory,
+                hideDisplay: true
             )
         );
         ShotFired = AddVariable(

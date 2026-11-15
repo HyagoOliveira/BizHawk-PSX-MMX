@@ -124,6 +124,23 @@ X and Zero share `g_Player` and the `PlayerObj` layout. These fields are shared 
 | `boss_flags` | `+0xB9` | `0x141981` | `s8` bitmask | Zero ability checks use masks `0x01` (Raijingeki), `0x02` (Hyouretsuzan), `0x04` (double jump/spin slash), `0x08` (Ryuenjin), `0x20` (Rakuhouha), and `0x80` (Shippuuga). |
 | `combo` | `+0xBB` | `0x141983` | `s8` | Sabre combo progress; affects the follow-up animation and spawned saber attack. |
 
+### X armor and charge state
+
+These are fields in the same `PlayerObj`; their addresses below use the MMX4 USA `g_Player` base `0x1418C8`. `weapon_energy` is a 16-byte array. In the analyzer, only slot 0 is shown by default to avoid crowding the property overlay; all slots remain available through the `WeaponEnergy` array.
+
+| Field | `PlayerObj` offset | MMX4 `MainRAM` address | Type | Use in the fork |
+|---|---:|---:|---|---|
+| `charge_state[0]` | `+0x9B` | `0x141963` | `s8` | Shoot-button charge: `0` none, `1` partial, `2` full. |
+| `charge_state[1]` | `+0x9C` | `0x141964` | `s8` | Special-button charge; same state values. |
+| `charge_timer` | `+0x9D` | `0x141965` | `u8` | Charge duration for the shoot button, in frames. |
+| `special_charge_timer` | `+0x9E` | `0x141966` | `u8` | Charge duration for the special button, in frames. |
+| `stock_charge` | `+0xA6` | `0x14196E` | `s8` | Stocked buster charge; under `arm_type == 1` and `weapon == 0`, thresholds at `0x5A`, `0x78`, and `0x96` frames raise the stock to 2, 3, and 4. |
+| `armor_parts` | `+0xA7` | `0x14196F` | `s8` bitmask | Observed masks: `0x01` affects special-weapon energy cost; `0x02` enables Nova Strike; `0x04` permits linked special-weapon charging; `0x08` enables hover. The fork does not establish a reliable part name for each bit. |
+| `weapon_energy[0..15]` | `+0xA8`-`+0xB7` | `0x141970`-`0x14197F` | `s8` each | Weapon-energy values; slot 0 is also checked by Zero's Rakuhouha and X's Nova Strike logic. |
+| `arm_type` | `+0xB8` | `0x141980` | `u8` | Selects charge behavior. The fork uses values 0, 1, and 2, but does not name them as specific armor sets. |
+| `nova_strike_active` | `+0xE2` | `0x1419AA` | `s8` | Nova Strike activity flag. |
+| `nova_strike_timer` | `+0xE3` | `0x1419AB` | `s8` | Nova Strike duration timer. |
+
 ### Shared object fields
 
 | Field | Object offset | MMX4 type | C# type |
