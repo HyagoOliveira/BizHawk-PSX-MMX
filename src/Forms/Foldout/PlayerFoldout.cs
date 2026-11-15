@@ -10,8 +10,8 @@ public sealed class PlayerFoldout : FoldoutControl
 {
     public Player Player { get; }
 
-    private readonly ButtonToggle allWeaponsToggle;
-    private readonly GameObjectPropertiesToggle propertiesToggle;
+    private readonly ButtonToggle allWeaponsToggle = new("Weapons");
+    private readonly GameObjectPropertiesToggle propertiesToggle = new();
     private readonly NumericUpDownField healthField = new(
         "Health",
         min: SByteS8Memory.MIN_VALUE,
@@ -24,12 +24,10 @@ public sealed class PlayerFoldout : FoldoutControl
         Player = player;
         ContentHeight = 38;
 
-        allWeaponsToggle = new ButtonToggle(
-            "All Weapons",
-            Player.ToggleAllWeaponsEnabled,
-            Player.IsAllWeaponsEnabled
-        );
-        propertiesToggle = new GameObjectPropertiesToggle(Player);
+        allWeaponsToggle.OnToggle += Player.ToggleAllWeaponsEnabled;
+        allWeaponsToggle.IsToggledFunction = Player.IsAllWeaponsEnabled;
+
+        propertiesToggle.GameObject = Player;
 
         healthField.AddToggleFreezeButton(Player.Health);
         healthField.Control.ValueChanged += (_, _) => WriteHealth();
@@ -40,7 +38,6 @@ public sealed class PlayerFoldout : FoldoutControl
             Padding = new Padding(3),
             WrapContents = false
         };
-
         controls.Controls.Add(healthField);
         controls.Controls.Add(propertiesToggle);
         controls.Controls.Add(allWeaponsToggle);

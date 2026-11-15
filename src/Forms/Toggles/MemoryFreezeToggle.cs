@@ -12,7 +12,7 @@ public sealed class MemoryFreezeToggle : Button
     public MemoryFreezeToggle(IMemory memory)
     {
         this.memory = memory ?? throw new ArgumentNullException(nameof(memory));
-        Size = new Size(130, 24);
+        Size = FormConstants.BUTTON_SIZE;
         UseVisualStyleBackColor = false;
         UpdateAppearance();
         Click += (_, _) => HandleClick();

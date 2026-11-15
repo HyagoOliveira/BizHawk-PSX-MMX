@@ -6,21 +6,23 @@ namespace BizHawk.PSXMMX.Forms.Toggles;
 
 public sealed class GameObjectPropertiesToggle : Button
 {
-    private readonly GameObject gameObject;
+    public GameObject GameObject = null!;
 
-    public GameObjectPropertiesToggle(GameObject gameObject)
+    public GameObjectPropertiesToggle()
     {
-        this.gameObject = gameObject ?? throw new ArgumentNullException(nameof(gameObject));
-        Size = new Size(130, 24);
-        UpdateAppearance();
+        Size = FormConstants.BUTTON_SIZE;
         Click += (_, _) => HandleClick();
+
+        UpdateAppearance();
     }
 
-    public void UpdateAppearance() => Text = gameObject.IsPropertiesEnabled ? "Hide Properties" : "Show Properties";
+    public void UpdateAppearance() => Text = GameObject?.IsPropertiesEnabled == true ?
+        "Hide Properties" :
+        "Show Properties";
 
     private void HandleClick()
     {
-        gameObject.ToggleShowProperties();
+        GameObject?.ToggleShowProperties();
         UpdateAppearance();
     }
 }

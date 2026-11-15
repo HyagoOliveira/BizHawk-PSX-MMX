@@ -20,7 +20,7 @@ public abstract class AbstractBaseField<T> : FlowLayoutPanel where T : Control
         {
             AutoSize = true,
             Text = labelText,
-            Margin = new Padding(2, 8, 2, 2)
+            Margin = FormConstants.LABEL_MARGIN
         };
 
         Controls.Add(label);
@@ -34,7 +34,7 @@ public abstract class AbstractBaseField<T> : FlowLayoutPanel where T : Control
             Text = "F",
             Width = 28,
             Height = 24,
-            Margin = new Padding(2, 3, 2, 3)
+            Margin = FormConstants.BUTTON_MARGIN
         };
         button.Click += (_, _) =>
         {

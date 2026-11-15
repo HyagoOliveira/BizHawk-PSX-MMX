@@ -7,9 +7,9 @@ public class NumericUpDownField : AbstractBaseField<NumericUpDown>
     public NumericUpDownField(string labelText, decimal min = 0, decimal max = 100) :
         base(labelText, new NumericUpDown
         {
-            Margin = new Padding(2, 5, 2, 3),
-            Width = 64,
+            Width = 54,
             TextAlign = HorizontalAlignment.Right,
+            Margin = FormConstants.CONTROL_PADDING,
             Minimum = min,
             Maximum = max
         }
