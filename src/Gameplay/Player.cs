@@ -32,7 +32,6 @@ public sealed class Player : MainObject
     public override void Update()
     {
         base.Update();
-        UpdateHealthByInput(); //TODO remove later
     }
 
     protected override void UpdateName()
@@ -45,13 +44,6 @@ public sealed class Player : MainObject
         2,
         Camera.SCREEN_SIZE.Y - 90
     );
-
-    private void UpdateHealthByInput()
-    {
-        if (Input.GetKeyDown("T")) Health.ToggleFreeze();
-        if (Input.GetKey("KeypadAdd")) Health++;
-        else if (Input.GetKey("KeypadSubtract")) Health--;
-    }
 
     private enum PlayerName
     {
