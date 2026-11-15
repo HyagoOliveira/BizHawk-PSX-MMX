@@ -51,7 +51,9 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
             APIs
         );
 
+        foldouts.Clear();
         foldouts.Add(new PlayerFoldout(Player, isExpanded: true));
+
         InitializeFoldouts();
     }
 
@@ -87,7 +89,9 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
             sections.Controls.Add(foldout);
         }
 
+        Controls.Clear();
         Controls.Add(sections);
+
         Activated += (_, _) => UpdateFoldouts();
     }
 

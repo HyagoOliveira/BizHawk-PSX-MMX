@@ -12,7 +12,7 @@ public sealed class Player : MainObject
 
     #region VARIABLES
     public SByteS8Memory CharacterMode { get; }       // unk2
-    public SByteS8Memory Action { get; }        // unk5
+    public SByteS8Memory Action { get; }            // unk5
     public SByteS8Memory ActionSubstate { get; }      // unk6
     public BoolS8Memory IsSpikeImmune { get; }          // spike_immune
     public SByteS8Memory AirAction { get; }           // air_action
@@ -160,7 +160,7 @@ public sealed class Player : MainObject
         BossFlags = AddVariable(
             new ByteU8Memory(
                 "Boss Flags",
-                baseAddress + 0xB9,
+                Game.Addresses.BossFlags,
                 APIs.Memory,
                 hideDisplay: true
             )
@@ -304,11 +304,11 @@ public sealed class Player : MainObject
         #endregion
     }
 
-    public bool IsAllWeaponsEnabled() => BossFlags.Value == byte.MaxValue;
+    public bool IsAllWeaponsEnabled() => BossFlags.ReadValue() == 0xFF;
 
     public void ToggleAllWeaponsEnabled()
     {
-        var flags = IsAllWeaponsEnabled() ? (byte)0 : byte.MaxValue;
+        var flags = IsAllWeaponsEnabled() ? (byte)0x00 : (byte)0xFF;
         BossFlags.WriteValue(flags);
     }
 
