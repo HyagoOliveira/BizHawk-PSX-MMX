@@ -3,6 +3,7 @@ using BizHawk.PSXMMX.Forms.Fields;
 using BizHawk.PSXMMX.Forms.Toggles;
 using BizHawk.PSXMMX.Gameplay;
 using BizHawk.PSXMMX.Memory;
+using static BizHawk.PSXMMX.Gameplay.Player;
 
 namespace BizHawk.PSXMMX.Forms.Foldout;
 
@@ -12,6 +13,7 @@ public sealed class PlayerFoldout : FoldoutControl
 
     private readonly ButtonToggle allWeaponsToggle = new("Weapons");
     private readonly GameObjectPropertiesToggle propertiesToggle = new();
+    private readonly EnumDropdownField<PlayerArmorPart> armorDropdown = new("Armor");
     private readonly NumericUpDownField healthField = new(
         "Health",
         min: SByteS8Memory.MIN_VALUE,
@@ -22,12 +24,13 @@ public sealed class PlayerFoldout : FoldoutControl
         base(title: "Player", isExpanded)
     {
         Player = player;
-        ContentHeight = 38;
+        ContentHeight = 68;
 
         allWeaponsToggle.OnToggle += Player.ToggleAllWeaponsEnabled;
         allWeaponsToggle.IsToggledFunction = Player.IsAllWeaponsEnabled;
 
         propertiesToggle.GameObject = Player;
+        armorDropdown.OnSelected += Player.EnableArmorPart;
 
         healthField.AddToggleFreezeButton(Player.Health);
         healthField.Control.ValueChanged += (_, _) => WriteHealth();
@@ -36,11 +39,14 @@ public sealed class PlayerFoldout : FoldoutControl
         {
             Dock = DockStyle.Fill,
             Padding = new Padding(3),
-            WrapContents = false
+            WrapContents = true
         };
+
         controls.Controls.Add(healthField);
+        controls.Controls.Add(armorDropdown);
         controls.Controls.Add(propertiesToggle);
         controls.Controls.Add(allWeaponsToggle);
+        controls.SetFlowBreak(armorDropdown, true);
 
         ContentPanel.Controls.Add(controls);
     }
