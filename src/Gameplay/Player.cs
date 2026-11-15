@@ -314,7 +314,22 @@ public sealed class Player : MainObject
 
     public void EnableArmorPart(PlayerArmorPart part)
     {
-        // Implementation for enabling/disabling armor parts goes here
+        if (!Game.Is(GameName.MegaManX4)) return;
+
+        var mask = (byte)part;
+        var clearParts = part == PlayerArmorPart.None;
+        var playerParts = ArmorParts.ReadValue();
+        var updatedArmorParts = clearParts ?
+            (byte)(playerParts & ~(byte)PlayerArmorPart.All) :
+            (byte)(playerParts | mask);
+
+        ArmorParts.WriteValue(updatedArmorParts);
+
+        if (clearParts || (part & PlayerArmorPart.Arms) != 0)
+        {
+            var armType = clearParts ? (byte)0 : (byte)2;
+            ArmType.WriteValue(armType);
+        }
     }
 
     protected override void UpdateName()
@@ -331,12 +346,12 @@ public sealed class Player : MainObject
     [Flags]
     public enum PlayerArmorPart
     {
-        None,
-        All,
-        Head,
-        Body,
-        Legs,
-        Arms
+        None = 0,
+        Head = 0x01,
+        Body = 0x02,
+        Arms = 0x04,
+        Legs = 0x08,
+        All = Head | Body | Arms | Legs
     }
 
     private enum PlayerName
