@@ -1,6 +1,6 @@
 using System.Drawing;
+using BizHawk.PSXMMX.Core;
 using BizHawk.PSXMMX.Math;
-using BizHawk.PSXMMX.Memory;
 
 namespace BizHawk.PSXMMX.Gameplay.Components.Collisions;
 
@@ -11,7 +11,7 @@ public abstract class AbstractBoundBox : AbstractComponent
     public RectInt? RawBounds { get; private set; } = null!;
     public RectInt? WorldBounds { get; private set; } = null!;
 
-    public const string DOMAIN = GameMemoryAddress.DOMAIN;
+    public const string DOMAIN = Constants.MEMORY_DOMAIN;
 
     public AbstractBoundBox(long baseAddress, GameObject gameObject, Color lineColor) : base(gameObject)
     {

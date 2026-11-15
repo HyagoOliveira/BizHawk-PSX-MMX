@@ -1,5 +1,6 @@
 using System.Drawing;
 using BizHawk.Client.Common;
+using BizHawk.PSXMMX.Core;
 using BizHawk.PSXMMX.Gameplay.Components.Collisions;
 using BizHawk.PSXMMX.Math;
 using BizHawk.PSXMMX.Memory;
@@ -100,7 +101,7 @@ public class MainObject : GameObject
 
     protected virtual void UpdateName()
     {
-        var mainName = GameMemoryAddress.GetMainObjectName(Id.Value);
+        var mainName = Game.GetMainObjectName(Id.Value);
         Name = $"{mainName} (Id: {Id.Value})";
     }
 

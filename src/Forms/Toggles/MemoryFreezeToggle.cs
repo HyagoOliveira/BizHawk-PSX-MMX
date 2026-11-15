@@ -1,8 +1,9 @@
 using System.Drawing;
 using System.Windows.Forms;
+using BizHawk.PSXMMX.Core;
 using BizHawk.PSXMMX.Memory;
 
-namespace BizHawk.PSXMMX.Forms;
+namespace BizHawk.PSXMMX.Forms.Toggles;
 
 public sealed class MemoryFreezeToggle : Button
 {
@@ -20,7 +21,7 @@ public sealed class MemoryFreezeToggle : Button
     public void UpdateAppearance()
     {
         Text = $"{(memory.IsFrozen ? "Unfreeze" : "Freeze")} {memory.Name}";
-        BackColor = memory.IsFrozen ? MemoryDisplayColors.FROZEN_COLOR : MemoryDisplayColors.UNFROZEN_COLOR;
+        BackColor = Constants.GetMemoryColor(memory.IsFrozen);
     }
 
     private void HandleClick()

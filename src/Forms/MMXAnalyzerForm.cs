@@ -4,9 +4,9 @@ using BizHawk.PSXMMX.Forms.Foldout;
 using BizHawk.PSXMMX.Gameplay;
 using BizHawk.PSXMMX.Input;
 using BizHawk.PSXMMX.Math;
-using BizHawk.PSXMMX.Memory;
 using System.Drawing;
 using System.Windows.Forms;
+using MMXGame = BizHawk.PSXMMX.Core.Game;
 
 namespace BizHawk.PSXMMX.Forms;
 
@@ -19,7 +19,6 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     public Camera? Camera { get; private set; } = null!;
     public KeyboardInput? Input { get; private set; } = null!;
     public GamePoolManager<MainObject>? MainObjectsPool { get; private set; } = null!;
-    public GameMemoryAddress? MemoryAddress { get; private set; } = null!;
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
 
@@ -40,14 +39,13 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     public override void Restart()
     {
         base.Restart();
-        var gameHash = APIs.Emulation.GetGameInfo()?.Hash ?? string.Empty;
-        MemoryAddress = GameMemoryAddress.Get(gameHash);
+        MMXGame.Initialize(GetGameHash());
 
         Input = new KeyboardInput(APIs.Input);
-        Camera = new Camera(MemoryAddress.Camera, APIs);
-        Player = new Player(MemoryAddress.Player, APIs, Input);
+        Camera = new Camera(MMXGame.Addresses.Camera, APIs);
+        Player = new Player(MMXGame.Addresses.Player, APIs, Input);
         MainObjectsPool = new GamePoolManager<MainObject>(
-            MemoryAddress.MainObjectsPool,
+            MMXGame.Addresses.MainObjectsPool,
             blockSize: 0x9C,
             totalSlots: 48,
             APIs
@@ -59,7 +57,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     protected override void UpdateAfter()
     {
-        if (MemoryAddress?.IsInvalid() == true) ShowUnsupportedGameMessage();
+        if (MMXGame.IsInvalid()) ShowUnsupportedGameMessage();
         else UpdateGame();
     }
 
@@ -88,14 +86,14 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         {
             sections.Controls.Add(foldout);
         }
-        Controls.Add(sections);
 
+        Controls.Add(sections);
         Activated += (_, _) => UpdateFoldouts();
     }
 
     private void UpdateFoldouts()
     {
-        if (MemoryAddress?.IsInvalid() == true) return;
+        if (MMXGame.IsInvalid()) return;
 
         foreach (var foldout in foldouts)
         {
@@ -109,4 +107,6 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         Color.Red,
         Color.FromArgb(180, Color.Black)
     );
+
+    private string GetGameHash() => APIs.Emulation.GetGameInfo()?.Hash ?? string.Empty;
 }

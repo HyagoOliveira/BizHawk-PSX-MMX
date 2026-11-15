@@ -1,6 +1,6 @@
-namespace BizHawk.PSXMMX.Memory;
+namespace BizHawk.PSXMMX.Core;
 
-public enum SupportedGames
+public enum GameName
 {
     Invalid = -1,
     MegaManX4,

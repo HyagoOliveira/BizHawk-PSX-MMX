@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using BizHawk.PSXMMX.Forms.Toggles;
 using BizHawk.PSXMMX.Gameplay;
 using BizHawk.PSXMMX.Memory;
 

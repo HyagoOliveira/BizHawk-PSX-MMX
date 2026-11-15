@@ -2,7 +2,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using BizHawk.PSXMMX.Gameplay;
 
-namespace BizHawk.PSXMMX.Forms;
+namespace BizHawk.PSXMMX.Forms.Toggles;
 
 public sealed class GameObjectPropertiesToggle : Button
 {

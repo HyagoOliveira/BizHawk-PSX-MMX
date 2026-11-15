@@ -1,4 +1,5 @@
 using BizHawk.Client.Common;
+using BizHawk.PSXMMX.Core;
 using BizHawk.PSXMMX.Math;
 
 namespace BizHawk.PSXMMX.Memory;
@@ -15,7 +16,7 @@ public abstract class AbstractMemory<T> : IMemory
     public T Value { get; private set; } = default!;
     public T FrozenValue { get; private set; } = default!;
 
-    public const string DOMAIN = GameMemoryAddress.DOMAIN;
+    protected const string DOMAIN = Constants.MEMORY_DOMAIN;
 
     public AbstractMemory(string name, long address, IMemoryApi api, bool hideDisplay = false)
     {
@@ -31,11 +32,11 @@ public abstract class AbstractMemory<T> : IMemory
         Value = ReadValue();
     }
 
-    public void Draw(Vector2Int position, ApiContainer apis)
-    {
-        var color = IsFrozen ? MemoryDisplayColors.FROZEN_COLOR : MemoryDisplayColors.UNFROZEN_COLOR;
-        apis.DrawText(position, ToString(), color);
-    }
+    public void Draw(Vector2Int position, ApiContainer apis) => apis.DrawText(
+        position,
+        ToString(),
+        Constants.GetMemoryColor(IsFrozen)
+    );
 
     public void ToggleFreeze()
     {

@@ -1,48 +1,8 @@
-namespace BizHawk.PSXMMX.Memory;
+namespace BizHawk.PSXMMX.Core;
 
-public sealed class GameMemoryAddress
+public static class MainObjects
 {
-    public const string DOMAIN = "MainRAM";
-    private static SupportedGames currentGame = SupportedGames.Invalid;
-    private static readonly Dictionary<string, GameMemoryAddress> addressesByHash = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["314E06A8"] = new(SupportedGames.MegaManX4, player: 0x1418C8, camera: 0x1419B0, mainObjectsPool: 0x13BED0),
-        ["1C64D6EA"] = new(SupportedGames.MegaManX5, player: 0x09A0A0, camera: 0x09A1F8, mainObjectsPool: 0x092090),
-        ["F063F536"] = new(SupportedGames.MegaManX6, player: 0x0970A0, camera: 0x0971F8, mainObjectsPool: 0x08EF48)
-    };
-
-    public SupportedGames Game { get; }
-    public long Player { get; }
-    public long Camera { get; }
-    public long MainObjectsPool { get; }
-
-    private GameMemoryAddress(
-        SupportedGames game,
-        long player = 0,
-        long camera = 0,
-        long mainObjectsPool = 0
-    )
-    {
-        Game = game;
-        Player = player;
-        Camera = camera;
-        MainObjectsPool = mainObjectsPool;
-    }
-
-    public bool IsInvalid() => Game == SupportedGames.Invalid;
-
-    public static GameMemoryAddress Get(string gameHash)
-    {
-        var hasHash = addressesByHash.TryGetValue(gameHash, out var addresses);
-        var result = hasHash ? addresses! : new GameMemoryAddress(SupportedGames.Invalid);
-        currentGame = result.Game;
-        return result;
-    }
-
-    public static string GetMainObjectName(uint id) => objectNames[currentGame].TryGetValue(id, out var name) ?
-        name : "UNKNOWN MAIN OBJECT";
-
-    private static readonly Dictionary<uint, string> mmx4MainObjectNames = new()
+    private static readonly Dictionary<uint, string> mmx4 = new()
     {
         { 00, "BACKGROUND DRAGON" },
         { 01, "ARMORED WALKER" },
@@ -123,14 +83,14 @@ public sealed class GameMemoryAddress
         { 76, "SPIKE CRAWLER" }
     };
 
-    private static readonly Dictionary<uint, string> mmx5MainObjectNames = [];
-    private static readonly Dictionary<uint, string> mmx6MainObjectNames = [];
+    private static readonly Dictionary<uint, string> mmx5 = [];
+    private static readonly Dictionary<uint, string> mmx6 = [];
 
-    private static readonly Dictionary<SupportedGames, Dictionary<uint, string>> objectNames = new()
+    public static readonly Dictionary<GameName, Dictionary<uint, string>> Names = new()
     {
-        { SupportedGames.Invalid, new Dictionary<uint, string>() },
-        { SupportedGames.MegaManX4, mmx4MainObjectNames! },
-        { SupportedGames.MegaManX5, mmx5MainObjectNames! },
-        { SupportedGames.MegaManX6, mmx6MainObjectNames! }
-    };
+        { GameName.Invalid, new Dictionary<uint, string>() },
+        { GameName.MegaManX4, mmx4! },
+        { GameName.MegaManX5, mmx5! },
+        { GameName.MegaManX6, mmx6! }
+    };    
 }
