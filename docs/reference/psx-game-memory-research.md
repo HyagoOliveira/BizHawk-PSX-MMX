@@ -109,6 +109,21 @@ The following `PlayerObj` fields are useful for correlating a weapon-pool snapsh
 | `special_shot_count` | `+0x99` | `s8` | `sbyte` |
 | `shot_cycle` | `+0x9A` | `s8` | `sbyte` |
 
+### Zero-specific player state
+
+X and Zero share `g_Player` and the `PlayerObj` layout. These fields are shared storage whose meanings are useful for identifying or tracking Zero behavior in the fork; the values are reconstructed from code and should be validated against the running game.
+
+| Field | `PlayerObj` offset | MMX4 `MainRAM` address | Type | Use in the fork |
+|---|---:|---:|---|---|
+| `unk2` | `+0x02` | `0x1418CA` | `s8` | Branches between X and Zero paths: zero follows X-only firing logic; nonzero permits Zero-specific routines. The fork retains the name `unk2`. |
+| `unk5` | `+0x05` | `0x1418CD` | `s8` | Player action state; Zero actions use values `0x30`-`0x3B`. |
+| `unk6` | `+0x06` | `0x1418CE` | `s8` | Substate/phase of the current action. |
+| `spike_immune` | `+0x7A` | `0x141942` | `s8` | Nonzero during selected techniques that grant spike immunity. |
+| `air_action` | `+0x86` | `0x14194E` | `s8` | Air-move state; Zero's double jump sets it to `6`. |
+| `weapon_energy[0]` | `+0xA8` | `0x141970` | `s8` | Used by Rakuhouha: requires at least `0x0C` and consumes `0x0C`. |
+| `boss_flags` | `+0xB9` | `0x141981` | `s8` bitmask | Zero ability checks use masks `0x01` (Raijingeki), `0x02` (Hyouretsuzan), `0x04` (double jump/spin slash), `0x08` (Ryuenjin), `0x20` (Rakuhouha), and `0x80` (Shippuuga). |
+| `combo` | `+0xBB` | `0x141983` | `s8` | Sabre combo progress; affects the follow-up animation and spawned saber attack. |
+
 ### Shared object fields
 
 | Field | Object offset | MMX4 type | C# type |

@@ -10,6 +10,14 @@ public sealed class Player : MainObject
     public KeyboardInput Input { get; }
 
     // Variables
+    public SByteS8Memory CharacterMode { get; }       // unk2
+    public SByteS8Memory Action { get; }        // unk5
+    public SByteS8Memory ActionSubstate { get; }      // unk6
+    public BoolS8Memory IsSpikeImmune { get; }          // spike_immune
+    public SByteS8Memory AirAction { get; }           // air_action
+    public SByteS8Memory ZeroTechniqueEnergy { get; } // weapon_energy[0]
+    public ByteU8Memory BossFlags { get; }            // boss_flags
+    public SByteS8Memory ZeroCombo { get; }               // combo
     public BoolU8Memory IsAttacking { get; }      // attacking
     public SByteS8Memory ShotFired { get; }      // shot_fired
     public SByteS8Memory AttackEnded { get; }    // attack_ended
@@ -31,12 +39,73 @@ public sealed class Player : MainObject
         IsDrawEnabled = true;
         IsPropertiesEnabled = true;
 
+        CharacterMode = AddVariable(
+            new SByteS8Memory(
+                "Character Mode",
+                baseAddress + 0x02,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        Action = AddVariable(
+            new SByteS8Memory(
+                "Action",
+                baseAddress + 0x05,
+                APIs.Memory
+            )
+        );
+        ActionSubstate = AddVariable(
+            new SByteS8Memory(
+                "Action Substate",
+                baseAddress + 0x06,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        IsSpikeImmune = AddVariable(
+            new BoolS8Memory(
+                "Spike Immune",
+                baseAddress + 0x7A,
+                APIs.Memory
+            )
+        );
+        AirAction = AddVariable(
+            new SByteS8Memory(
+                "Air Action",
+                baseAddress + 0x86,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        ZeroTechniqueEnergy = AddVariable(
+            new SByteS8Memory(
+                "Zero Energy",
+                baseAddress + 0xA8,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        BossFlags = AddVariable(
+            new ByteU8Memory(
+                "Boss Flags",
+                baseAddress + 0xB9,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
+        ZeroCombo = AddVariable(
+            new SByteS8Memory(
+                "Zero Combo",
+                baseAddress + 0xBB,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
         IsAttacking = AddVariable(
             new BoolU8Memory(
                 "Is Attacking",
                 baseAddress + 0x8E,
-                APIs.Memory,
-                hideDisplay: true
+                APIs.Memory //, hideDisplay: true
             )
         );
         ShotFired = AddVariable(
