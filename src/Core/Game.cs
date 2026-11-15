@@ -2,10 +2,10 @@ namespace BizHawk.PSXMMX.Core;
 
 public static class Game
 {
-    public static MemoryAddress Addresses => addressesByGame[currentGame];
+    public static MemoryAddress Addresses => addressesByGame[currentName];
 
-    private static GameName currentGame = GameName.Invalid;
-    private static Dictionary<uint, string> MainObjectNames => MainObjects.Names[currentGame];
+    private static GameName currentName = GameName.Invalid;
+    private static Dictionary<uint, string> MainObjectNames => MainObjects.Names[currentName];
     private static readonly Dictionary<string, GameName> hashesByGame = new(StringComparer.OrdinalIgnoreCase)
     {
         ["314E06A8"] = GameName.MegaManX4,
@@ -19,8 +19,9 @@ public static class Game
         [GameName.MegaManX6] = new(player: 0x0970A0, camera: 0x0971F8, bossFlags: 0x097169, mainObjectsPool: 0x08EF48)
     };
 
-    public static void Initialize(string hash) => hashesByGame.TryGetValue(hash, out currentGame);
-    public static bool IsInvalid() => currentGame == GameName.Invalid;
+    public static void Initialize(string hash) => hashesByGame.TryGetValue(hash, out currentName);
+    public static bool Is(GameName name) => currentName == name;
+    public static bool IsInvalid() => Is(GameName.Invalid);
     public static string GetMainObjectName(uint id) => MainObjectNames.TryGetValue(id, out var name) ?
         name : "UNKNOWN MAIN OBJECT";
 }
