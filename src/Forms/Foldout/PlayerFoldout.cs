@@ -9,6 +9,7 @@ public sealed class PlayerFoldout : FoldoutControl
 {
     public Player Player { get; }
 
+    private readonly ButtonToggle allWeaponsToggle;
     private readonly MemoryFreezeToggle healthToggle;
     private readonly GameObjectPropertiesToggle propertiesToggle;
     private readonly NumericUpDown healthInput = new()
@@ -26,6 +27,11 @@ public sealed class PlayerFoldout : FoldoutControl
         Player = player;
         ContentHeight = 38;
 
+        allWeaponsToggle = new ButtonToggle(
+            "All Weapons",
+            Player.ToggleAllWeaponsEnabled,
+            Player.IsAllWeaponsEnabled
+        );
         var healthLabel = new Label
         {
             AutoSize = true,
@@ -48,6 +54,7 @@ public sealed class PlayerFoldout : FoldoutControl
         controls.Controls.Add(healthInput);
         controls.Controls.Add(healthToggle);
         controls.Controls.Add(propertiesToggle);
+        controls.Controls.Add(allWeaponsToggle);
 
         ContentPanel.Controls.Add(controls);
     }
@@ -59,6 +66,7 @@ public sealed class PlayerFoldout : FoldoutControl
         healthInput.Value = Player.Health.ReadValue();
         healthToggle.UpdateAppearance();
         propertiesToggle.UpdateAppearance();
+        allWeaponsToggle.UpdateText();
     }
 
     private void WriteHealth()

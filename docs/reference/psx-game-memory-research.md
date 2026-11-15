@@ -124,6 +124,8 @@ X and Zero share `g_Player` and the `PlayerObj` layout. These fields are shared 
 | `boss_flags` | `+0xB9` | `0x141981` | `s8` bitmask | Zero ability checks use masks `0x01` (Raijingeki), `0x02` (Hyouretsuzan), `0x04` (double jump/spin slash), `0x08` (Ryuenjin), `0x20` (Rakuhouha), and `0x80` (Shippuuga). |
 | `combo` | `+0xBB` | `0x141983` | `s8` | Sabre combo progress; affects the follow-up animation and spawned saber attack. |
 
+`SetAllWeaponsEnabled` writes `0xFF` or `0x00` to `boss_flags` for MMX4 only. Clearing it removes all current boss flags, including Zero's ability flags; it does not restore prior progress. The method does not refill weapon energy.
+
 ### X armor and charge state
 
 These are fields in the same `PlayerObj`; their addresses below use the MMX4 USA `g_Player` base `0x1418C8`. `weapon_energy` is a 16-byte array. In the analyzer, only slot 0 is shown by default to avoid crowding the property overlay; all slots remain available through the `WeaponEnergy` array.
@@ -138,8 +140,8 @@ These are fields in the same `PlayerObj`; their addresses below use the MMX4 USA
 | `armor_parts` | `+0xA7` | `0x14196F` | `s8` bitmask | Observed masks: `0x01` affects special-weapon energy cost; `0x02` enables Nova Strike; `0x04` permits linked special-weapon charging; `0x08` enables hover. The fork does not establish a reliable part name for each bit. |
 | `weapon_energy[0..15]` | `+0xA8`-`+0xB7` | `0x141970`-`0x14197F` | `s8` each | Weapon-energy values; slot 0 is also checked by Zero's Rakuhouha and X's Nova Strike logic. |
 | `arm_type` | `+0xB8` | `0x141980` | `u8` | Selects charge behavior. The fork uses values 0, 1, and 2, but does not name them as specific armor sets. |
-| `nova_strike_active` | `+0xE2` | `0x1419AA` | `s8` | Nova Strike activity flag. |
-| `nova_strike_timer` | `+0xE3` | `0x1419AB` | `s8` | Nova Strike duration timer. |
+| `nova_strike_active` | `+0xE0` | `0x1419A8` | `s8` | Nova Strike activity flag. |
+| `nova_strike_timer` | `+0xE1` | `0x1419A9` | `s8` | Nova Strike duration timer. |
 
 ### Shared object fields
 

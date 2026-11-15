@@ -1,4 +1,5 @@
 using BizHawk.Client.Common;
+using BizHawk.PSXMMX.Core;
 using BizHawk.PSXMMX.Input;
 using BizHawk.PSXMMX.Math;
 using BizHawk.PSXMMX.Memory;
@@ -9,7 +10,7 @@ public sealed class Player : MainObject
 {
     public KeyboardInput Input { get; }
 
-    // Variables
+    #region VARIABLES
     public SByteS8Memory CharacterMode { get; }       // unk2
     public SByteS8Memory Action { get; }        // unk5
     public SByteS8Memory ActionSubstate { get; }      // unk6
@@ -41,6 +42,7 @@ public sealed class Player : MainObject
     public SByteS8Memory SpecialShotCount { get; } // special_shot_count
     public SByteS8Memory ShotCycle { get; }      // shot_cycle
     public UIntS8Memory Character { get; }      // cur_character
+    #endregion
 
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
@@ -48,6 +50,7 @@ public sealed class Player : MainObject
         IsDrawEnabled = true;
         IsPropertiesEnabled = true;
 
+        #region VARIABLES INITIALIZATION
         CharacterMode = AddVariable(
             new SByteS8Memory(
                 "Character Mode",
@@ -173,7 +176,7 @@ public sealed class Player : MainObject
         IsNovaStrikeActive = AddVariable(
             new BoolS8Memory(
                 "Nova Strike Active",
-                baseAddress + 0xE2,
+                baseAddress + 0xE0,
                 APIs.Memory,
                 hideDisplay: true
             )
@@ -181,7 +184,7 @@ public sealed class Player : MainObject
         NovaStrikeTimer = AddVariable(
             new SByteS8Memory(
                 "Nova Strike Timer",
-                baseAddress + 0xE3,
+                baseAddress + 0xE1,
                 APIs.Memory,
                 hideDisplay: true
             )
@@ -298,11 +301,20 @@ public sealed class Player : MainObject
                 hideDisplay: true
             )
         );
+        #endregion
     }
 
-    public override void Update()
+    public bool IsAllWeaponsEnabled() => BossFlags.Value == byte.MaxValue;
+
+    public void ToggleAllWeaponsEnabled()
     {
-        base.Update();
+        var flags = IsAllWeaponsEnabled() ? (byte)0 : byte.MaxValue;
+        BossFlags.WriteValue(flags);
+    }
+
+    public void SetArmorPartEnable(ArmorPart part, bool isEnabled)
+    {
+        // Implementation for enabling/disabling armor parts goes here
     }
 
     protected override void UpdateName()
@@ -315,6 +327,16 @@ public sealed class Player : MainObject
         2,
         10 // Camera.SCREEN_SIZE.Y - 900
     );
+
+    [Flags]
+    public enum ArmorPart
+    {
+        None,
+        Head = 1 << 0,
+        Body = 1 << 1,
+        Legs = 1 << 2,
+        Arms = 1 << 3
+    }
 
     private enum PlayerName
     {
