@@ -12,6 +12,9 @@ public sealed class Camera : GameObject
     public Camera(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
         Main = this;
+        IsDrawEnabled = false;
+        IsPropertiesEnabled = false;
+
         // Camera Previous Position addresses are different
         PreviousPosition.XAddress = BaseAddress + 0x14;
         PreviousPosition.YAddress = BaseAddress + 0x18;

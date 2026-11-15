@@ -26,6 +26,9 @@ public class MainObject : GameObject
 
     public MainObject(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
+        IsDrawEnabled = true;
+        IsPropertiesEnabled = false;
+
         IsFacingRight = AddVariable(
             new BoolU8Memory(
                 "Is Right",

@@ -11,7 +11,8 @@ public class GameObject
     public ApiContainer APIs { get; }
 
     public string Name { get; protected set; }
-    public bool IsPropertiesEnabled { get; private set; }
+    public bool IsDrawEnabled { get; protected set; }
+    public bool IsPropertiesEnabled { get; protected set; }
 
     // Variables
     public BoolS8Memory IsActive { get; }       // active (whether slot is active)
@@ -100,17 +101,17 @@ public class GameObject
     }
 
     public bool IsActivated() => IsActive.Value;
-    public bool IsDrawEnabled() => IsVisible.Value;
+    public bool IsVisibleOnScreen() => IsVisible.Value;
+    public bool CanDraw() => IsVisibleOnScreen() && IsDrawEnabled;
+    public bool CanDrawProperties() => IsVisibleOnScreen() && IsPropertiesEnabled;
 
-    public void ShowProperties() => IsPropertiesEnabled = true;
-    public void HideProperties() => IsPropertiesEnabled = false;
     public void ToggleShowProperties() => IsPropertiesEnabled = !IsPropertiesEnabled;
 
     public void UpdateAndDraw()
     {
         Update();
-        if (IsDrawEnabled()) Draw();
-        if (IsPropertiesEnabled) DrawProperties();
+        if (CanDraw()) Draw();
+        if (CanDrawProperties()) DrawProperties();
     }
 
     public virtual void Update()

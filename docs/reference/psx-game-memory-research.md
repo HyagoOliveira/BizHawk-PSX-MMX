@@ -97,11 +97,17 @@ The following `PlayerObj` fields are useful for correlating a weapon-pool snapsh
 |---|---:|---|---|
 | `attacking` | `+0x8E` | `s8` | `sbyte` |
 | `shot_fired` | `+0x8F` | `s8` | `sbyte` |
-| `shot_types[0..1]` | `+0x94`-`+0x95` | `s8` each | `sbyte` |
+| `attack_ended` | `+0x90` | `s8` | `sbyte` |
+| `attack_pose_timer` | `+0x91` | `u8` | `byte` |
+| `shot_cooldown` | `+0x92` | `u8` | `byte` |
+| `weapon` | `+0x93` | `s8` | `sbyte` |
+| `shot_types[0]` | `+0x94` | `s8` | `sbyte` |
+| `shot_types[1]` | `+0x95` | `s8` | `sbyte` |
 | `shot_type` | `+0x96` | `s8` | `sbyte` |
 | `last_shot_type` | `+0x97` | `s8` | `sbyte` |
 | `shot_count` | `+0x98` | `s8` | `sbyte` |
 | `special_shot_count` | `+0x99` | `s8` | `sbyte` |
+| `shot_cycle` | `+0x9A` | `s8` | `sbyte` |
 
 ### Shared object fields
 
