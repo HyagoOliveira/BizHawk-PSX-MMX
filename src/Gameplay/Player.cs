@@ -312,7 +312,7 @@ public sealed class Player : MainObject
         BossFlags.WriteValue(flags);
     }
 
-    public void SetArmorPartEnable(ArmorPart part, bool isEnabled)
+    public void EnableArmorPart(PlayerArmorPart part)
     {
         // Implementation for enabling/disabling armor parts goes here
     }
@@ -329,13 +329,14 @@ public sealed class Player : MainObject
     );
 
     [Flags]
-    public enum ArmorPart
+    public enum PlayerArmorPart
     {
         None,
-        Head = 1 << 0,
-        Body = 1 << 1,
-        Legs = 1 << 2,
-        Arms = 1 << 3
+        All,
+        Head,
+        Body,
+        Legs,
+        Arms
     }
 
     private enum PlayerName
