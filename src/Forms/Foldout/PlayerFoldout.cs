@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using BizHawk.PSXMMX.Forms.Fields;
 using BizHawk.PSXMMX.Forms.Toggles;
 using BizHawk.PSXMMX.Gameplay;
 using BizHawk.PSXMMX.Memory;
@@ -10,16 +11,12 @@ public sealed class PlayerFoldout : FoldoutControl
     public Player Player { get; }
 
     private readonly ButtonToggle allWeaponsToggle;
-    private readonly MemoryFreezeToggle healthToggle;
     private readonly GameObjectPropertiesToggle propertiesToggle;
-    private readonly NumericUpDown healthInput = new()
-    {
-        Minimum = SByteS8Memory.MIN_VALUE,
-        Maximum = SByteS8Memory.MAX_VALUE,
-        Margin = new Padding(3, 5, 3, 3),
-        Width = 100,
-        TextAlign = HorizontalAlignment.Right
-    };
+    private readonly NumericUpDownField healthField = new(
+        "Health",
+        min: SByteS8Memory.MIN_VALUE,
+        max: SByteS8Memory.MAX_VALUE
+    );
 
     public PlayerFoldout(Player player, bool isExpanded = false) :
         base(title: "Player", isExpanded)
@@ -32,16 +29,10 @@ public sealed class PlayerFoldout : FoldoutControl
             Player.ToggleAllWeaponsEnabled,
             Player.IsAllWeaponsEnabled
         );
-        var healthLabel = new Label
-        {
-            AutoSize = true,
-            Margin = new Padding(3, 8, 3, 3),
-            Text = "Health"
-        };
-        healthToggle = new MemoryFreezeToggle(Player.Health);
         propertiesToggle = new GameObjectPropertiesToggle(Player);
 
-        healthInput.ValueChanged += (_, _) => WriteHealth();
+        healthField.AddToggleFreezeButton(Player.Health);
+        healthField.Control.ValueChanged += (_, _) => WriteHealth();
 
         var controls = new FlowLayoutPanel
         {
@@ -50,9 +41,7 @@ public sealed class PlayerFoldout : FoldoutControl
             WrapContents = false
         };
 
-        controls.Controls.Add(healthLabel);
-        controls.Controls.Add(healthInput);
-        controls.Controls.Add(healthToggle);
+        controls.Controls.Add(healthField);
         controls.Controls.Add(propertiesToggle);
         controls.Controls.Add(allWeaponsToggle);
 
@@ -63,15 +52,14 @@ public sealed class PlayerFoldout : FoldoutControl
     {
         base.UpdateContent();
 
-        healthInput.Value = Player.Health.ReadValue();
-        healthToggle.UpdateAppearance();
+        healthField.Control.Value = Player.Health.ReadValue();
         propertiesToggle.UpdateAppearance();
         allWeaponsToggle.UpdateText();
     }
 
     private void WriteHealth()
     {
-        var health = (sbyte)healthInput.Value;
+        var health = (sbyte)healthField.Control.Value;
         if (Player.Health.IsFrozen) Player.Health.Freeze(health);
         else Player.Health.WriteValue(health);
     }
