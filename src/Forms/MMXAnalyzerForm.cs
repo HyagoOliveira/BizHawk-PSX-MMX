@@ -26,7 +26,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     public MMXAnalyzerForm()
     {
-        ClientSize = new Size(600, 160);
+        ClientSize = new Size(600, 300);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterParent;
@@ -53,6 +53,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
         foldouts.Clear();
         foldouts.Add(new PlayerFoldout(Player, isExpanded: true));
+        foldouts.Add(new GamePoolFoldout<MainObject>(MainObjectsPool, isExpanded: true)); //TODO remove isExpanded
 
         InitializeFoldouts();
     }
@@ -66,9 +67,9 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     private void UpdateGame()
     {
         Input?.Update();
-        Camera?.UpdateAndDraw();
-        Player?.UpdateAndDraw();
-        MainObjectsPool?.Update();
+        Camera?.UpdateAndTryDraw();
+        Player?.UpdateAndTryDraw();
+        MainObjectsPool?.UpdateAndTryDraw();
     }
 
     private void InitializeFoldouts()

@@ -15,12 +15,32 @@ public sealed class GamePoolManager<T> where T : GameObject
         }
     }
 
-    public void Update()
+    public void UpdateAndTryDraw()
     {
         foreach (var obj in pool)
         {
-            obj.IsActive.Update();
-            if (obj.IsActivated()) obj.UpdateAndDraw();
+            obj.UpdateAndTryDraw();
+        }
+    }
+
+    public void ShowObjectProperties(int index)
+    {
+        SetObjectsPropertiesEnabled(false);
+        pool[index].IsPropertiesEnabled = true;
+    }
+
+    public override string ToString() => $"{typeof(T).Name} Pool";
+
+    public string[] GetAllObjectsNames() => [.. pool.Select(obj => obj.Name)];
+    public string[] GetActivatedObjectsNames() => [.. GetActivatedObjects().Select(obj => obj.Name)];
+    public T GetFirstActivatedObject() => GetActivatedObjects().FirstOrDefault();
+    public IEnumerable<T> GetActivatedObjects() => pool.Where(obj => obj.IsActivated());
+
+    private void SetObjectsPropertiesEnabled(bool isEnabled)
+    {
+        foreach (var obj in pool)
+        {
+            obj.IsPropertiesEnabled = isEnabled;
         }
     }
 }

@@ -11,8 +11,8 @@ public class GameObject
     public ApiContainer APIs { get; }
 
     public string Name { get; protected set; }
-    public bool IsDrawEnabled { get; protected set; }
-    public bool IsPropertiesEnabled { get; protected set; }
+    public bool IsDrawEnabled { get; set; }
+    public bool IsPropertiesEnabled { get; set; }
 
     // Variables
     public BoolS8Memory IsActive { get; }       // active (whether slot is active)
@@ -124,9 +124,15 @@ public class GameObject
 
     public void ToggleShowProperties() => IsPropertiesEnabled = !IsPropertiesEnabled;
 
-    public void UpdateAndDraw()
+    public void UpdateAndTryDraw()
     {
         Update();
+        TryDraw();
+    }
+
+    public void TryDraw()
+    {
+        if (!IsActivated()) return;
         if (CanDraw()) Draw();
         if (CanDrawProperties()) DrawProperties();
     }
@@ -156,4 +162,6 @@ public class GameObject
             variable.Draw(position, APIs);
         }
     }
+
+    public override string ToString() => Name;
 }

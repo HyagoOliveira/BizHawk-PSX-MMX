@@ -35,20 +35,11 @@ public sealed class PlayerFoldout : FoldoutControl
         healthField.AddToggleFreezeButton(Player.Health);
         healthField.Control.ValueChanged += (_, _) => WriteHealth();
 
-        var controls = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            Padding = new Padding(3),
-            WrapContents = true
-        };
-
-        controls.Controls.Add(healthField);
-        controls.Controls.Add(armorDropdown);
-        controls.Controls.Add(propertiesToggle);
-        controls.Controls.Add(allWeaponsToggle);
-        controls.SetFlowBreak(armorDropdown, true);
-
-        ContentPanel.Controls.Add(controls);
+        ControlsPanel.Controls.Add(healthField);
+        ControlsPanel.Controls.Add(armorDropdown);
+        ControlsPanel.Controls.Add(propertiesToggle);
+        ControlsPanel.Controls.Add(allWeaponsToggle);
+        ControlsPanel.SetFlowBreak(armorDropdown, true);
     }
 
     public override void UpdateContent()

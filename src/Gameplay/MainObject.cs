@@ -27,7 +27,8 @@ public class MainObject : GameObject
     public MainObject(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
         IsDrawEnabled = true;
-        IsPropertiesEnabled = true;
+        IsPropertiesEnabled = false;
+        Name = "MainObject - INACTIVE";
 
         IsFacingRight = AddVariable(
             new BoolU8Memory(
@@ -117,6 +118,12 @@ public class MainObject : GameObject
 
     protected virtual void UpdateName()
     {
+        if (!IsActivated())
+        {
+            Name = "MainObject - INACTIVE";
+            return;
+        }
+
         var mainName = Game.GetMainObjectName(Id.Value);
         Name = $"{mainName} (Id: {Id.Value})";
     }

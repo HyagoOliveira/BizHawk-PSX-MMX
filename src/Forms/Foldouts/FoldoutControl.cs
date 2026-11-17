@@ -12,6 +12,7 @@ public class FoldoutControl : UserControl
 
     public string Title { get; }
     protected Panel ContentPanel => contentPanel;
+    protected FlowLayoutPanel ControlsPanel { get; }
 
     public bool IsExpanded
     {
@@ -50,11 +51,19 @@ public class FoldoutControl : UserControl
         headerButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         headerButton.Click += (_, _) => IsExpanded = !IsExpanded;
 
-        contentPanel.Dock = DockStyle.Fill;
-        contentPanel.BorderStyle = BorderStyle.FixedSingle;
+        ContentPanel.Dock = DockStyle.Fill;
+        ContentPanel.BorderStyle = BorderStyle.FixedSingle;
 
-        Controls.Add(contentPanel);
+        Controls.Add(ContentPanel);
         Controls.Add(headerButton);
+
+        ControlsPanel = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            Padding = new Padding(3),
+            WrapContents = true
+        };
+        ContentPanel.Controls.Add(ControlsPanel);
     }
 
     public virtual void UpdateContent() { }

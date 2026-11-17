@@ -14,8 +14,25 @@ public class DropdownField : AbstractBaseField<ComboBox>
         }
     )
     {
-        Control.Items.AddRange(items);
+        ResetItems(items);
         if (Control.Items.Count > 0) Control.SelectedIndex = 0;
-        Control.SelectedIndexChanged += (_, _) => OnSelected?.Invoke(Control.SelectedIndex);
+        Control.SelectedIndexChanged += HandleSelectedIndexChanged;
     }
+
+    public void ResetItems(params string[] items)
+    {
+        Control.Items.Clear();
+        Control.Items.AddRange(items);
+    }
+
+    public void SelectWithoutNotify(int index)
+    {
+        if (Control.Items.Count == 0) return;
+
+        Control.SelectedIndexChanged -= HandleSelectedIndexChanged;
+        Control.SelectedIndex = index;
+        Control.SelectedIndexChanged += HandleSelectedIndexChanged;
+    }
+
+    private void HandleSelectedIndexChanged(object _, EventArgs __) => OnSelected?.Invoke(Control.SelectedIndex);
 }
