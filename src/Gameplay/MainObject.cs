@@ -124,7 +124,7 @@ public class MainObject : GameObject
         }
 
         var mainName = Game.GetMainObjectName(Id.Value);
-        Name = $"{mainName} [S: {PoolIndex:D2}] (Id: {Id.Value})";
+        Name = $"{mainName} | Id:{Id.Value:D2} | S:{PoolIndex:D2}";
     }
 
     protected override void DrawInGameName()

@@ -12,9 +12,9 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
         base(pool.ToString(), isExpanded)
     {
         this.pool = pool;
+        pool.DisableAllObjectsProperties();
 
-        objDropdown = new("Object", items: pool.GetAllObjectsNames());
-
+        objDropdown = new("Object", GetDropdownItems());
         objDropdown.Control.Width = 300;
         objDropdown.OnSelected += HandleObjectSelected;
 
@@ -24,8 +24,15 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
     public override void UpdateContent()
     {
         base.UpdateContent();
-        objDropdown.UpdateItems(pool.GetAllObjectsNames());
+        objDropdown.UpdateItems(GetDropdownItems());
     }
 
-    private void HandleObjectSelected(int index) => pool.ShowObjectProperties(index);
+    private string[] GetDropdownItems() => ["None", .. pool.GetAllObjectsNames()];
+
+    private void HandleObjectSelected(int index)
+    {
+        if (index < 0) return;
+        if (index == 0) pool.DisableAllObjectsProperties();
+        else pool.ShowObjectProperties(index - 1);
+    }
 }

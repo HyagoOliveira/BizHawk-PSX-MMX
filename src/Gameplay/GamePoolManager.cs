@@ -24,9 +24,11 @@ public sealed class GamePoolManager<T> where T : GameObject
         }
     }
 
+    public void DisableAllObjectsProperties() => SetObjectsPropertiesEnabled(false);
+
     public void ShowObjectProperties(int index)
     {
-        SetObjectsPropertiesEnabled(false);
+        DisableAllObjectsProperties();
         pool[index].IsPropertiesEnabled = true;
     }
 
