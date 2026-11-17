@@ -8,6 +8,7 @@ namespace BizHawk.PSXMMX.Gameplay;
 public class GameObject
 {
     public long BaseAddress { get; }
+    public int PoolIndex { get; internal set; } = -1;
     public ApiContainer APIs { get; }
 
     public string Name { get; protected set; }
@@ -147,6 +148,7 @@ public class GameObject
     {
         foreach (var component in components) component.Draw();
         APIs.DrawAxis(Camera.Main.WorldToScreenPoint(Position.Value));
+        DrawInGameName();
     }
 
     public virtual void DrawProperties()
@@ -164,4 +166,6 @@ public class GameObject
     }
 
     public override string ToString() => Name;
+
+    protected virtual void DrawInGameName() { }
 }

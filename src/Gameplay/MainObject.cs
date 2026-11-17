@@ -107,7 +107,6 @@ public class MainObject : GameObject
     {
         var position = GetTopRightPosition();
         var properties =
-            $"{Name}\n" +
             $"{State} | {Substate}\n" +
             $"{Health} | {InvincibilityTimer} | {Damage}\n" +
             $"{Speed} | {Gravity}\n" +
@@ -125,8 +124,23 @@ public class MainObject : GameObject
         }
 
         var mainName = Game.GetMainObjectName(Id.Value);
-        Name = $"{mainName} (Id: {Id.Value})";
+        Name = $"{mainName} [S: {PoolIndex:D2}] (Id: {Id.Value})";
     }
+
+    protected override void DrawInGameName()
+    {
+        base.DrawInGameName();
+        APIs.DrawText(
+            GetTopCenterPosition(),
+            Name,
+            horizontalAlign: "center",
+            verticalAlign: "bottom"
+        );
+    }
+
+    protected Vector2Int GetTopCenterPosition() => DamageableBox.WorldBounds.HasValue ?
+        Camera.Main.WorldToScreenPoint(DamageableBox.WorldBounds.Value.GetTopCenter()) :
+        Vector2Int.Zero;
 
     protected Vector2Int GetTopRightPosition() => DamageableBox.WorldBounds.HasValue ?
         Camera.Main.WorldToScreenPoint(DamageableBox.WorldBounds.Value.GetTopRight()) :

@@ -12,6 +12,7 @@ public sealed class GamePoolManager<T> where T : GameObject
         for (int i = 0; i < totalSlots; i++)
         {
             pool[i] = (T)Activator.CreateInstance(typeof(T), basseAddress + i * blockSize, apis)!;
+            pool[i].PoolIndex = i;
         }
     }
 
