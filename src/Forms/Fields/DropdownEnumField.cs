@@ -2,11 +2,11 @@ using System.Windows.Forms;
 
 namespace BizHawk.PSXMMX.Forms.Fields;
 
-public class EnumDropdownField<T> : AbstractBaseField<ComboBox> where T : struct, Enum
+public class DropdownEnumField<T> : AbstractBaseField<ComboBox> where T : struct, Enum
 {
     public event Action<T>? OnSelected;
 
-    public EnumDropdownField(string labelText) :
+    public DropdownEnumField(string labelText) :
         base(labelText, new ComboBox
         {
             Margin = FormConstants.CONTROL_PADDING,

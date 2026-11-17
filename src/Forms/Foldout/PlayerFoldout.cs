@@ -13,7 +13,7 @@ public sealed class PlayerFoldout : FoldoutControl
 
     private readonly ButtonToggle allWeaponsToggle = new("Weapons");
     private readonly GameObjectPropertiesToggle propertiesToggle = new();
-    private readonly EnumDropdownField<PlayerArmorPart> armorDropdown = new("Armor");
+    private readonly DropdownEnumField<PlayerArmorPart> armorDropdown = new("Armor");
     private readonly NumericUpDownField healthField = new(
         "Health",
         min: SByteS8Memory.MIN_VALUE,
