@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace BizHawk.PSXMMX.Forms.Foldout;
+namespace BizHawk.PSXMMX.Forms.Foldouts;
 
 public class FoldoutControl : UserControl
 {

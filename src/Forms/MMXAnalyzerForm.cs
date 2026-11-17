@@ -1,6 +1,6 @@
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
-using BizHawk.PSXMMX.Forms.Foldout;
+using BizHawk.PSXMMX.Forms.Foldouts;
 using BizHawk.PSXMMX.Gameplay;
 using BizHawk.PSXMMX.Input;
 using BizHawk.PSXMMX.Math;

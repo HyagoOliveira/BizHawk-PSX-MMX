@@ -5,7 +5,7 @@ using BizHawk.PSXMMX.Gameplay;
 using BizHawk.PSXMMX.Memory;
 using static BizHawk.PSXMMX.Gameplay.Player;
 
-namespace BizHawk.PSXMMX.Forms.Foldout;
+namespace BizHawk.PSXMMX.Forms.Foldouts;
 
 public sealed class PlayerFoldout : FoldoutControl
 {
