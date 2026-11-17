@@ -14,15 +14,15 @@ public class DropdownField : AbstractBaseField<ComboBox>
         }
     )
     {
-        ResetItems(items);
+        Control.Items.AddRange(items);
         if (Control.Items.Count > 0) Control.SelectedIndex = 0;
         Control.SelectedIndexChanged += HandleSelectedIndexChanged;
     }
 
-    public void ResetItems(params string[] items)
+    public void UpdateItems(params string[] items)
     {
-        Control.Items.Clear();
-        Control.Items.AddRange(items);
+        for (int i = 0; i < Control.Items.Count; i++)
+            Control.Items[i] = items[i];
     }
 
     public void SelectWithoutNotify(int index)

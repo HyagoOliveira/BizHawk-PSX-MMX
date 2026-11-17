@@ -318,12 +318,6 @@ public sealed class Player : MainObject
         }
     }
 
-    protected override void UpdateName()
-    {
-        var playerName = (PlayerName)Character.Value;
-        Name = $"Player: {playerName}";
-    }
-
     public override void DrawProperties()
     {
         var properties =
@@ -341,6 +335,14 @@ public sealed class Player : MainObject
         );
         APIs.DrawText(PROPERTIES_POSITION, properties);
     }
+
+    protected override void UpdateName()
+    {
+        var playerName = (PlayerName)Character.Value;
+        Name = $"Player: {playerName}";
+    }
+
+    protected override void DrawInGameName() { }
 
     [Flags]
     public enum PlayerArmorPart
