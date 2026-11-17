@@ -27,7 +27,7 @@ public class MainObject : GameObject
     public MainObject(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
         IsDrawEnabled = true;
-        IsPropertiesEnabled = false;
+        IsPropertiesEnabled = true;
 
         IsFacingRight = AddVariable(
             new BoolU8Memory(
@@ -102,13 +102,26 @@ public class MainObject : GameObject
         UpdateName();
     }
 
+    public override void DrawProperties()
+    {
+        var position = GetTopRightPosition();
+        var properties =
+            $"{Name}\n" +
+            $"{State} | {Substate}\n" +
+            $"{Health} | {InvincibilityTimer} | {Damage}\n" +
+            $"{Speed} | {Gravity}\n" +
+            $"{Position} | {PreviousPosition}\n" +
+            $"{Animation}";
+        APIs.DrawText(position, properties);
+    }
+
     protected virtual void UpdateName()
     {
         var mainName = Game.GetMainObjectName(Id.Value);
         Name = $"{mainName} (Id: {Id.Value})";
     }
 
-    protected override Vector2Int GetPropertiesPosition() => DamageableBox.WorldBounds.HasValue ?
+    protected Vector2Int GetTopRightPosition() => DamageableBox.WorldBounds.HasValue ?
         Camera.Main.WorldToScreenPoint(DamageableBox.WorldBounds.Value.GetTopRight()) :
         Vector2Int.Zero;
 }

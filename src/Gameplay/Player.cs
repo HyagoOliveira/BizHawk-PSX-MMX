@@ -1,3 +1,4 @@
+using System.Drawing;
 using BizHawk.Client.Common;
 using BizHawk.PSXMMX.Core;
 using BizHawk.PSXMMX.Input;
@@ -11,9 +12,7 @@ public sealed class Player : MainObject
     public KeyboardInput Input { get; }
 
     #region VARIABLES
-    public SByteS8Memory CharacterMode { get; }       // unk2
-    public SByteS8Memory Action { get; }            // unk5
-    public SByteS8Memory ActionSubstate { get; }      // unk6
+    public SByteS8Memory CharacterMode { get; }       // unk2    
     public BoolS8Memory IsSpikeImmune { get; }          // spike_immune
     public SByteS8Memory AirAction { get; }           // air_action
     public SByteS8Memory ChargeState0 { get; }         // charge_state[0]
@@ -44,6 +43,8 @@ public sealed class Player : MainObject
     public UIntS8Memory Character { get; }      // cur_character
     #endregion
 
+    private static readonly Vector2Int PROPERTIES_POSITION = new(4, Camera.SCREEN_SIZE.Y - 42);
+    private static readonly RectInt PROPERTIES_RECT = new(2, Camera.SCREEN_SIZE.Y - 44, 220, 43);
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
         Input = input;
@@ -55,21 +56,6 @@ public sealed class Player : MainObject
             new SByteS8Memory(
                 "Character Mode",
                 baseAddress + 0x02,
-                APIs.Memory,
-                hideDisplay: true
-            )
-        );
-        Action = AddVariable(
-            new SByteS8Memory(
-                "Action",
-                baseAddress + 0x05,
-                APIs.Memory
-            )
-        );
-        ActionSubstate = AddVariable(
-            new SByteS8Memory(
-                "Action Substate",
-                baseAddress + 0x06,
                 APIs.Memory,
                 hideDisplay: true
             )
@@ -335,13 +321,26 @@ public sealed class Player : MainObject
     protected override void UpdateName()
     {
         var playerName = (PlayerName)Character.Value;
-        Name = $"Player:\t{playerName}";
+        Name = $"Player: {playerName}";
     }
 
-    protected override Vector2Int GetPropertiesPosition() => new(
-        2,
-        10 // Camera.SCREEN_SIZE.Y - 900
-    );
+    public override void DrawProperties()
+    {
+        var properties =
+            $"{Name}\n" +
+            $"{State} | {Substate} | {IsSpikeImmune}\n" +
+            $"{Health} | {InvincibilityTimer} | {Damage}\n" +
+            $"{Speed} | {Gravity}\n" +
+            $"{Position} | {PreviousPosition}\n" +
+            $"{Animation}";
+
+        APIs.DrawBox(
+            PROPERTIES_RECT,
+            lineColor: Color.Transparent,
+            backgroundColor: Color.FromArgb(150, Color.Black)
+        );
+        APIs.DrawText(PROPERTIES_POSITION, properties);
+    }
 
     [Flags]
     public enum PlayerArmorPart

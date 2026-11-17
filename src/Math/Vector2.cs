@@ -17,7 +17,7 @@ public record struct Vector2(float X, float Y) : IEquatable<Vector2>
     public readonly float GetSqrMagnitude() => (X * X) + (Y * Y);
 
     public readonly Vector2Int ToVector2Int() => new((int)X, (int)Y);
-    public override readonly string ToString() => string.Format(CultureInfo.InvariantCulture, "({0}, {1})", X, Y);
+    public override readonly string ToString() => string.Format(CultureInfo.InvariantCulture, "({0:F2}, {1:F2})", X, Y);
 
     public static Vector2 operator +(Vector2 a, Vector2 b) => new(a.X + b.X, a.Y + b.Y);
     public static Vector2 operator -(Vector2 a, Vector2 b) => new(a.X - b.X, a.Y - b.Y);

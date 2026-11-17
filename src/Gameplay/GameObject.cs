@@ -20,6 +20,8 @@ public class GameObject
     public BoolS8Memory IsVisible { get; }      // on_screen (whether is visible)
     public UIntS8Memory MainState { get; }      // state (initialization, behavior or despawn)
     public Vector2S32Memory Position { get; }   // x_pos, y_pos
+    public SByteS8Memory State { get; }            // unk5
+    public SByteS8Memory Substate { get; }      // unk6
     public Vector2S32Memory PreviousPosition { get; }
 
     public int TotalVariables => variables.Count;
@@ -67,9 +69,24 @@ public class GameObject
                 hideDisplay: true
             )
         );
+        State = AddVariable(
+            new SByteS8Memory(
+                "State",
+                baseAddress + 0x05,
+                APIs.Memory
+            )
+        );
+        Substate = AddVariable(
+            new SByteS8Memory(
+                "Substate",
+                baseAddress + 0x06,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
         Position = AddVariable(
             new Vector2S32Memory(
-                "Position",
+                "Pos",
                 xAddress: BaseAddress + 0x08,
                 yAddress: BaseAddress + 0x0C,
                 APIs.Memory
@@ -126,9 +143,9 @@ public class GameObject
         APIs.DrawAxis(Camera.Main.WorldToScreenPoint(Position.Value));
     }
 
-    public void DrawProperties()
+    public virtual void DrawProperties()
     {
-        var position = GetPropertiesPosition();
+        var position = Camera.Main.WorldToScreenPoint(Position.Value);
         APIs.DrawText(position, Name);
 
         foreach (var variable in variables)
@@ -139,6 +156,4 @@ public class GameObject
             variable.Draw(position, APIs);
         }
     }
-
-    protected virtual Vector2Int GetPropertiesPosition() => Vector2Int.Zero;
 }

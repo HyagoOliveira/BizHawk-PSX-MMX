@@ -27,6 +27,11 @@ public readonly record struct RectInt : IEquatable<RectInt>
     {
     }
 
+    public RectInt(Vector2Int position, int width, int height) :
+        this(position.X, position.Y, width, height)
+    {
+    }
+
     public override string ToString() => $"(X:{X}, Y:{Y}, W:{Width}, H:{Height})";
 
     public Vector2Int GetPosition() => new(X, Y);

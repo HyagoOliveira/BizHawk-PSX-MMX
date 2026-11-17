@@ -58,7 +58,7 @@ public abstract class AbstractMemory<T> : IMemory
         FrozenValue = default!;
     }
 
-    public override string ToString() => $"{Name}:\t{Value}";
+    public override string ToString() => $"{Name}: {Value}";
 
     protected void ForceToWriteValue(T value)
     {
