@@ -339,7 +339,7 @@ public sealed class Player : MainObject
     protected override void UpdateName()
     {
         var playerName = (PlayerName)Character.Value;
-        Name = $"Player: {playerName}";
+        Name = $"Player: {playerName} [CV: {Character.Value}]";
     }
 
     protected override void DrawInGameName() { }
