@@ -41,10 +41,12 @@ public sealed class Player : MainObject
     public SByteS8Memory SpecialShotCount { get; } // special_shot_count
     public SByteS8Memory ShotCycle { get; }      // shot_cycle
     public UIntS8Memory Character { get; }      // cur_character
+    public SByteS8Memory Combo { get; }      // cur_character
     #endregion
 
     private static readonly Vector2Int PROPERTIES_POSITION = new(4, Camera.SCREEN_SIZE.Y - 42);
     private static readonly RectInt PROPERTIES_RECT = new(2, Camera.SCREEN_SIZE.Y - 44, 220, 43);
+
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
         Input = input;
@@ -287,6 +289,14 @@ public sealed class Player : MainObject
                 hideDisplay: true
             )
         );
+        Combo = AddVariable(
+            new SByteS8Memory(
+                "Combo",
+                baseAddress + 0xBB,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
         #endregion
     }
 
@@ -321,7 +331,7 @@ public sealed class Player : MainObject
     public override void DrawProperties()
     {
         var properties =
-            $"{Name}\n" +
+            $"{Name} | {Combo}\n" +
             $"{State} | {Substate} | {IsSpikeImmune}\n" +
             $"{Health} | {InvincibilityTimer} | {Damage}\n" +
             $"{Speed} | {Gravity}\n" +
