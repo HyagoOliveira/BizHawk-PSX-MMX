@@ -21,6 +21,21 @@ MMX4 is the only game with a documented detailed object-name table and reconstru
 
 `ROOMS_Extractions/` is Git-ignored and contains separate `MMX4/`, `MMX5/`, and `MMX6/` folders with disc and executable data. Use it for local investigation of room, asset, and game-specific data, but do not modify or commit its files. Extracted data is not a validated memory map; verify conclusions against save states or live gameplay.
 
+## Reading BizHawk save states
+
+A save state is a snapshot of the emulator and game, not necessarily a raw copy of PSX RAM. In the BizHawk v2.11.1 state examined for this reference, the `.State` file is a ZIP archive containing `BizVersion.txt`, `Core.bin.zst`, and other entries such as a framebuffer and sync settings. `Core.bin.zst` is the compressed, serialized core state; its decompressed bytes are not automatically a flat `MainRAM` dump. The archive entries and serialization can vary with BizHawk and core versions.
+
+Use this workflow when investigating a state:
+
+1. Keep the original state unchanged. Record the BizHawk version, PSX core, game/release, and the memory domain used for any addresses.
+2. Inspect the archive and extract `Core.bin.zst`. Decompress it with a Zstandard implementation, such as the one distributed with the matching BizHawk installation. Preserve the actual decompressed length; do not treat unused output-buffer capacity as state data.
+3. To read values reliably, either load the state in the matching BizHawk version and inspect the `MainRAM` domain, or parse the serialized core state using the matching core's save-state format. Do not assume a byte offset in `Core.bin` is also a PSX RAM address.
+4. When locating RAM in a serialized state without a parser, use a known, verified RAM address and a value that can be independently recognized in that exact state as an anchor. Confirm the candidate region with multiple nearby fields and types, then check another state or live gameplay. A single matching byte pattern is not enough to establish the mapping.
+5. Once the RAM region and game-specific layout are established, interpret values using the correct width, signedness, endianness, and representation. For an object pool, calculate an object's address from its pool base, slot index, and verified slot stride; treat each field address as an offset within that object.
+6. Cross-check results against the in-game display, known memory mappings, or a second state in which the value changes. Keep BizHawk `MainRAM` offsets distinct from PS1 virtual addresses, file offsets, and host-process addresses.
+
+If the state format or core version is unknown, prefer loading the state in BizHawk and inspecting its memory domains over guessing at the serialized layout. Treat any mapping inferred from a single state as provisional until independently validated.
+
 ## MMX4 globals and object pools
 
 | Symbol | `MainRAM` offset | Layout | C# model |
