@@ -28,7 +28,6 @@ public class MainObject : GameObject
     {
         IsDrawEnabled = true;
         IsPropertiesEnabled = false;
-        Name = GetDeactivatedName();
 
         IsFacingRight = AddVariable(
             new BoolU8Memory(
@@ -97,47 +96,32 @@ public class MainObject : GameObject
         CollisionBox = AddComponent(new TerrainBox(BaseAddress + 0x68, this));
     }
 
-    public override void Update()
-    {
-        base.Update();
-        UpdateName();
-    }
+    protected override void DrawProperties() => APIs.DrawText(
+         GetPropertiesPosition(),
+         GetProperties()
+     );
 
-    protected virtual void UpdateName() => Name = IsActivated() ? GetActivatedName() : GetDeactivatedName();
+    protected override string GetInGameName() => Game.GetMainObjectName(Id.Value);
+    protected virtual Vector2Int GetPropertiesPosition() => GetTopRightPosition();
+    protected override Vector2Int GetInGameNamePosition() => GetTopCenterPosition();
 
-    public override void DrawProperties()
-    {
-        var position = GetTopRightPosition();
-        var properties =
-            $"{State} | {Substate}\n" +
-            $"{Health} | {InvincibilityTimer} | {Damage}\n" +
-            $"{Speed} | {Gravity}\n" +
-            $"{Position} | {PreviousPosition}\n" +
-            $"{Animation}";
-        APIs.DrawText(position, properties);
-    }
+    protected virtual string GetProperties() =>
+        $"{State} | {Substate}\n" +
+        $"{Health} | {InvincibilityTimer} | {Damage}\n" +
+        $"{Speed} | {Gravity}\n" +
+        $"{Position} | {PreviousPosition}\n" +
+        $"{Animation}";
 
-    protected override void DrawInGameName()
+    public Vector2Int GetTopRightPosition() => Camera.Main.WorldToScreenPoint(GetBounds().GetTopRight());
+    public Vector2Int GetTopCenterPosition() => Camera.Main.WorldToScreenPoint(GetBounds().GetTopCenter());
+
+    private RectInt GetBounds()
     {
-        base.DrawInGameName();
-        APIs.DrawText(
-            GetTopCenterPosition(),
-            Name,
-            horizontalAlign: "center",
-            verticalAlign: "bottom"
+        if (CollisionBox.HasWorldBounds()) return CollisionBox.WorldBounds;
+        if (DamageableBox.HasWorldBounds()) return DamageableBox.WorldBounds;
+        return new RectInt(
+            center: Position.Value.ToVector2Int(),
+            size: Vector2Int.One * 20
         );
     }
-
-    protected virtual string GetGameName() => Game.GetMainObjectName(Id.Value);
-
-    protected Vector2Int GetTopCenterPosition() => DamageableBox.WorldBounds.HasValue ?
-        Camera.Main.WorldToScreenPoint(DamageableBox.WorldBounds.Value.GetTopCenter()) :
-        Vector2Int.Zero;
-
-    protected Vector2Int GetTopRightPosition() => DamageableBox.WorldBounds.HasValue ?
-        Camera.Main.WorldToScreenPoint(DamageableBox.WorldBounds.Value.GetTopRight()) :
-        Vector2Int.Zero;
-
-    private string GetActivatedName() => $"{GetGameName()} | Id:{Id.Value:D2} | S:{PoolIndex:D2}";
-    private string GetDeactivatedName() => $"{GetType().Name} - DEACTIVATED";
 }

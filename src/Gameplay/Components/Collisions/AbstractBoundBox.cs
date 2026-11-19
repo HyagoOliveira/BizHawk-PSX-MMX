@@ -8,8 +8,8 @@ public abstract class AbstractBoundBox : AbstractComponent
 {
     public long BaseAddress { get; }
     public Color LineColor { get; }
-    public RectInt? RawBounds { get; private set; } = null!;
-    public RectInt? WorldBounds { get; private set; } = null!;
+    public RectInt RawBounds { get; private set; }
+    public RectInt WorldBounds { get; private set; }
 
     public const string DOMAIN = Constants.MEMORY_DOMAIN;
 
@@ -20,6 +20,8 @@ public abstract class AbstractBoundBox : AbstractComponent
     }
 
     protected abstract RectInt CalculateWorldBounds(RectInt rawBounds, int x, int y, uint facing);
+
+    public bool HasWorldBounds() => WorldBounds.HasBounds();
 
     public override void Update()
     {
@@ -41,19 +43,17 @@ public abstract class AbstractBoundBox : AbstractComponent
             | (memory.ReadS8(positionAddress + 7, DOMAIN) << 8);
 
         RawBounds = new RectInt(offsetX, offsetY, width, height);
-        WorldBounds = CalculateWorldBounds(RawBounds.Value, x, y, facing);
+        WorldBounds = CalculateWorldBounds(RawBounds, x, y, facing);
     }
 
     public override void Draw()
     {
-        if (WorldBounds is not RectInt bounds) return;
-
-        var screenPosition = Camera.Main.WorldToScreenPoint(bounds.GetPosition());
+        var screenPosition = Camera.Main.WorldToScreenPoint(WorldBounds.GetPosition());
         var screenBounds = new RectInt(
             screenPosition.X,
             screenPosition.Y,
-            bounds.Width,
-            bounds.Height
+            WorldBounds.Width,
+            WorldBounds.Height
         );
 
         GameObject.APIs.DrawBox(screenBounds, LineColor);

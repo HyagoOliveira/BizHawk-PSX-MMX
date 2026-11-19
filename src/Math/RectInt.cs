@@ -13,6 +13,7 @@ public readonly record struct RectInt : IEquatable<RectInt>
     public int Height { get; }
 
     public static readonly RectInt Zero = new(0, 0, 0, 0);
+    public static readonly RectInt One = new(0, 0, 1, 1);
 
     public RectInt(int x, int y, int width, int height)
     {
@@ -32,8 +33,14 @@ public readonly record struct RectInt : IEquatable<RectInt>
     {
     }
 
+    public RectInt(Vector2Int center, Vector2Int size) :
+        this(center.X - size.X / 2, center.Y - size.Y / 2, size.X, size.Y)
+    {
+    }
+
     public override string ToString() => $"(X:{X}, Y:{Y}, W:{Width}, H:{Height})";
 
+    public bool HasBounds() => Width > 0 && Height > 0;
     public Vector2Int GetPosition() => new(X, Y);
     public Vector2Int GetSize() => new(Width, Height);
 

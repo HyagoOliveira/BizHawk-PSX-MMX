@@ -27,7 +27,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
     public MMXAnalyzerForm()
     {
-        ClientSize = new Size(600, 300);
+        ClientSize = new Size(600, 400);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterParent;

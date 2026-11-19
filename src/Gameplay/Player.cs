@@ -1,4 +1,3 @@
-using System.Drawing;
 using BizHawk.Client.Common;
 using BizHawk.PSXMMX.Core;
 using BizHawk.PSXMMX.Input;
@@ -43,8 +42,7 @@ public sealed class Player : MainObject
     public UIntS8Memory Character { get; }      // cur_character
     #endregion
 
-    private static readonly Vector2Int PROPERTIES_POSITION = new(4, Camera.SCREEN_SIZE.Y - 42);
-    private static readonly RectInt PROPERTIES_RECT = new(2, Camera.SCREEN_SIZE.Y - 44, 220, 43);
+    private static readonly Vector2Int PROPERTIES_POSITION = new(2, Camera.SCREEN_SIZE.Y - 42);
 
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
@@ -319,29 +317,20 @@ public sealed class Player : MainObject
         }
     }
 
-    public override void DrawProperties()
-    {
-        var properties =
-            $"{Name}\n" +
-            $"{State} | {Substate} | {IsSpikeImmune}\n" +
-            $"{Health} | {InvincibilityTimer} | {Damage}\n" +
-            $"{Speed} | {Gravity}\n" +
-            $"{Position} | {PreviousPosition}\n" +
-            $"{Animation}";
-
-        APIs.DrawBox(
-            PROPERTIES_RECT,
-            lineColor: Color.Transparent,
-            backgroundColor: Color.FromArgb(150, Color.Black)
-        );
-        APIs.DrawText(PROPERTIES_POSITION, properties);
-    }
-
-    protected override void UpdateName()
+    protected override string GetInGameName()
     {
         var playerName = (PlayerName)Character.Value;
-        Name = $"Player: {playerName} [CV: {Character.Value}]";
+        return $"Player: {playerName} [CV: {Character.Value}]";
     }
+
+    protected override Vector2Int GetPropertiesPosition() => PROPERTIES_POSITION;
+    protected override string GetProperties() =>
+        $"{Name}\n" +
+        $"{State} | {Substate} | {IsSpikeImmune}\n" +
+        $"{Health} | {InvincibilityTimer} | {Damage}\n" +
+        $"{Speed} | {Gravity}\n" +
+        $"{Position} | {PreviousPosition}\n" +
+        $"{Animation}";
 
     protected override void DrawInGameName()
     {

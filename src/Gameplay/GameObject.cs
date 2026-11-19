@@ -11,7 +11,7 @@ public class GameObject
     public int PoolIndex { get; internal set; } = -1;
     public ApiContainer APIs { get; }
 
-    public string Name { get; protected set; }
+    public string Name { get; private set; }
     public bool IsDrawEnabled { get; set; }
     public bool IsPropertiesEnabled { get; set; }
 
@@ -34,8 +34,8 @@ public class GameObject
     public GameObject(long baseAddress, ApiContainer apis)
     {
         APIs = apis;
-        Name = GetType().Name;
         BaseAddress = baseAddress;
+        Name = GetDeactivatedName();
 
         #region VARIABLES INITIALIZATION
         IsActive = AddVariable(
@@ -123,6 +123,7 @@ public class GameObject
     public bool CanDraw() => IsVisibleOnScreen() && IsDrawEnabled;
     public bool CanDrawProperties() => IsVisibleOnScreen() && IsPropertiesEnabled;
 
+    public override string ToString() => Name;
     public void ToggleShowProperties() => IsPropertiesEnabled = !IsPropertiesEnabled;
 
     public void UpdateAndTryDraw()
@@ -140,6 +141,7 @@ public class GameObject
 
     public virtual void Update()
     {
+        UpdateName();
         foreach (var variable in variables) variable.Update();
         foreach (var component in components) component.Update();
     }
@@ -147,11 +149,21 @@ public class GameObject
     public virtual void Draw()
     {
         foreach (var component in components) component.Draw();
-        APIs.DrawAxis(Camera.Main.WorldToScreenPoint(Position.Value));
+
         DrawInGameName();
+        APIs.DrawAxis(Camera.Main.WorldToScreenPoint(Position.Value));
     }
 
-    public virtual void DrawProperties()
+    protected virtual void DrawInGameName() => APIs.DrawText(
+       GetInGameNamePosition(),
+       Name,
+       horizontalAlign: "center",
+       verticalAlign: "bottom"
+   );
+
+    protected virtual Vector2Int GetInGameNamePosition() => Position.Value.ToVector2Int();
+
+    protected virtual void DrawProperties()
     {
         var position = Camera.Main.WorldToScreenPoint(Position.Value);
         APIs.DrawText(position, Name);
@@ -165,7 +177,8 @@ public class GameObject
         }
     }
 
-    public override string ToString() => Name;
-
-    protected virtual void DrawInGameName() { }
+    private void UpdateName() => Name = IsActivated() ? GetActivatedName() : GetDeactivatedName();
+    private string GetDeactivatedName() => $"{GetType().Name} - DEACTIVATED";
+    private string GetActivatedName() => $"{GetInGameName()} | Id:{Id.Value:D2} | S:{PoolIndex:D2}";
+    protected virtual string GetInGameName() => string.Empty;
 }
