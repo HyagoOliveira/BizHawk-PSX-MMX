@@ -11,7 +11,6 @@ public sealed class Weapon : MainObject
 
     protected override string GetProperties() =>
         $"{State} | {Substate}\n" +
-        $"{Health} | {InvincibilityTimer} | {Damage}\n" +
         $"{Speed} | {Gravity}\n" +
         $"{Position} | {PreviousPosition}\n" +
         $"{Animation}";
