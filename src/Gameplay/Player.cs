@@ -45,6 +45,7 @@ public sealed class Player : MainObject
 
     private static readonly Vector2Int PROPERTIES_POSITION = new(4, Camera.SCREEN_SIZE.Y - 42);
     private static readonly RectInt PROPERTIES_RECT = new(2, Camera.SCREEN_SIZE.Y - 44, 220, 43);
+
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
         Input = input;
@@ -342,7 +343,10 @@ public sealed class Player : MainObject
         Name = $"Player: {playerName} [CV: {Character.Value}]";
     }
 
-    protected override void DrawInGameName() { }
+    protected override void DrawInGameName()
+    {
+        // Name is drawn using DrawProperties
+    }
 
     [Flags]
     public enum PlayerArmorPart

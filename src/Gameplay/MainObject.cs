@@ -28,7 +28,7 @@ public class MainObject : GameObject
     {
         IsDrawEnabled = true;
         IsPropertiesEnabled = false;
-        Name = "MainObject - INACTIVE";
+        Name = GetDeactivatedName();
 
         IsFacingRight = AddVariable(
             new BoolU8Memory(
@@ -103,6 +103,8 @@ public class MainObject : GameObject
         UpdateName();
     }
 
+    protected virtual void UpdateName() => Name = IsActivated() ? GetActivatedName() : GetDeactivatedName();
+
     public override void DrawProperties()
     {
         var position = GetTopRightPosition();
@@ -113,18 +115,6 @@ public class MainObject : GameObject
             $"{Position} | {PreviousPosition}\n" +
             $"{Animation}";
         APIs.DrawText(position, properties);
-    }
-
-    protected virtual void UpdateName()
-    {
-        if (!IsActivated())
-        {
-            Name = "MainObject - INACTIVE";
-            return;
-        }
-
-        var mainName = Game.GetMainObjectName(Id.Value);
-        Name = $"{mainName} | Id:{Id.Value:D2} | S:{PoolIndex:D2}";
     }
 
     protected override void DrawInGameName()
@@ -138,6 +128,8 @@ public class MainObject : GameObject
         );
     }
 
+    protected virtual string GetGameName() => Game.GetMainObjectName(Id.Value);
+
     protected Vector2Int GetTopCenterPosition() => DamageableBox.WorldBounds.HasValue ?
         Camera.Main.WorldToScreenPoint(DamageableBox.WorldBounds.Value.GetTopCenter()) :
         Vector2Int.Zero;
@@ -145,4 +137,7 @@ public class MainObject : GameObject
     protected Vector2Int GetTopRightPosition() => DamageableBox.WorldBounds.HasValue ?
         Camera.Main.WorldToScreenPoint(DamageableBox.WorldBounds.Value.GetTopRight()) :
         Vector2Int.Zero;
+
+    private string GetActivatedName() => $"{GetGameName()} | Id:{Id.Value:D2} | S:{PoolIndex:D2}";
+    private string GetDeactivatedName() => $"{GetType().Name} - DEACTIVATED";
 }

@@ -18,6 +18,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     public Player? Player { get; private set; } = null!;
     public Camera? Camera { get; private set; } = null!;
     public KeyboardInput? Input { get; private set; } = null!;
+    public GamePoolManager<Weapon>? WeaponPool { get; private set; } = null!;
     public GamePoolManager<MainObject>? MainObjectsPool { get; private set; } = null!;
 
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
@@ -44,6 +45,13 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         Input = new KeyboardInput(APIs.Input);
         Camera = new Camera(MMXGame.Addresses.Camera, APIs);
         Player = new Player(MMXGame.Addresses.Player, APIs, Input);
+
+        WeaponPool = new GamePoolManager<Weapon>(
+            MMXGame.Addresses.WeaponObjectsPool,
+            blockSize: 0x9C,
+            totalSlots: 16,
+            APIs
+        );
         MainObjectsPool = new GamePoolManager<MainObject>(
             MMXGame.Addresses.MainObjectsPool,
             blockSize: 0x9C,
@@ -53,7 +61,8 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
         foldouts.Clear();
         foldouts.Add(new PlayerFoldout(Player, isExpanded: true));
-        foldouts.Add(new GamePoolFoldout<MainObject>(MainObjectsPool, isExpanded: true)); //TODO remove isExpanded
+        foldouts.Add(new GamePoolFoldout<Weapon>(WeaponPool, isExpanded: true)); //TODO remove isExpanded
+        foldouts.Add(new GamePoolFoldout<MainObject>(MainObjectsPool, isExpanded: true));   //TODO remove isExpanded
 
         InitializeFoldouts();
     }
@@ -70,6 +79,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         Camera?.UpdateAndTryDraw();
         Player?.UpdateAndTryDraw();
         MainObjectsPool?.UpdateAndTryDraw();
+        WeaponPool?.UpdateAndTryDraw();
     }
 
     private void InitializeFoldouts()

@@ -38,12 +38,12 @@ If the state format or core version is unknown, prefer loading the state in BizH
 
 ## MMX4 globals and object pools
 
-| Symbol | `MainRAM` offset | Layout | C# model |
+| Symbol | `MainRAM` offset | Layout | C#  |
 |---|---:|---|---|
 | `g_Player` | `0x1418C8` | One `PlayerObj`, `0xE4` bytes | `Player` |
-| `main_objects` | `0x13BED0` | 48 `MainObj` slots, `0x9C` bytes each | `MainObj` pool |
-| `shot_objects` | `0x13F328` | 32 `ShotObj` slots, `0x9C` bytes each | `ShotObj` pool |
-| `weapon_objects` | `0x1406F8` | 16 `WeaponObj` slots, `0x9C` bytes each | `WeaponObj` pool |
+| `main_objects` | `0x13BED0` | 48 `MainObj` slots, `0x9C` bytes each | `GamePoolManager<MainObject>`  |
+| `shot_objects` | `0x13F328` | 32 `ShotObj` slots, `0x9C` bytes each | `GamePoolManager<Shot>`  |
+| `weapon_objects` | `0x1406F8` | 16 `WeaponObj` slots, `0x9C` bytes each | `GamePoolManager<Weapon>` |
 | `background_objects` | `0x1419B0` | 3 `BackgroundObj` slots, `0x54` bytes each | `BackgroundObj` pool |
 
 These are separate pools. `main_objects` can contain enemies and other objects; it is not enemy-only storage.
