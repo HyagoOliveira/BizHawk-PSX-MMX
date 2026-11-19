@@ -117,8 +117,10 @@ public class MainObject : GameObject
 
     private RectInt GetBounds()
     {
+        if (DamagerBox.HasWorldBounds()) return DamagerBox.WorldBounds;
         if (CollisionBox.HasWorldBounds()) return CollisionBox.WorldBounds;
         if (DamageableBox.HasWorldBounds()) return DamageableBox.WorldBounds;
+
         return new RectInt(
             center: Position.Value.ToVector2Int(),
             size: Vector2Int.One * 20
