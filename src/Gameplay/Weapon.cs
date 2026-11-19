@@ -1,4 +1,5 @@
 using BizHawk.Client.Common;
+using BizHawk.PSXMMX.Core;
 
 namespace BizHawk.PSXMMX.Gameplay;
 
@@ -8,6 +9,8 @@ public sealed class Weapon : MainObject
         base(baseAddress, apis)
     {
     }
+
+    protected override string GetInGameName() => Game.GetWeaponObjectName(Id.Value);
 
     protected override string GetProperties() =>
         $"{State} | {Substate}\n" +
