@@ -96,24 +96,18 @@ public class MainObject : GameObject
         CollisionBox = AddComponent(new TerrainBox(BaseAddress + 0x68, this));
     }
 
-    protected override void DrawProperties() => APIs.DrawText(
-         GetPropertiesPosition(),
-         GetProperties()
-     );
-
     protected override string GetInGameName() => Game.GetMainObjectName(Id.Value);
-    protected virtual Vector2Int GetPropertiesPosition() => GetTopRightPosition();
+    protected override Vector2Int GetPropertiesPosition() => GetTopRightPosition();
     protected override Vector2Int GetInGameNamePosition() => GetTopCenterPosition();
+    public Vector2Int GetTopRightPosition() => Camera.Main.WorldToScreenPoint(GetBounds().GetTopRight());
+    public Vector2Int GetTopCenterPosition() => Camera.Main.WorldToScreenPoint(GetBounds().GetTopCenter());
 
-    protected virtual string GetProperties() =>
+    protected override string GetProperties() =>
         $"{State} | {Substate}\n" +
         $"{Health} | {InvincibilityTimer} | {Damage}\n" +
         $"{Speed} | {Gravity}\n" +
         $"{Position} | {PreviousPosition}\n" +
         $"{Animation}";
-
-    public Vector2Int GetTopRightPosition() => Camera.Main.WorldToScreenPoint(GetBounds().GetTopRight());
-    public Vector2Int GetTopCenterPosition() => Camera.Main.WorldToScreenPoint(GetBounds().GetTopCenter());
 
     private RectInt GetBounds()
     {

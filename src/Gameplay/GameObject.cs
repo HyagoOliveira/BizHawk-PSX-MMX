@@ -14,6 +14,8 @@ public class GameObject
     public string Name { get; private set; }
     public bool IsDrawEnabled { get; set; }
     public bool IsPropertiesEnabled { get; set; }
+    public string? PropertiesVerticalAlign { get; protected set; } = null!;
+    public string? PropertiesHorizontalAlign { get; protected set; } = null!;
 
     // Variables
     public BoolS8Memory IsActive { get; }       // active (whether slot is active)
@@ -161,24 +163,31 @@ public class GameObject
        verticalAlign: "bottom"
    );
 
+    protected virtual string GetInGameName() => string.Empty;
     protected virtual Vector2Int GetInGameNamePosition() => Position.Value.ToVector2Int();
 
-    protected virtual void DrawProperties()
-    {
-        var position = Camera.Main.WorldToScreenPoint(Position.Value);
-        APIs.DrawText(position, Name);
+    protected virtual void DrawProperties() => APIs.DrawText(
+         GetPropertiesPosition(),
+         GetProperties(),
+         horizontalAlign: PropertiesHorizontalAlign,
+         verticalAlign: PropertiesVerticalAlign
+     );
 
+    protected virtual Vector2Int GetPropertiesPosition() =>
+        Camera.Main.WorldToScreenPoint(Position.Value);
+
+    protected virtual string GetProperties()
+    {
+        var properties = string.Empty;
         foreach (var variable in variables)
         {
             if (variable.HideDisplay) continue;
-
-            position.Y += 10;
-            variable.Draw(position, APIs);
+            properties += variable.ToString() + "\n";
         }
+        return properties;
     }
 
     private void UpdateName() => Name = IsActivated() ? GetActivatedName() : GetDeactivatedName();
     private string GetDeactivatedName() => $"{GetType().Name} - DEACTIVATED";
     private string GetActivatedName() => $"{GetInGameName()} | Id:{Id.Value:D2} | S:{PoolIndex:D2}";
-    protected virtual string GetInGameName() => string.Empty;
 }
