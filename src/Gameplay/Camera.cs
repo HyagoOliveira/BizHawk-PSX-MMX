@@ -12,8 +12,6 @@ public sealed class Camera : GameObject
     public Camera(long baseAddress, ApiContainer apis) : base(baseAddress, apis)
     {
         Main = this;
-        IsDrawEnabled = true;
-        IsPropertiesEnabled = true;
         PropertiesVerticalAlign = "center";
         PropertiesHorizontalAlign = "center";
 
