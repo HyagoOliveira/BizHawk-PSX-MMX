@@ -4,30 +4,30 @@ namespace BizHawk.PSXMMX.Forms.Toggles;
 
 public sealed class ButtonToggle : Button
 {
+    public event Action OnToggled = null!;
+    public bool IsEnabled { get; private set; }
     private readonly string text;
 
-    public event Action OnToggle = null!;
-    public Func<bool> IsToggledFunction = null!;
-
-    public ButtonToggle(string text)
+    public ButtonToggle(string text, bool isEnabled = false)
     {
         this.text = text;
 
         Size = FormConstants.BUTTON_SIZE;
         Click += (_, _) => HandleClick();
 
-        UpdateText();
+        UpdateText(isEnabled);
     }
 
-    public void UpdateText()
+    public void UpdateText(bool isEnabled)
     {
-        var action = IsToggledFunction?.Invoke() == true ? "Disable" : "Enable";
+        IsEnabled = isEnabled;
+        var action = IsEnabled ? "Disable" : "Enable";
         Text = $"{action} {text}";
     }
 
     private void HandleClick()
     {
-        OnToggle?.Invoke();
-        UpdateText();
+        OnToggled?.Invoke();
+        UpdateText(!IsEnabled);
     }
 }

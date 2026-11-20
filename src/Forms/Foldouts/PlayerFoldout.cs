@@ -26,9 +26,7 @@ public sealed class PlayerFoldout : FoldoutControl
         Player = player;
         ContentHeight = 68;
 
-        allWeaponsToggle.OnToggle += Player.ToggleAllWeaponsEnabled;
-        allWeaponsToggle.IsToggledFunction = Player.IsAllWeaponsEnabled;
-
+        allWeaponsToggle.OnToggled += Player.ToggleAllWeaponsEnabled;
         propertiesToggle.GameObject = Player;
         armorDropdown.OnSelected += Player.EnableArmorPart;
 
@@ -48,7 +46,7 @@ public sealed class PlayerFoldout : FoldoutControl
 
         healthField.Control.Value = Player.Health.ReadValue();
         propertiesToggle.UpdateAppearance();
-        allWeaponsToggle.UpdateText();
+        allWeaponsToggle.UpdateText(Player.IsAllWeaponsEnabled());
     }
 
     private void WriteHealth()

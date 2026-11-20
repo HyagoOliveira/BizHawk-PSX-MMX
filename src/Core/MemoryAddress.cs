@@ -3,23 +3,36 @@ namespace BizHawk.PSXMMX.Core;
 public sealed class MemoryAddress
 {
     public long Player { get; }
-    public long Camera { get; }
     public long BossFlags { get; }
     public long MainObjectsPool { get; }
     public long WeaponObjectsPool { get; }
 
+    public CameraAddress Camera { get; }
+
     public MemoryAddress(
         long player = 0,
-        long camera = 0,
         long bossFlags = 0,
         long mainObjectsPool = 0,
-        long weaponObjectsPool = 0
+        long weaponObjectsPool = 0,
+        CameraAddress? camera = null
     )
     {
         Player = player;
-        Camera = camera;
         BossFlags = bossFlags;
         MainObjectsPool = mainObjectsPool;
         WeaponObjectsPool = weaponObjectsPool;
+        Camera = camera ?? new CameraAddress();
+    }
+
+    public sealed class CameraAddress
+    {
+        public long Base { get; }
+        public long HUD { get; }
+
+        public CameraAddress(long @base = 0, long hud = 0)
+        {
+            Base = @base;
+            HUD = hud;
+        }
     }
 }
