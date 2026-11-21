@@ -61,9 +61,9 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
         foldouts.Clear();
         foldouts.Add(new PlayerFoldout(Player, isExpanded: true));
-        foldouts.Add(new CameraFoldout(Camera, isExpanded: true));
-        foldouts.Add(new GamePoolFoldout<Weapon>(WeaponPool, isExpanded: false)); //TODO remove isExpanded
-        foldouts.Add(new GamePoolFoldout<MainObject>(MainObjectsPool, isExpanded: false));   //TODO remove isExpanded
+        foldouts.Add(new CameraFoldout(Camera));
+        foldouts.Add(new GamePoolFoldout<MainObject>(MainObjectsPool));
+        foldouts.Add(new GamePoolFoldout<Weapon>(WeaponPool));
 
         InitializeFoldouts();
     }

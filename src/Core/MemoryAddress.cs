@@ -29,6 +29,8 @@ public sealed class MemoryAddress
         public long Base { get; }
         public long HUD { get; }
 
+        public const long SIZE = 0x54;
+
         public CameraAddress(long @base = 0, long hud = 0)
         {
             Base = @base;
