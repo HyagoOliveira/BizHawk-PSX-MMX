@@ -15,7 +15,7 @@
 | MMX5 | Hash `1C64D6EA` | Player, camera, boss flags, and main-object pool |
 | MMX6 | Hash `F063F536` | Player, camera, boss flags, and main-object pool |
 
-MMX4 is the only game with a documented detailed object-name table and reconstructed object-layout reference in this repository. MMX5 and MMX6 currently share only runtime-tested/shared findings, such as the player collision-box pointer offsets; detailed decompilation layouts must be added only after they are confirmed for the corresponding USA build.
+MMX4 is the only game with a documented detailed object-name table in this repository. The background-object structure is also used by MMX5 and MMX6, according to the user's report; individual field interpretations still require game-specific verification. Other detailed decompilation layouts must be confirmed for the corresponding USA build.
 
 ## Local extracted data
 
@@ -64,6 +64,58 @@ In MMX4, `StageObjectRecord.object_type` in `src/main/195B4.c` selects the pool:
 The record `id` selects behavior within the pool. Main-object IDs index `main_object_update_funcs`; IDs are pool-specific. `0xFF` terminates the stage-object list.
 
 `GameMemoryAddress.Get` supplies `GetMainObjectName` names. Only MMX4 currently has a name table; unknown IDs and unsupported games display `UNKNOWN MAIN OBJECT`.
+
+## Background objects and camera
+
+MMX4 uses three `BackgroundObj` slots of `0x54` bytes each. The user reports that MMX5 and MMX6 also use this structure. Slot 0 supplies the main camera/scroll position; slots 1 and 2 control additional background layers whose appearance and behavior vary by stage. Calculate a field's `MainRAM` address as `game base + slot * 0x54 + field offset`.
+
+| Game | Slot 0 base | Slot 1 base | Slot 2 base |
+|---|---:|---:|---:|
+| MMX4 USA | `0x1419B0` | `0x141A04` | `0x141A58` |
+| MMX5 USA | `0x09A1F8` | `0x09A24C` | `0x09A2A0` |
+| MMX6 USA v1.1 | `0x0971F8` | `0x09724C` | `0x0972A0` |
+
+Slot 0 bases are the analyzer's game-specific camera mappings. The other addresses are calculated using the shared stride; the complete MMX5 and MMX6 layouts and individual field behaviors have not been independently validated here.
+
+In MMX4, `+0x03` is the draw flag at `0x1419B3`, `0x141A07`, and `0x141A5B`. The corresponding calculated byte addresses are `0x09A1FB`, `0x09A24F`, and `0x09A2A3` for MMX5, and `0x0971FB`, `0x09724F`, and `0x0972A3` for MMX6. Their draw-flag behavior in those games still needs verification.
+
+### MMX4 field interpretations
+
+The following types and offsets come from the [MMX4 reconstructed structure](https://github.com/HyagoOliveira/mmx4/blob/main/include/obj.h). Meanings describe MMX4 code paths, not necessarily every stage or update mode; do not assume identical meanings in MMX5 or MMX6 without checking those games. Runtime checks remain important.
+
+| Field | Offset | Type | Observed use or interpretation |
+|---|---:|---|---|
+| `unk0`, `unk1` | `+0x00`, `+0x01` | `u8` | Unknown. `unk0` is initialized to 1. |
+| `unk2` | `+0x02` | `s8` | Assigned the slot index during reset. |
+| `unk3` | `+0x03` | `s8` | Layer draw gate: zero skips drawing, nonzero permits it. Initialization sets it to 1; stage transitions can change it. |
+| `unk4` | `+0x04` | `s8` | Index into the slot's update-function table; modes differ between slots. |
+| `x_pos`, `y_pos` | `+0x08`, `+0x0C` | Signed 16.16 `f32` | Current scroll position. |
+| `unk14`, `unk18` | `+0x14`, `+0x18` | Signed 16.16 `f32` | Previous X/Y position, used to calculate movement. |
+| `unk1C`, `unk1E` | `+0x1C`, `+0x1E` | `s16` | Current maximum and minimum camera X limits, respectively. |
+| `unk20`, `unk22` | `+0x20`, `+0x22` | `s16` | Current maximum and minimum camera Y limits, respectively. |
+| `unk24`, `unk26` | `+0x24`, `+0x26` | `s16` | Target maximum and minimum X limits, respectively. |
+| `unk28`, `unk2A` | `+0x28`, `+0x2A` | `s16` | Target maximum and minimum Y limits, respectively. |
+| `unk2C`, `unk2E` | `+0x2C`, `+0x2E` | `s16` | Vertical player-tracking thresholds; defaults are `0x60` and `0xC0`. |
+| `unk30`, `unk32` | `+0x30`, `+0x32` | `s16` | Horizontal player-tracking thresholds; both default to `0xA0`. |
+| `unk34` | `+0x34` | `u16` | Shake flags: bit `0x10` for X and bit `0x01` for Y. |
+| `unk36`, `unk37` | `+0x36`, `+0x37` | `s8` | Shake duration counters for X and Y. |
+| `unk3A`, `unk3B` | `+0x3A`, `+0x3B` | `s8` | Shake cadence values for X and Y. |
+| `unk3C`, `unk3D` | `+0x3C`, `+0x3D` | `s8` | Shake cadence counters for X and Y. |
+| `unk3E` | `+0x3E` | 2-byte union | Shake phase bytes for X and Y. |
+| `unk40`, `unk42` | `+0x40`, `+0x42` | `u16` | X/Y offsets used by layer-position and parallax routines. |
+| `unk44` | `+0x44` | `s8` | Nonzero enables the slot's normal update when the player's update delay is zero; separate from the draw gate. |
+| `unk45`, `unk46` | `+0x45`, `+0x46` | `s8` | X/Y shake displacement values. |
+| `unk47` | `+0x47` | `s8` | Associated with limit transitions; the detailed reconstructed transition routine is PC/Saturn-only, so verify its PSX behavior. |
+| `unk48`, `unk49` | `+0x48`, `+0x49` | `s8` | Upper and lower limits used to clamp scroll displacement in observed camera modes. |
+| `unk4A`, `unk4B` | `+0x4A`, `+0x4B` | `s8` | Ordering-table offsets for the layer's primitives and associated `layer + 3` primitives. |
+| `unk4C` | `+0x4C` | `u8` | Nonzero causes a background update routine to run before drawing; its exact behavior is not yet established. |
+| `unk4D`, `unk4E` | `+0x4D`, `+0x4E` | `u8` | Initialized from layout width; used as horizontal layout bounds in Saturn code. PSX role is unverified. |
+| `min_y`, `max_y` | `+0x4F`, `+0x50` | `s8` | Initialized from layout height; used as vertical layout bounds in Saturn code. PSX role is unverified. |
+| `unk51` | `+0x51` | `s8` | Changed by an autoscroll effect and tested by ride-chaser logic; exact meaning is unknown. |
+
+The draw gate is checked directly by both PSX background drawing paths in [165A0.c](https://github.com/HyagoOliveira/mmx4/blob/main/src/main/165A0.c). The position, tracking, shake, and update paths are in [background.c](https://github.com/HyagoOliveira/mmx4/blob/main/src/main/background.c); an example of layer-specific parallax is in [layer_01_jungle_parallax.c](https://github.com/HyagoOliveira/mmx4/blob/main/src/main/layers/layer_01_jungle_parallax.c). The detailed limit-transition reconstruction in that file is conditional on PC/Saturn; the PSX path is assembly. Similarly, the bounds-based layout access in [object_motion.c](https://github.com/HyagoOliveira/mmx4/blob/main/src/main/object_motion.c) is Saturn-specific, while the PSX path uses different indexing.
+
+The user observed that MMX4 `MainRAM` address `0x1721DF` acts as a HUD visibility flag. This observation is separate from the background draw flags; its exact semantics and relation to other structures have not been independently established. Do not derive an MMX5 or MMX6 HUD address from its distance to the MMX4 camera base.
 
 ## Shared MMX4 object fields
 
