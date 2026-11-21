@@ -23,6 +23,9 @@ public abstract class AbstractBaseField<T> : FlowLayoutPanel where T : Control
             Margin = FormConstants.LABEL_MARGIN
         };
 
+        if (string.IsNullOrEmpty(labelText))
+            label.Visible = false;
+
         Controls.Add(label);
         Controls.Add(Control);
     }
