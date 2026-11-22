@@ -1,4 +1,3 @@
-using System.Windows.Forms;
 using BizHawk.PSXMMX.Forms.Fields;
 using BizHawk.PSXMMX.Forms.Toggles;
 using BizHawk.PSXMMX.Gameplay;
@@ -11,11 +10,10 @@ public sealed class PlayerFoldout : FoldoutControl
 {
     public Player Player { get; }
 
-    private readonly ButtonToggle allWeaponsToggle = new("Weapons");
-    private readonly GameObjectPropertiesToggle propertiesToggle = new();
-    private readonly DropdownEnumField<PlayerArmorPart> armorDropdown = new("Armor");
-    private readonly NumericUpDownField healthField = new(
-        "Health",
+    private readonly ButtonToggle propertiesToggle = new("Properties");
+    private readonly ButtonToggle allWeaponsToggle = new("All Weapons");
+    private readonly DropdownEnumField<PlayerArmorPart> armorPartDropdown = new("Armor Part");
+    private readonly NumericUpDownField healthField = new("Health",
         min: SByteS8Memory.MIN_VALUE,
         max: SByteS8Memory.MAX_VALUE
     );
@@ -26,18 +24,18 @@ public sealed class PlayerFoldout : FoldoutControl
         Player = player;
         ContentHeight = 68;
 
+        propertiesToggle.OnToggled += Player.ToggleShowProperties;
         allWeaponsToggle.OnToggled += Player.ToggleAllWeaponsEnabled;
-        propertiesToggle.GameObject = Player;
-        armorDropdown.OnSelected += Player.EnableArmorPart;
+        armorPartDropdown.OnSelected += Player.EnableArmorPart;
 
         healthField.AddToggleFreezeButton(Player.Health);
         healthField.Control.ValueChanged += (_, _) => WriteHealth();
 
         ControlsPanel.Controls.Add(healthField);
-        ControlsPanel.Controls.Add(armorDropdown);
+        ControlsPanel.Controls.Add(armorPartDropdown);
         ControlsPanel.Controls.Add(propertiesToggle);
         ControlsPanel.Controls.Add(allWeaponsToggle);
-        ControlsPanel.SetFlowBreak(armorDropdown, true);
+        ControlsPanel.SetFlowBreak(armorPartDropdown, true);
     }
 
     public override void UpdateContent()
@@ -45,7 +43,7 @@ public sealed class PlayerFoldout : FoldoutControl
         base.UpdateContent();
 
         healthField.Control.Value = Player.Health.ReadValue();
-        propertiesToggle.UpdateAppearance();
+        propertiesToggle.UpdateText(Player.IsPropertiesEnabled);
         allWeaponsToggle.UpdateText(Player.IsAllWeaponsEnabled());
     }
 

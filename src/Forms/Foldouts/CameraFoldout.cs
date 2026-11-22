@@ -10,15 +10,15 @@ public sealed class CameraFoldout : FoldoutControl
     private readonly Camera camera;
     private readonly ToggleListField layerList;
     private readonly ButtonToggle hudToggle = new("HUD");
-    private readonly GameObjectPropertiesToggle propertiesToggle = new();
+    private readonly ButtonToggle propertiesToggle = new("Properties");
 
     public CameraFoldout(Camera camera, bool isExpanded = false) :
         base("Camera", isExpanded)
     {
         this.camera = camera;
 
-        propertiesToggle.GameObject = camera;
         hudToggle.OnToggled += camera.IsHUDActive.Toggle;
+        propertiesToggle.OnToggled += camera.ToggleShowProperties;
 
         layerList = new(string.Empty, [.. camera.Layers.Select(layer => layer.Name)]);
         layerList.OnToggled += camera.SetLayerEnabled;
@@ -43,8 +43,8 @@ public sealed class CameraFoldout : FoldoutControl
     public override void UpdateContent()
     {
         base.UpdateContent();
-        propertiesToggle.UpdateAppearance();
         hudToggle.UpdateText(camera.IsHUDActive.ReadValue());
+        propertiesToggle.UpdateText(camera.IsPropertiesEnabled);
 
         var (indexes, isChecked) = camera.GetLayersData();
         layerList.SetWithoutNotify(indexes, isChecked);

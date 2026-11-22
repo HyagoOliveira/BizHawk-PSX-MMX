@@ -21,8 +21,8 @@ public sealed class ButtonToggle : Button
     public void UpdateText(bool isEnabled)
     {
         IsEnabled = isEnabled;
-        var action = IsEnabled ? "Disable" : "Enable";
-        Text = $"{action} {text}";
+        var state = IsEnabled ? "ON" : "OFF";
+        Text = $"{text}: {state}";
     }
 
     private void HandleClick()
