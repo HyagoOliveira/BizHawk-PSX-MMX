@@ -1,12 +1,16 @@
 using BizHawk.PSXMMX.Forms.Fields;
+using BizHawk.PSXMMX.Forms.Toggles;
 using BizHawk.PSXMMX.Gameplay;
 
 namespace BizHawk.PSXMMX.Forms.Foldouts;
 
 public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
 {
+    public int CurrentIndex { get; private set; }
+
     private readonly GamePoolManager<T> pool;
     private readonly DropdownField objDropdown;
+    private readonly ButtonToggle moverToggle = new("Mover");
 
     public GamePoolFoldout(GamePoolManager<T> pool, bool isExpanded = false) :
         base(pool.ToString(), isExpanded)
@@ -17,8 +21,10 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
         objDropdown = new("Object", GetDropdownItems());
         objDropdown.Control.Width = 300;
         objDropdown.OnSelected += HandleObjectSelected;
+        moverToggle.OnToggled += HandleMoverToggled;
 
         ControlsPanel.Controls.Add(objDropdown);
+        ControlsPanel.Controls.Add(moverToggle);
     }
 
     public override void UpdateContent()
@@ -31,8 +37,19 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
 
     private void HandleObjectSelected(int index)
     {
+        CurrentIndex = -1;
         if (index < 0) return;
         if (index == 0) pool.DisableAllObjectsProperties();
-        else pool.ShowObjectProperties(index - 1);
+        else
+        {
+            CurrentIndex = index - 1;
+            pool.ShowObjectProperties(CurrentIndex);
+        }
+    }
+
+    private void HandleMoverToggled()
+    {
+        if (CurrentIndex < 0) return;
+        pool.ToggleMoverEnabled(CurrentIndex);
     }
 }

@@ -32,6 +32,8 @@ public sealed class GamePoolManager<T> where T : GameObject
         pool[index].IsPropertiesEnabled = true;
     }
 
+    public void ToggleMoverEnabled(int index) => pool[index].Mover.ToggleEnabled();
+
     public override string ToString() => $"{typeof(T).Name} Pool";
 
     public string[] GetAllObjectsNames() => [.. pool.Select(obj => obj.Name)];
