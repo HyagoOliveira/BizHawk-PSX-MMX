@@ -2,11 +2,20 @@ using BizHawk.Client.Common;
 
 namespace BizHawk.PSXMMX.Input;
 
-public sealed class KeyboardInput(IInputApi input)
+public sealed class KeyboardInput
 {
+    public static KeyboardInput? Instance { get; private set; }
+
     private HashSet<string> currentKeys = new(StringComparer.OrdinalIgnoreCase);
     private HashSet<string> previousKeys = new(StringComparer.OrdinalIgnoreCase);
-    private readonly IInputApi input = input ?? throw new ArgumentNullException(nameof(input));
+
+    private readonly IInputApi input;
+
+    public KeyboardInput(IInputApi input)
+    {
+        Instance = this;
+        this.input = input ?? throw new ArgumentNullException(nameof(input));
+    }
 
     public void Update()
     {

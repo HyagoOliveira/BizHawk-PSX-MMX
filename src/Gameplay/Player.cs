@@ -8,8 +8,6 @@ namespace BizHawk.PSXMMX.Gameplay;
 
 public sealed class Player : MainObject
 {
-    public KeyboardInput Input { get; }
-
     #region VARIABLES
     public SByteS8Memory CharacterMode { get; }       // unk2    
     public BoolS8Memory IsSpikeImmune { get; }          // spike_immune
@@ -46,7 +44,6 @@ public sealed class Player : MainObject
 
     public Player(long baseAddress, ApiContainer apis, KeyboardInput input) : base(baseAddress, apis)
     {
-        Input = input;
         IsDrawEnabled = true;
         IsPropertiesEnabled = true;
 
