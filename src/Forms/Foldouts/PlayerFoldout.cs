@@ -62,7 +62,9 @@ public sealed class PlayerFoldout : FoldoutControl
         base.UpdateContent();
 
         healthField.Control.Value = Player.Health.ReadValue();
+
         drawToggle.UpdateText(Player.IsDrawEnabled);
+        moverToggle.UpdateText(Player.Mover.IsEnabled);
         propertiesToggle.UpdateText(Player.IsPropertiesEnabled);
         allWeaponsToggle.UpdateText(Player.IsAllWeaponsEnabled());
     }
