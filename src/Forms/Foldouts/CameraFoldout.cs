@@ -25,14 +25,7 @@ public sealed class CameraFoldout : FoldoutControl
         layerList.Control.IntegralHeight = false;
         layerList.Control.Height = 60;
 
-        var togglesPanel = new FlowLayoutPanel
-        {
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            FlowDirection = FlowDirection.TopDown,
-            Margin = Padding.Empty,
-            WrapContents = false
-        };
+        var togglesPanel = GetVerticalPanel();
         togglesPanel.Controls.Add(hudToggle);
         togglesPanel.Controls.Add(propertiesToggle);
 

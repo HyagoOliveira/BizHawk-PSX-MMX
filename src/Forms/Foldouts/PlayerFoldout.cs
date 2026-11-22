@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using BizHawk.PSXMMX.Forms.Fields;
 using BizHawk.PSXMMX.Forms.Toggles;
 using BizHawk.PSXMMX.Gameplay;
@@ -22,10 +23,10 @@ public sealed class PlayerFoldout : FoldoutControl
         base(title: "Player", isExpanded)
     {
         Player = player;
-        ContentHeight = 90;
+        ContentHeight = 100;
 
         armorParts.Control.IntegralHeight = false;
-        armorParts.Control.Height = 72;
+        armorParts.Control.Height = 80;
 
         armorParts.OnToggled += Player.EnableArmorPart;
         propertiesToggle.OnToggled += Player.ToggleShowProperties;
@@ -34,11 +35,13 @@ public sealed class PlayerFoldout : FoldoutControl
         healthField.AddToggleFreezeButton(Player.Health);
         healthField.Control.ValueChanged += (_, _) => WriteHealth();
 
+        var verticalPanel = GetVerticalPanel();
+        verticalPanel.Controls.Add(healthField);
+        verticalPanel.Controls.Add(propertiesToggle);
+        verticalPanel.Controls.Add(allWeaponsToggle);
+
         ControlsPanel.Controls.Add(armorParts);
-        ControlsPanel.Controls.Add(healthField);
-        ControlsPanel.Controls.Add(propertiesToggle);
-        ControlsPanel.Controls.Add(allWeaponsToggle);
-        // ControlsPanel.SetFlowBreak(armorPartDropdown, true);
+        ControlsPanel.Controls.Add(verticalPanel);
     }
 
     public override void UpdateContent()

@@ -67,4 +67,13 @@ public class FoldoutControl : UserControl
     }
 
     public virtual void UpdateContent() { }
+
+    protected static FlowLayoutPanel GetVerticalPanel() => new()
+    {
+        AutoSize = true,
+        AutoSizeMode = AutoSizeMode.GrowAndShrink,
+        FlowDirection = FlowDirection.TopDown,
+        Margin = Padding.Empty,
+        WrapContents = false
+    };
 }
