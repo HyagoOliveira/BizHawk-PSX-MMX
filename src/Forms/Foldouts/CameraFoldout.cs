@@ -23,7 +23,7 @@ public sealed class CameraFoldout : FoldoutControl
         layerList = new(string.Empty, [.. camera.Layers.Select(layer => layer.Name)]);
         layerList.OnToggled += camera.SetLayerEnabled;
         layerList.Control.IntegralHeight = false;
-        layerList.Control.Height = GetHeight(layerList.Control.Margin.Vertical);
+        layerList.Control.Height = 60;
 
         var togglesPanel = new FlowLayoutPanel
         {
@@ -49,6 +49,4 @@ public sealed class CameraFoldout : FoldoutControl
         var (indexes, isChecked) = camera.GetLayersData();
         layerList.SetWithoutNotify(indexes, isChecked);
     }
-
-    private int GetHeight(int verticalMargin) => ControlsPanel.ClientSize.Height - ControlsPanel.Padding.Vertical - verticalMargin;
 }
