@@ -18,7 +18,7 @@ public sealed class CameraFoldout : FoldoutControl
         this.camera = camera;
 
         hudToggle.OnToggled += camera.IsHUDActive.Toggle;
-        propertiesToggle.OnToggled += camera.ToggleShowProperties;
+        propertiesToggle.OnToggled += camera.TogglePropertiesEnabled;
 
         layerList = new(string.Empty, [.. camera.Layers.Select(layer => layer.Name)]);
         layerList.OnToggled += camera.SetLayerEnabled;

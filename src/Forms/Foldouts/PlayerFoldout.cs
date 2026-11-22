@@ -11,6 +11,7 @@ public sealed class PlayerFoldout : FoldoutControl
 {
     public Player Player { get; }
 
+    private readonly ButtonToggle drawToggle = new("Draw");
     private readonly ButtonToggle moverToggle = new("Mover");
     private readonly ButtonToggle propertiesToggle = new("Properties");
     private readonly ButtonToggle allWeaponsToggle = new("All Weapons");
@@ -30,8 +31,9 @@ public sealed class PlayerFoldout : FoldoutControl
         armorParts.Control.Height = 80;
 
         armorParts.OnToggled += Player.EnableArmorPart;
+        drawToggle.OnToggled += Player.ToggleDrawEnabled;
         moverToggle.OnToggled += Player.Mover.ToggleEnabled;
-        propertiesToggle.OnToggled += Player.ToggleShowProperties;
+        propertiesToggle.OnToggled += Player.TogglePropertiesEnabled;
         allWeaponsToggle.OnToggled += Player.ToggleAllWeaponsEnabled;
 
         healthField.AddToggleFreezeButton(Player.Health);
@@ -43,11 +45,12 @@ public sealed class PlayerFoldout : FoldoutControl
            GetVerticalPanel()
         };
 
-        verticalPanels[0].Controls.Add(moverToggle);
+        verticalPanels[0].Controls.Add(drawToggle);
         verticalPanels[0].Controls.Add(propertiesToggle);
         verticalPanels[0].Controls.Add(allWeaponsToggle);
 
         verticalPanels[1].Controls.Add(healthField);
+        verticalPanels[1].Controls.Add(moverToggle);
 
         ControlsPanel.Controls.Add(armorParts);
         ControlsPanel.Controls.Add(verticalPanels[0]);
@@ -59,6 +62,7 @@ public sealed class PlayerFoldout : FoldoutControl
         base.UpdateContent();
 
         healthField.Control.Value = Player.Health.ReadValue();
+        drawToggle.UpdateText(Player.IsDrawEnabled);
         propertiesToggle.UpdateText(Player.IsPropertiesEnabled);
         allWeaponsToggle.UpdateText(Player.IsAllWeaponsEnabled());
     }

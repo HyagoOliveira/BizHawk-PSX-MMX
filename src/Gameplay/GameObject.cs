@@ -130,7 +130,8 @@ public class GameObject
     public bool CanDrawProperties() => IsVisibleOnScreen() && IsPropertiesEnabled;
 
     public override string ToString() => Name;
-    public void ToggleShowProperties() => IsPropertiesEnabled = !IsPropertiesEnabled;
+    public void ToggleDrawEnabled() => IsDrawEnabled = !IsDrawEnabled;
+    public void TogglePropertiesEnabled() => IsPropertiesEnabled = !IsPropertiesEnabled;
 
     public void UpdateAndTryDraw()
     {
