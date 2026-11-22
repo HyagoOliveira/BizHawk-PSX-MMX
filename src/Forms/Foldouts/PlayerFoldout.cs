@@ -12,7 +12,7 @@ public sealed class PlayerFoldout : FoldoutControl
 
     private readonly ButtonToggle propertiesToggle = new("Properties");
     private readonly ButtonToggle allWeaponsToggle = new("All Weapons");
-    private readonly DropdownEnumField<PlayerArmorPart> armorPartDropdown = new("Armor Part");
+    private readonly ToggleEnumField<PlayerArmorPart> armorParts = new(string.Empty);
     private readonly NumericUpDownField healthField = new("Health",
         min: SByteS8Memory.MIN_VALUE,
         max: SByteS8Memory.MAX_VALUE
@@ -22,20 +22,23 @@ public sealed class PlayerFoldout : FoldoutControl
         base(title: "Player", isExpanded)
     {
         Player = player;
-        ContentHeight = 68;
+        ContentHeight = 90;
 
+        armorParts.Control.IntegralHeight = false;
+        armorParts.Control.Height = 72;
+
+        armorParts.OnToggled += Player.EnableArmorPart;
         propertiesToggle.OnToggled += Player.ToggleShowProperties;
         allWeaponsToggle.OnToggled += Player.ToggleAllWeaponsEnabled;
-        armorPartDropdown.OnSelected += Player.EnableArmorPart;
 
         healthField.AddToggleFreezeButton(Player.Health);
         healthField.Control.ValueChanged += (_, _) => WriteHealth();
 
+        ControlsPanel.Controls.Add(armorParts);
         ControlsPanel.Controls.Add(healthField);
-        ControlsPanel.Controls.Add(armorPartDropdown);
         ControlsPanel.Controls.Add(propertiesToggle);
         ControlsPanel.Controls.Add(allWeaponsToggle);
-        ControlsPanel.SetFlowBreak(armorPartDropdown, true);
+        // ControlsPanel.SetFlowBreak(armorPartDropdown, true);
     }
 
     public override void UpdateContent()
