@@ -11,6 +11,7 @@ public sealed class PlayerFoldout : FoldoutControl
 {
     public Player Player { get; }
 
+    private readonly ButtonToggle moverToggle = new("Mover");
     private readonly ButtonToggle propertiesToggle = new("Properties");
     private readonly ButtonToggle allWeaponsToggle = new("All Weapons");
     private readonly ToggleEnumField<PlayerArmorPart> armorParts = new(string.Empty);
@@ -29,19 +30,28 @@ public sealed class PlayerFoldout : FoldoutControl
         armorParts.Control.Height = 80;
 
         armorParts.OnToggled += Player.EnableArmorPart;
+        moverToggle.OnToggled += Player.Mover.ToggleEnabled;
         propertiesToggle.OnToggled += Player.ToggleShowProperties;
         allWeaponsToggle.OnToggled += Player.ToggleAllWeaponsEnabled;
 
         healthField.AddToggleFreezeButton(Player.Health);
         healthField.Control.ValueChanged += (_, _) => WriteHealth();
 
-        var verticalPanel = GetVerticalPanel();
-        verticalPanel.Controls.Add(healthField);
-        verticalPanel.Controls.Add(propertiesToggle);
-        verticalPanel.Controls.Add(allWeaponsToggle);
+        var verticalPanels = new FlowLayoutPanel[2]
+        {
+           GetVerticalPanel(),
+           GetVerticalPanel()
+        };
+
+        verticalPanels[0].Controls.Add(moverToggle);
+        verticalPanels[0].Controls.Add(propertiesToggle);
+        verticalPanels[0].Controls.Add(allWeaponsToggle);
+
+        verticalPanels[1].Controls.Add(healthField);
 
         ControlsPanel.Controls.Add(armorParts);
-        ControlsPanel.Controls.Add(verticalPanel);
+        ControlsPanel.Controls.Add(verticalPanels[0]);
+        ControlsPanel.Controls.Add(verticalPanels[1]);
     }
 
     public override void UpdateContent()
