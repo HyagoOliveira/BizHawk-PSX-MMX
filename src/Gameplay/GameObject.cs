@@ -27,6 +27,9 @@ public class GameObject
     public SByteS8Memory Substate { get; }      // unk6
     public Vector2S32Memory PreviousPosition { get; }
 
+    // Components
+    public KeypadMover Mover { get; private set; }
+
     public int TotalVariables => variables.Count;
     public int TotalComponents => components.Count;
 
@@ -105,6 +108,7 @@ public class GameObject
         );
         #endregion
 
+        Mover = AddComponent(new KeypadMover(this));
         // Each implementation should initialize its own variables and components in the constructor.
     }
 
@@ -145,12 +149,12 @@ public class GameObject
     {
         UpdateName();
         foreach (var variable in variables) variable.Update();
-        foreach (var component in components) component.Update();
+        foreach (var component in components) component.TryUpdate();
     }
 
     public virtual void Draw()
     {
-        foreach (var component in components) component.Draw();
+        foreach (var component in components) component.TryDraw();
 
         DrawInGameName();
         APIs.DrawAxis(Camera.Main.WorldToScreenPoint(Position.Value));

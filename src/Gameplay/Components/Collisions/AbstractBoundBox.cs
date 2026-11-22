@@ -23,7 +23,7 @@ public abstract class AbstractBoundBox : AbstractComponent
 
     public bool HasWorldBounds() => WorldBounds.HasBounds();
 
-    public override void Update()
+    protected override void Update()
     {
         var memory = GameObject.APIs.Memory;
         var facing = memory.ReadU8(GameObject.BaseAddress + 0x15, DOMAIN);
@@ -46,7 +46,7 @@ public abstract class AbstractBoundBox : AbstractComponent
         WorldBounds = CalculateWorldBounds(RawBounds, x, y, facing);
     }
 
-    public override void Draw()
+    protected override void Draw()
     {
         var screenPosition = Camera.Main.WorldToScreenPoint(WorldBounds.GetPosition());
         var screenBounds = new RectInt(

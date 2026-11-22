@@ -1,4 +1,5 @@
 using BizHawk.Client.Common;
+using BizHawk.PSXMMX.Math;
 
 namespace BizHawk.PSXMMX.Input;
 
@@ -59,6 +60,13 @@ public sealed class KeyboardInput
         else if (GetKey("Keypad2")) value += speed;
         return value;
     }
+
+    public static Vector2 GetKeypadAxis() => Instance == null ?
+        Vector2.Zero :
+        new Vector2(
+            Instance.GetKeypadHorizontalAxis(),
+            Instance.GetKeypadVerticalAxis()
+        );
 
     private static void ValidateKey(string key)
     {
