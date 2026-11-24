@@ -111,8 +111,8 @@ public class MainObject : GameObject
 
     private RectInt GetBounds()
     {
-        if (DamagerBox.HasWorldBounds()) return DamagerBox.WorldBounds;
         if (CollisionBox.HasWorldBounds()) return CollisionBox.WorldBounds;
+        if (DamagerBox.HasWorldBounds()) return DamagerBox.WorldBounds;
         if (DamageableBox.HasWorldBounds()) return DamageableBox.WorldBounds;
 
         return new RectInt(
