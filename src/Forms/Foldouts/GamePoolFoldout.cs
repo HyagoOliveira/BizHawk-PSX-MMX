@@ -10,7 +10,9 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
 
     private readonly GamePoolManager<T> pool;
     private readonly DropdownField objDropdown;
+    private readonly ButtonToggle drawToggle = new("Draw");
     private readonly ButtonToggle moverToggle = new("Mover");
+    private readonly ButtonToggle propertiesToggle = new("Properties");
 
     public GamePoolFoldout(GamePoolManager<T> pool, bool isExpanded = false) :
         base(pool.ToString(), isExpanded)
@@ -21,16 +23,24 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
         objDropdown = new("Object", GetDropdownItems());
         objDropdown.Control.Width = 300;
         objDropdown.OnSelected += HandleObjectSelected;
+
         moverToggle.OnToggled += HandleMoverToggled;
+        drawToggle.OnToggled += HandleDrawToggled;
+        propertiesToggle.OnToggled += HandlePropertiesToggled;
 
         ControlsPanel.Controls.Add(objDropdown);
+        ControlsPanel.SetFlowBreak(objDropdown, true);
         ControlsPanel.Controls.Add(moverToggle);
+        ControlsPanel.Controls.Add(drawToggle);
+        ControlsPanel.Controls.Add(propertiesToggle);
     }
 
     public override void UpdateContent()
     {
         base.UpdateContent();
         objDropdown.UpdateItems(GetDropdownItems());
+        drawToggle.UpdateText(pool.IsDrawEnabled(CurrentIndex));
+        propertiesToggle.UpdateText(pool.IsPropertiesEnabled(CurrentIndex));
     }
 
     private string[] GetDropdownItems() => ["None", .. pool.GetAllObjectsNames()];
@@ -47,9 +57,7 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
         }
     }
 
-    private void HandleMoverToggled()
-    {
-        if (CurrentIndex < 0) return;
-        pool.ToggleMoverEnabled(CurrentIndex);
-    }
+    private void HandleDrawToggled() => pool.ToggleDrawEnabled(CurrentIndex);
+    private void HandleMoverToggled() => pool.ToggleMoverEnabled(CurrentIndex);
+    private void HandlePropertiesToggled() => pool.TogglePropertiesEnabled(CurrentIndex);
 }

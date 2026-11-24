@@ -16,6 +16,18 @@ public sealed class GamePoolManager<T> where T : GameObject
         }
     }
 
+    public bool IsDrawEnabled(int currentIndex)
+    {
+        if (currentIndex < 0 || currentIndex >= pool.Length) return false;
+        return pool[currentIndex].IsDrawEnabled;
+    }
+
+    public bool IsPropertiesEnabled(int currentIndex)
+    {
+        if (currentIndex < 0 || currentIndex >= pool.Length) return false;
+        return pool[currentIndex].IsPropertiesEnabled;
+    }
+
     public void UpdateAndTryDraw()
     {
         foreach (var obj in pool)
@@ -32,7 +44,22 @@ public sealed class GamePoolManager<T> where T : GameObject
         pool[index].IsPropertiesEnabled = true;
     }
 
-    public void ToggleMoverEnabled(int index) => pool[index].Mover.ToggleEnabled();
+    public void ToggleMoverEnabled(int index)
+    {
+        if (index < 0 || index >= pool.Length) return;
+        pool[index].Mover.ToggleEnabled();
+    }
+    public void ToggleDrawEnabled(int currentIndex)
+    {
+        if (currentIndex < 0 || currentIndex >= pool.Length) return;
+        pool[currentIndex].ToggleDrawEnabled();
+    }
+
+    public void TogglePropertiesEnabled(int currentIndex)
+    {
+        if (currentIndex < 0 || currentIndex >= pool.Length) return;
+        pool[currentIndex].TogglePropertiesEnabled();
+    }
 
     public override string ToString() => $"{typeof(T).Name} Pool";
 
