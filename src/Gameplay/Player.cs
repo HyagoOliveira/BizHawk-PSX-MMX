@@ -38,6 +38,7 @@ public sealed class Player : MainObject
     public SByteS8Memory SpecialShotCount { get; } // special_shot_count
     public SByteS8Memory ShotCycle { get; }      // shot_cycle
     public UIntS8Memory Character { get; }      // cur_character
+    public ByteU8Memory Armor { get; }
     #endregion
 
     private static readonly Vector2Int PROPERTIES_POSITION = new(2, Camera.SCREEN_SIZE.Y - 42);
@@ -283,6 +284,14 @@ public sealed class Player : MainObject
                 hideDisplay: true
             )
         );
+        Armor = AddVariable(
+            new ByteU8Memory(
+                "Armor",
+                baseAddress + 0xFA,
+                APIs.Memory,
+                hideDisplay: true
+            )
+        );
         #endregion
     }
 
@@ -308,7 +317,15 @@ public sealed class Player : MainObject
     }
 
     public void EnableArmor(MMX4Armors part) { }
-    public void EnableArmor(MMX5Armors part) { }
+
+    public void EnableArmor(MMX5Armors part)
+    {
+        if (!Game.Is(GameName.MegaManX5)) return;
+
+        var armor = (byte)part;
+        Armor.WriteValue(armor);
+    }
+
     public void EnableArmor(MMX6Armors part) { }
 
     protected override string GetInGameName()
@@ -349,16 +366,17 @@ public sealed class Player : MainObject
     public enum MMX4Armors
     {
         None,
+        Four,
         Ultimate,
-        Four
     }
 
     public enum MMX5Armors
     {
-        None,
-        Ultimate,
-        Falcon,
-        Gaea
+        None = 0,
+        Fourth = 1,
+        Falcon = 2,
+        Gaea = 3,
+        Ultimate = 4
     }
 
     public enum MMX6Armors
