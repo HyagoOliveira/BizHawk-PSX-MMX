@@ -20,6 +20,7 @@ public sealed class PlayerFoldout : FoldoutControl
         min: SByteS8Memory.MIN_VALUE,
         max: SByteS8Memory.MAX_VALUE
     );
+    private readonly Label numpadMoverLabel = FormConstants.BuildNumpadMoverLabel();
 
     public PlayerFoldout(Player player, bool isExpanded = false) :
         base(title: "Player", isExpanded)
@@ -35,6 +36,7 @@ public sealed class PlayerFoldout : FoldoutControl
         moverToggle.OnToggled += Player.Mover.ToggleEnabled;
         propertiesToggle.OnToggled += Player.TogglePropertiesEnabled;
         allWeaponsToggle.OnToggled += Player.ToggleAllWeaponsEnabled;
+        Player.Mover.OnEnabledChanged += HandleMoverEnabledChanged;
 
         healthField.AddToggleFreezeButton(Player.Health);
         healthField.Control.ValueChanged += (_, _) => WriteHealth();
@@ -51,6 +53,7 @@ public sealed class PlayerFoldout : FoldoutControl
 
         verticalPanels[1].Controls.Add(healthField);
         verticalPanels[1].Controls.Add(moverToggle);
+        verticalPanels[1].Controls.Add(numpadMoverLabel);
 
         ControlsPanel.Controls.Add(armorParts);
         ControlsPanel.Controls.Add(verticalPanels[0]);
@@ -67,6 +70,7 @@ public sealed class PlayerFoldout : FoldoutControl
         moverToggle.UpdateText(Player.Mover.IsEnabled);
         propertiesToggle.UpdateText(Player.IsPropertiesEnabled);
         allWeaponsToggle.UpdateText(Player.IsAllWeaponsEnabled());
+        numpadMoverLabel.Visible = Player.Mover.IsEnabled;
     }
 
     private void WriteHealth()
@@ -75,4 +79,7 @@ public sealed class PlayerFoldout : FoldoutControl
         if (Player.Health.IsFrozen) Player.Health.Freeze(health);
         else Player.Health.WriteValue(health);
     }
+
+    private void HandleMoverEnabledChanged(bool isEnabled) =>
+        numpadMoverLabel.Visible = isEnabled;
 }

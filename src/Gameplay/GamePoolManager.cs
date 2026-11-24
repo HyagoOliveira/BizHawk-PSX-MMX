@@ -28,6 +28,12 @@ public sealed class GamePoolManager<T> where T : GameObject
         return pool[currentIndex].IsPropertiesEnabled;
     }
 
+    public bool IsMoverEnabled(int currentIndex)
+    {
+        if (currentIndex < 0 || currentIndex >= pool.Length) return false;
+        return pool[currentIndex].Mover.IsEnabled;
+    }
+
     public void UpdateAndTryDraw()
     {
         foreach (var obj in pool)

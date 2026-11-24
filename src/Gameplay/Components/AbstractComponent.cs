@@ -5,6 +5,8 @@ public abstract class AbstractComponent
     public bool IsEnabled { get; private set; }
     public GameObject GameObject { get; }
 
+    public event Action<bool>? OnEnabledChanged;
+
     public AbstractComponent(GameObject gameObject, bool isEnabled = true)
     {
         IsEnabled = isEnabled;
@@ -18,6 +20,8 @@ public abstract class AbstractComponent
         if (IsEnabled == isEnabled) return;
 
         IsEnabled = isEnabled;
+        OnEnabledChanged?.Invoke(IsEnabled);
+
         if (IsEnabled) OnEnabled();
         else OnDisabled();
     }

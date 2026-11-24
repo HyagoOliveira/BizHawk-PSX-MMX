@@ -12,6 +12,7 @@ public sealed class CameraFoldout : FoldoutControl
     private readonly ButtonToggle hudToggle = new("HUD");
     private readonly ButtonToggle moverToggle = new("Mover");
     private readonly ButtonToggle propertiesToggle = new("Properties");
+    private readonly Label numpadMoverLabel = FormConstants.BuildNumpadMoverLabel();
 
     public CameraFoldout(Camera camera, bool isExpanded = false) :
         base("Camera", isExpanded)
@@ -22,6 +23,7 @@ public sealed class CameraFoldout : FoldoutControl
         hudToggle.OnToggled += camera.IsHUDActive.Toggle;
         moverToggle.OnToggled += camera.Mover.ToggleEnabled;
         propertiesToggle.OnToggled += camera.TogglePropertiesEnabled;
+        camera.Mover.OnEnabledChanged += HandleMoverEnabledChanged;
 
         layerList = new(string.Empty, [.. camera.Layers.Select(layer => layer.Name)]);
         layerList.OnToggled += camera.SetLayerEnabled;
@@ -35,6 +37,7 @@ public sealed class CameraFoldout : FoldoutControl
 
         ControlsPanel.Controls.Add(layerList);
         ControlsPanel.Controls.Add(togglesPanel);
+        ControlsPanel.Controls.Add(numpadMoverLabel);
     }
 
     public override void UpdateContent()
@@ -43,8 +46,12 @@ public sealed class CameraFoldout : FoldoutControl
         moverToggle.UpdateText(camera.Mover.IsEnabled);
         hudToggle.UpdateText(camera.IsHUDActive.ReadValue());
         propertiesToggle.UpdateText(camera.IsPropertiesEnabled);
+        numpadMoverLabel.Visible = camera.Mover.IsEnabled;
 
         var (indexes, isChecked) = camera.GetLayersData();
         layerList.SetWithoutNotify(indexes, isChecked);
     }
+
+    private void HandleMoverEnabledChanged(bool isEnabled) =>
+        numpadMoverLabel.Visible = isEnabled;
 }

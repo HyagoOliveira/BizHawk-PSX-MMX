@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using BizHawk.PSXMMX.Forms.Fields;
 using BizHawk.PSXMMX.Forms.Toggles;
 using BizHawk.PSXMMX.Gameplay;
@@ -13,11 +14,13 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
     private readonly ButtonToggle drawToggle = new("Draw");
     private readonly ButtonToggle moverToggle = new("Mover");
     private readonly ButtonToggle propertiesToggle = new("Properties");
+    private readonly Label numpadMoverLabel = FormConstants.BuildNumpadMoverLabel();
 
     public GamePoolFoldout(GamePoolManager<T> pool, bool isExpanded = false) :
         base(pool.ToString(), isExpanded)
     {
         this.pool = pool;
+        ContentHeight = 100;
         pool.DisableAllObjectsProperties();
 
         objDropdown = new("Object", GetDropdownItems());
@@ -32,6 +35,7 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
         ControlsPanel.Controls.Add(moverToggle);
         ControlsPanel.Controls.Add(drawToggle);
         ControlsPanel.Controls.Add(propertiesToggle);
+        ControlsPanel.Controls.Add(numpadMoverLabel);
     }
 
     public override void UpdateContent()
@@ -40,6 +44,7 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
         objDropdown.UpdateItems(GetDropdownItems());
         drawToggle.UpdateText(pool.IsDrawEnabled(CurrentIndex));
         propertiesToggle.UpdateText(pool.IsPropertiesEnabled(CurrentIndex));
+        numpadMoverLabel.Visible = pool.IsMoverEnabled(CurrentIndex);
     }
 
     private string[] GetDropdownItems() => ["None", .. pool.GetAllObjectsNames()];
@@ -57,6 +62,11 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
     }
 
     private void HandleDrawToggled() => pool.ToggleDrawEnabled(CurrentIndex);
-    private void HandleMoverToggled() => pool.ToggleMoverEnabled(CurrentIndex);
     private void HandlePropertiesToggled() => pool.TogglePropertiesEnabled(CurrentIndex);
+
+    private void HandleMoverToggled()
+    {
+        pool.ToggleMoverEnabled(CurrentIndex);
+        numpadMoverLabel.Visible = pool.IsMoverEnabled(CurrentIndex);
+    }
 }
