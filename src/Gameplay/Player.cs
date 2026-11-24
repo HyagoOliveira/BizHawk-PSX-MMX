@@ -294,7 +294,7 @@ public sealed class Player : MainObject
         BossFlags.WriteValue(flags);
     }
 
-    public void EnableArmorPart(PlayerArmorPart part, bool isEnabled)
+    public void EnableArmor(MMX4ArmorParts part, bool isEnabled)
     {
         if (!Game.Is(GameName.MegaManX4)) return;
 
@@ -306,6 +306,10 @@ public sealed class Player : MainObject
 
         ArmorParts.WriteValue(updatedArmorParts);
     }
+
+    public void EnableArmor(MMX4Armors part) { }
+    public void EnableArmor(MMX5Armors part) { }
+    public void EnableArmor(MMX6Armors part) { }
 
     protected override string GetInGameName()
     {
@@ -327,8 +331,14 @@ public sealed class Player : MainObject
         // Name is drawn using DrawProperties
     }
 
+    private enum PlayerName
+    {
+        X = 0,
+        Zero = 1
+    }
+
     [Flags]
-    public enum PlayerArmorPart
+    public enum MMX4ArmorParts
     {
         Head = 0x01,
         Body = 0x02,
@@ -336,9 +346,27 @@ public sealed class Player : MainObject
         Legs = 0x08,
     }
 
-    private enum PlayerName
+    public enum MMX4Armors
     {
-        X = 0,
-        Zero = 1
+        None,
+        Ultimate,
+        Four
+    }
+
+    public enum MMX5Armors
+    {
+        None,
+        Ultimate,
+        Falcon,
+        Gaea
+    }
+
+    public enum MMX6Armors
+    {
+        None,
+        Ultimate,
+        Falcon,
+        Shadow,
+        Blade
     }
 }

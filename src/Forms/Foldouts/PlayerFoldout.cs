@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using BizHawk.PSXMMX.Core;
 using BizHawk.PSXMMX.Forms.Fields;
 using BizHawk.PSXMMX.Forms.Toggles;
 using BizHawk.PSXMMX.Gameplay;
@@ -15,7 +16,10 @@ public sealed class PlayerFoldout : FoldoutControl
     private readonly ButtonToggle moverToggle = new("Mover");
     private readonly ButtonToggle propertiesToggle = new("Properties");
     private readonly ButtonToggle allWeaponsToggle = new("All Weapons");
-    private readonly ToggleEnumField<PlayerArmorPart> armorParts = new(string.Empty);
+    private readonly ToggleEnumField<MMX4ArmorParts> mmx4ArmorParts = new(string.Empty);
+    private readonly DropdownEnumField<MMX4Armors> mmx4Armors = new("Armor");
+    private readonly DropdownEnumField<MMX5Armors> mmx5Armors = new("Armor");
+    private readonly DropdownEnumField<MMX6Armors> mmx6Armors = new("Armor");
     private readonly NumericUpDownField healthField = new("Health",
         min: SByteS8Memory.MIN_VALUE,
         max: SByteS8Memory.MAX_VALUE
@@ -26,12 +30,17 @@ public sealed class PlayerFoldout : FoldoutControl
         base(title: "Player", isExpanded)
     {
         Player = player;
-        ContentHeight = 100;
+        ContentHeight = 120;
 
-        armorParts.Control.IntegralHeight = false;
-        armorParts.Control.Height = 80;
+        mmx4ArmorParts.Control.IntegralHeight = false;
+        mmx4ArmorParts.Control.Width = 168;
+        mmx4ArmorParts.Control.Height = 74;
 
-        armorParts.OnToggled += Player.EnableArmorPart;
+        mmx4ArmorParts.OnToggled += Player.EnableArmor;
+        mmx4Armors.OnSelected += Player.EnableArmor;
+        mmx5Armors.OnSelected += Player.EnableArmor;
+        mmx6Armors.OnSelected += Player.EnableArmor;
+
         drawToggle.OnToggled += Player.ToggleDrawEnabled;
         moverToggle.OnToggled += Player.Mover.ToggleEnabled;
         propertiesToggle.OnToggled += Player.TogglePropertiesEnabled;
@@ -41,23 +50,32 @@ public sealed class PlayerFoldout : FoldoutControl
         healthField.AddToggleFreezeButton(Player.Health);
         healthField.Control.ValueChanged += (_, _) => WriteHealth();
 
-        var verticalPanels = new FlowLayoutPanel[2]
+        var verticalPanels = new FlowLayoutPanel[3]
         {
+           GetVerticalPanel(),
            GetVerticalPanel(),
            GetVerticalPanel()
         };
 
-        verticalPanels[0].Controls.Add(drawToggle);
-        verticalPanels[0].Controls.Add(propertiesToggle);
-        verticalPanels[0].Controls.Add(allWeaponsToggle);
+        if (Game.Is(GameName.MegaManX4))
+        {
+            verticalPanels[0].Controls.Add(mmx4Armors);
+            verticalPanels[0].Controls.Add(mmx4ArmorParts);
+        }
+        else if (Game.Is(GameName.MegaManX5)) verticalPanels[0].Controls.Add(mmx5Armors);
+        else if (Game.Is(GameName.MegaManX6)) verticalPanels[0].Controls.Add(mmx6Armors);
 
-        verticalPanels[1].Controls.Add(healthField);
-        verticalPanels[1].Controls.Add(moverToggle);
-        verticalPanels[1].Controls.Add(numpadMoverLabel);
+        verticalPanels[1].Controls.Add(drawToggle);
+        verticalPanels[1].Controls.Add(propertiesToggle);
+        verticalPanels[1].Controls.Add(allWeaponsToggle);
 
-        ControlsPanel.Controls.Add(armorParts);
+        verticalPanels[2].Controls.Add(healthField);
+        verticalPanels[2].Controls.Add(moverToggle);
+        verticalPanels[2].Controls.Add(numpadMoverLabel);
+
         ControlsPanel.Controls.Add(verticalPanels[0]);
         ControlsPanel.Controls.Add(verticalPanels[1]);
+        ControlsPanel.Controls.Add(verticalPanels[2]);
     }
 
     public override void UpdateContent()

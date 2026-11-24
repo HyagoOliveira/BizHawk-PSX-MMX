@@ -109,7 +109,7 @@ public class MainObject : GameObject
         $"{Position} | {PreviousPosition}\n" +
         $"{Animation}";
 
-    private RectInt GetBounds()
+    protected virtual RectInt GetBounds()
     {
         if (CollisionBox.HasWorldBounds()) return CollisionBox.WorldBounds;
         if (DamagerBox.HasWorldBounds()) return DamagerBox.WorldBounds;
