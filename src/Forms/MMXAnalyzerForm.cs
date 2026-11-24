@@ -25,6 +25,10 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     protected override string WindowTitleStatic => "PSX MMX Analyzer";
 
     private readonly List<FoldoutControl> foldouts = [];
+    private readonly StatusStrip statusStrip = new()
+    {
+        Items = { new ToolStripStatusLabel("F - Frame Pause | F12 - Screenshot | Pause Break - Pause/Unpause") }
+    };
 
     public MMXAnalyzerForm()
     {
@@ -112,6 +116,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
 
         Controls.Clear();
         Controls.Add(sections);
+        Controls.Add(statusStrip);
 
         Activated += (_, _) => UpdateFoldouts();
     }
