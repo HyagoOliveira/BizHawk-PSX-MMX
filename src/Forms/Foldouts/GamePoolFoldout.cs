@@ -21,7 +21,7 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
         pool.DisableAllObjectsProperties();
 
         objDropdown = new("Object", GetDropdownItems());
-        objDropdown.Control.Width = 300;
+        objDropdown.Control.Width = 500;
         objDropdown.OnSelected += HandleObjectSelected;
 
         moverToggle.OnToggled += HandleMoverToggled;
@@ -29,7 +29,6 @@ public sealed class GamePoolFoldout<T> : FoldoutControl where T : GameObject
         propertiesToggle.OnToggled += HandlePropertiesToggled;
 
         ControlsPanel.Controls.Add(objDropdown);
-        ControlsPanel.SetFlowBreak(objDropdown, true);
         ControlsPanel.Controls.Add(moverToggle);
         ControlsPanel.Controls.Add(drawToggle);
         ControlsPanel.Controls.Add(propertiesToggle);
