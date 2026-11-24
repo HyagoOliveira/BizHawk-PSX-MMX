@@ -18,6 +18,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
     public Player? Player { get; private set; } = null!;
     public Camera? Camera { get; private set; } = null!;
     public KeyboardInput? Input { get; private set; } = null!;
+    public GamePoolManager<Shot>? ShotPool { get; private set; } = null!;
     public GamePoolManager<Weapon>? WeaponPool { get; private set; } = null!;
     public GamePoolManager<MainObject>? MainObjectsPool { get; private set; } = null!;
 
@@ -52,6 +53,12 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
             totalSlots: 16,
             APIs
         );
+        ShotPool = new GamePoolManager<Shot>(
+            MMXGame.Addresses.ShotObjectsPool,
+            blockSize: 0x9C,
+            totalSlots: 32,
+            APIs
+        );
         MainObjectsPool = new GamePoolManager<MainObject>(
             MMXGame.Addresses.MainObjectsPool,
             blockSize: 0x9C,
@@ -64,6 +71,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         foldouts.Add(new CameraFoldout(Camera));
         foldouts.Add(new GamePoolFoldout<MainObject>(MainObjectsPool));
         foldouts.Add(new GamePoolFoldout<Weapon>(WeaponPool));
+        foldouts.Add(new GamePoolFoldout<Shot>(ShotPool));
 
         InitializeFoldouts();
     }
@@ -81,6 +89,7 @@ public sealed class MMXAnalyzerForm : ToolFormBase, IExternalToolForm
         Player?.UpdateAndTryDraw();
         MainObjectsPool?.UpdateAndTryDraw();
         WeaponPool?.UpdateAndTryDraw();
+        ShotPool?.UpdateAndTryDraw();
     }
 
     private void InitializeFoldouts()

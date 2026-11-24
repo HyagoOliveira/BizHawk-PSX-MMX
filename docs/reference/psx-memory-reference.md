@@ -15,7 +15,7 @@
 | MMX5 | Hash `1C64D6EA` | Player, camera, boss flags, and main-object pool |
 | MMX6 | Hash `F063F536` | Player, camera, boss flags, and main-object pool |
 
-MMX4 is the only game with a documented detailed object-name table in this repository. The background-object structure is also used by MMX5 and MMX6, according to the user's report; individual field interpretations still require game-specific verification. Other detailed decompilation layouts must be confirmed for the corresponding USA build.
+MMX4 is the only game with a detailed main-object and shot-object name table in this repository. The background-object structure is also used by MMX5 and MMX6, according to the user's report; individual field interpretations still require game-specific verification. Other detailed decompilation layouts must be confirmed for the corresponding USA build.
 
 ## Local extracted data
 
@@ -64,6 +64,8 @@ In MMX4, `StageObjectRecord.object_type` in `src/main/195B4.c` selects the pool:
 The record `id` selects behavior within the pool. Main-object IDs index `main_object_update_funcs`; IDs are pool-specific. `0xFF` terminates the stage-object list.
 
 `GameMemoryAddress.Get` supplies `GetMainObjectName` names. Only MMX4 currently has a name table; unknown IDs and unsupported games display `UNKNOWN MAIN OBJECT`.
+
+The MMX4 shot-object names follow the reconstructed [`shot_object_update_funcs` dispatch table](https://github.com/HyagoOliveira/mmx4/blob/2927094b1419c9da79a24c592f3cc2816042ca74/src/main/object_update.c), indexed by shot ID from 0 through 57. These reconstructed names describe update routines and may cover multiple behaviors or variants; they have not been independently validated in gameplay. Unknown IDs and games without a shot name table display `UNKNOWN SHOT OBJECT`.
 
 ## Background objects and camera
 

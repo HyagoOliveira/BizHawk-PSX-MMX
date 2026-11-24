@@ -7,6 +7,7 @@ public static class Game
     private static GameName currentName = GameName.Invalid;
 
     private static Dictionary<uint, string> MainObjectNames => MainObjects.Names[currentName];
+    private static Dictionary<uint, string> ShotObjectNames => ShotObjects.Names[currentName];
     private static Dictionary<uint, string> WeaponObjectNames => WeaponObjects.Names[currentName];
 
     private static readonly Dictionary<string, GameName> hashesByGame = new(StringComparer.OrdinalIgnoreCase)
@@ -22,6 +23,7 @@ public static class Game
             player: 0x1418C8,
             bossFlags: 0x141981,
             mainObjectsPool: 0x13BED0,
+            shotObjectsPool: 0x13F328,
             weaponObjectsPool: 0x1406F8,
             camera: new MemoryAddress.CameraAddress(@base: 0x1419B0, hud: 0x1721DF)
         ),
@@ -29,6 +31,7 @@ public static class Game
             player: 0x09A0A0,
             bossFlags: 0x09A169,
             mainObjectsPool: 0x092090,
+            shotObjectsPool: 0x096D98,
             weaponObjectsPool: 0x098120,
             camera: new MemoryAddress.CameraAddress(@base: 0x09A1F8, hud: 0x0D1C1F)
         ),
@@ -36,6 +39,7 @@ public static class Game
             player: 0x0970A0,
             bossFlags: 0x097169,
             mainObjectsPool: 0x08EF48,
+            shotObjectsPool: 0x093C98,
             weaponObjectsPool: 0x0950A0,
             camera: new MemoryAddress.CameraAddress(@base: 0x0971F8, hud: 0x0CCEEF)
         )
@@ -45,5 +49,6 @@ public static class Game
     public static bool Is(GameName name) => currentName == name;
     public static bool IsInvalid() => Is(GameName.Invalid);
     public static string GetMainObjectName(uint id) => MainObjectNames.TryGetValue(id, out var name) ? name : "UNKNOWN MAIN OBJECT";
+    public static string GetShotObjectName(uint id) => ShotObjectNames.TryGetValue(id, out var name) ? name : "UNKNOWN SHOT OBJECT";
     public static string GetWeaponObjectName(uint id) => WeaponObjectNames.TryGetValue(id, out var name) ? name : "UNKNOWN WEAPON OBJECT";
 }
