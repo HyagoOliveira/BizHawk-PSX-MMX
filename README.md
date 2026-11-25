@@ -14,9 +14,9 @@ A specialized BizHawk **External Tool** plugin built in C# (.NET) for **BizHawk*
 - Show the Enemy properties (HP, position, speed etc);
 - Show the Axis Aligned Bounding Box (AABB) from the Player, Enemies and its weapons/shots;
 
-![Zero-Saber-Attack](/~Doc/Zero-Saber-Attack.png)
-![Zero-Enemies](/~Doc/Zero-Enemies.png)
-![X-Enemies](/~Doc/X-Enemies.png)
+![Zero-Saber-Attack](/docs/Zero-Saber-Attack.png)
+![Zero-Enemies](/docs/Zero-Enemies.png)
+![X-Enemies](/docs/X-Enemies.png)
 
 AABB Colors: 
 - Red: damager colliders (boxes able to inflict damage)
@@ -25,25 +25,25 @@ AABB Colors:
 
 Free Player Movement:
 
-![Player-Mover](/~Doc/Player-Mover.gif)
+![Player-Mover](/docs/Player-Mover.gif)
 
 Freeze Player movement is a good way for collecting animation references:
 
-![Player-Movement-Freeze](/~Doc/Player-Movement-Freeze.gif)
+![Player-Movement-Freeze](/docs/Player-Movement-Freeze.gif)
 
 You can also free move any enemy!
 
-![Enemy-Free-Movement](/~Doc/Enemy-Free-Movement.gif)
+![Enemy-Free-Movement](/docs/Enemy-Free-Movement.gif)
 
 ### Camera
 
 Free Camera control:
 
-![Camera-Mover](/~Doc/Camera-Mover.gif)
+![Camera-Mover](/docs/Camera-Mover.gif)
 
 Toggle Camera Layers visibility:
 
-![Camera-Layers](/~Doc/Camera-Layers.gif)
+![Camera-Layers](/docs/Camera-Layers.gif)
 
 
 ## Development
