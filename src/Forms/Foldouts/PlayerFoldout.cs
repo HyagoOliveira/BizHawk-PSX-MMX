@@ -59,11 +59,11 @@ public sealed class PlayerFoldout : FoldoutControl
 
         if (Game.Is(GameName.MegaManX4))
         {
-            verticalPanels[0].Controls.Add(mmx4Armors);
+            // verticalPanels[0].Controls.Add(mmx4Armors);
             verticalPanels[0].Controls.Add(mmx4ArmorParts);
         }
-        else if (Game.Is(GameName.MegaManX5)) verticalPanels[0].Controls.Add(mmx5Armors);
-        else if (Game.Is(GameName.MegaManX6)) verticalPanels[0].Controls.Add(mmx6Armors);
+        // else if (Game.Is(GameName.MegaManX5)) verticalPanels[0].Controls.Add(mmx5Armors);
+        // else if (Game.Is(GameName.MegaManX6)) verticalPanels[0].Controls.Add(mmx6Armors);
 
         verticalPanels[1].Controls.Add(drawToggle);
         verticalPanels[1].Controls.Add(propertiesToggle);
