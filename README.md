@@ -18,9 +18,9 @@ A specialized BizHawk **External Tool** plugin built in C# (.NET) for **BizHawk*
 ![X-Enemies](/docs/X-Enemies.png)
 
 AABB Colors: 
-- <span style="color:red">Red</span>: damager colliders (boxes able to inflict damage)
-- <span style="color:green">Green</span>: damageable colliders (boxes able to receive damage)
-- White: stage collision boxes
+- 🟥 Red: damager colliders (boxes able to inflict damage)
+- 🟩 Green: damageable colliders (boxes able to receive damage)
+- ⬜ White: stage collision boxes
 
 Free Player Movement:
 
