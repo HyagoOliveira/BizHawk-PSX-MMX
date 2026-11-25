@@ -6,6 +6,46 @@ A specialized BizHawk **External Tool** plugin built in C# (.NET) for **BizHawk*
 * **Mega Man X5** (`1C64D6EA`)
 * **Mega Man X6** (`F063F536`)
 
+## Features
+
+### Player, Enemies and Weapons/Shots
+
+- Show the Player properties (HP, position, speed etc);
+- Show the Enemy properties (HP, position, speed etc);
+- Show the Axis Aligned Bounding Box (AABB) from the Player, Enemies and its weapons/shots;
+
+![Zero-Saber-Attack](/~Doc/Zero-Saber-Attack.png)
+![Zero-Enemies](/~Doc/Zero-Enemies.png)
+![X-Enemies](/~Doc/X-Enemies.png)
+
+AABB Colors: 
+- Red: damager colliders (boxes able to inflict damage)
+- Green: damageable colliders (boxes able to receive damage)
+- White: stage collision boxes
+
+Free Player Movement:
+
+![Player-Mover](/~Doc/Player-Mover.gif)
+
+Freeze Player movement is a good way for collecting animation references:
+
+![Player-Movement-Freeze](/~Doc/Player-Movement-Freeze.gif)
+
+You can also free move any enemy!
+
+![Enemy-Free-Movement](/~Doc/Enemy-Free-Movement.gif)
+
+### Camera
+
+Free Camera control:
+
+![Camera-Mover](/~Doc/Camera-Mover.gif)
+
+Toggle Camera Layers visibility:
+
+![Camera-Layers](/~Doc/Camera-Layers.gif)
+
+
 ## Development
 
 - Consult the [C# style guide](docs/csharp-style-guide.md) before changing source code.
@@ -59,7 +99,7 @@ The `.vscode` task list also provides:
 
 Before deployment, the workflow closes the `EmuHawk.exe` instance from the configured BizHawk installation. It first requests a normal shutdown and waits up to 10 seconds; if the emulator does not close, it forcefully stops that process so the DLL can be replaced. Other BizHawk installations are not affected.
 
-## Research
+### Research
 
 - Memory addresses and reconstructed layouts are tracked in [PSX Game Memory Reference](docs/reference/psx-memory-reference.md).
 - The repository currently uses the BizHawk v2.11.1 API and the matching decompilation repositories for Mega Man X4, X5, and X6 as implementation references. API contracts should be rechecked whenever the target BizHawk version changes.
