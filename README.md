@@ -44,6 +44,12 @@ Toggle Camera Layer's visibility:
 
 ![Camera-Layers](/docs/Camera-Layers.gif)
 
+## Installation
+
+1. Download the BizHawkPSXMMX.zip file from the project's latest [GitHub Releases](https://github.com/HyagoOliveira/BizHawk-PSX-MMX/releases).
+2. Extract the ZIP and copy the `.dll` file into the `ExternalTools` folder in your BizHawk installation directory (the same directory as `EmuHawk.exe`). Create the folder if it does not exist.
+3. Start BizHawk and load a supported USA release of Mega Man X4, X5, or X6.
+4. In BizHawk, open **Tools > External Tools > PSX MMX Analyzer**.
 
 ## Development
 
