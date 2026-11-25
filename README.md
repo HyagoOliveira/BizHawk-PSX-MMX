@@ -10,8 +10,7 @@ A specialized BizHawk **External Tool** plugin built in C# (.NET) for **BizHawk*
 
 ### Player, Enemies and Weapons/Shots
 
-- Show the Player properties (HP, position, speed etc);
-- Show the Enemy properties (HP, position, speed etc);
+- Show the Player and Enemies properties (HP, position, speed etc);
 - Show the Axis Aligned Bounding Box (AABB) from the Player, Enemies and its weapons/shots;
 
 ![Zero-Saber-Attack](/docs/Zero-Saber-Attack.png)
@@ -19,8 +18,8 @@ A specialized BizHawk **External Tool** plugin built in C# (.NET) for **BizHawk*
 ![X-Enemies](/docs/X-Enemies.png)
 
 AABB Colors: 
-- Red: damager colliders (boxes able to inflict damage)
-- Green: damageable colliders (boxes able to receive damage)
+- <span style="color:red">Red</span>: damager colliders (boxes able to inflict damage)
+- <span style="color:green">Green</span>: damageable colliders (boxes able to receive damage)
 - White: stage collision boxes
 
 Free Player Movement:
@@ -41,7 +40,7 @@ Free Camera control:
 
 ![Camera-Mover](/docs/Camera-Mover.gif)
 
-Toggle Camera Layers visibility:
+Toggle Camera Layer's visibility:
 
 ![Camera-Layers](/docs/Camera-Layers.gif)
 
